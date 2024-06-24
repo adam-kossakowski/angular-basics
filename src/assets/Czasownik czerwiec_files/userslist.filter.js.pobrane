@@ -1,0 +1,27 @@
+angular.module("userslist").filter('millisToTimeString', function () {
+
+    var oneSecond = 1000;
+    var oneMinute = oneSecond * 60;
+    var oneHour = oneMinute * 60;
+
+    var millisToHours = function (millis) {
+        return Math.floor(millis / oneHour);
+    };
+    var millisToMinutes = function (millis) {
+        return Math.floor(millis / oneMinute);
+    };
+
+    var hoursToMinutes = function (hours) {
+        return Math.floor(hours * 60);
+    };
+
+    return function (millis) {
+        var minutes = Math.floor(Math.abs(millis / oneMinute) % 60);
+        var hours = Math.floor(Math.abs(millis / oneHour));
+
+        return (millis < 0 ? "-" : "") +
+        (hours <= 9 ? "0" + hours : hours) +
+        ":" + (minutes <= 9 ? "0" + minutes : minutes);
+
+    };
+});

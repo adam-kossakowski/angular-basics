@@ -1,0 +1,10 @@
+angular.module("settings").factory("settingsService", function ($resource, $http) {
+    var userREST = $resource("./api/:path/:subpath", {}, {
+
+    });
+    return{
+        saveNewPassword: function(passedData) {
+            return $http.post('./api/users/changePass', passedData, {});
+        }
+    }
+});

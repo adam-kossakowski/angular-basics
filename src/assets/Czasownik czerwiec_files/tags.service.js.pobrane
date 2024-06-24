@@ -1,0 +1,38 @@
+angular.module("tags").factory("tagsService", function ($resource) {
+    var userREST = $resource("./api/:path/:subpath/:action", {}, {
+         'getListOfTags': {method: 'GET', params: {path: 'tags', subpath: 'byDepartment', action: '@departmentIdPath'}, isArray: true}, // introduced api
+        'getTagData': {method: 'GET', params: {path: 'tags', action: '@tagIdPath'}},
+        'updateTag': {method: 'PUT', params: {path: 'tags'}},
+        'disconnectTag': {method: 'DELETE', params: {path: 'tags', subpath: 'unconnect', action: '@tagIdPath'}},
+        'removeTag': {method: 'DELETE', params: {path: 'tags', action: '@tagIdPath'}},
+        'getNewCard': {method: 'GET', params: {path: 'tmp-tags', subpath: 'byDepartment', action: '@departmentIdPath'}, isArray: true},
+        'addNewTag': {method: 'POST', params: {path: 'tmp-tags', action: 'register'}},
+        'deleteNewTag': {method: 'DELETE', params: {path: 'tmp-tags', action: '@tagIdPath'}}
+    });
+    return{
+        getListOfTags: function (success, failure) {
+            userREST.getListOfTags({}, success, failure);
+        },
+        getTagData: function (success, failure) {
+            userREST.getTagData({}, success, failure);
+        },
+        updateTag: function (tagData, success, failure) {
+            userREST.updateTag(tagData, success, failure);
+        },
+        disconnectTag: function (success, failure) {
+            userREST.disconnectTag({}, success, failure);
+        },
+        removeTag: function (success, failure) {
+            userREST.removeTag({}, success, failure);
+        },
+        getNewCard: function (success, failure) {
+            userREST.getNewCard({}, success, failure);
+        },
+        addNewTag: function (tagData, success, failure) {
+            userREST.addNewTag(tagData, success, failure);
+        },
+        deleteNewTag: function (success, failure) {
+            userREST.deleteNewTag({}, success, failure);
+        }
+    }
+});

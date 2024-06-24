@@ -1,0 +1,29 @@
+'use strict';
+
+angular.module('calendar.directives', []);
+
+angular.module("userslist", []);
+angular.module("calendar", []);
+angular.module("settings", []);
+angular.module("useredit", []);
+angular.module("tags", []);
+angular.module("logs", []);
+angular.module("reports", []);
+angular.module("about", []);
+angular.module("companydata", []);
+angular.module("employeedata", []);
+angular.module("readerconfig", []);
+angular.module("modalModule", []);
+angular.module("fired", []);
+
+var arr = [];
+var libraries = ["calendar.directives", "ui.router", "ui.bootstrap", "ui.select", "ngResource", "ngAnimate", "ngSanitize", "naif.base64"];
+var app = ["userslist", "calendar", "settings", "useredit", "tags", "logs", "reports", "about", "companydata", "employeedata", "readerconfig", "modalModule", "fired"];
+var dependencies = arr.concat(libraries, app);
+angular.module("calendarApp", dependencies);
+
+angular.module("calendarApp").config(["$locationProvider", "$urlRouterProvider", function ($locationProvider, $urlRouterProvider) {
+    $locationProvider.html5Mode(false);
+    $locationProvider.hashPrefix('');
+    $urlRouterProvider.otherwise('/');
+}]);

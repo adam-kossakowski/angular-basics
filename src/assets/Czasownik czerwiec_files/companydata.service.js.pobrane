@@ -1,0 +1,54 @@
+angular.module("companydata").factory("companydataService", function ($resource) {
+    var userREST = $resource("./api/:path/:subpath/:action", {}, {
+        'getCompaniesList': {method: 'GET', params: {path: 'company'}, isArray: true},
+        'getCompanyData': {method: 'GET', params: {path: 'company', action: '@companyIdPath'}},
+        'addCompany': {method: 'POST', params: {path: 'company'}},
+        'editCompany': {method: 'PUT', params: {path: 'company'}},
+        'deleteCompany': {method: 'DELETE', params: {path: 'company', action: '@companyIdPath'}},
+        'getCompanysDepartments': {method: 'GET', params: {path: 'department', subpath: 'by-company', action: '@companyIdPath'}, isArray: true},
+        'getDepartments': {method: 'GET', params: {path: 'department'}, isArray: true},
+        'getDepartmentData': {method: 'GET', params: {path: 'department', action: '@departmentIdPath'}},
+        'getSubdepartments': {method: 'GET', params: {path: 'department', subpath: 'sub-department-of', action: '@departmentIdPath'}, isArray: true},
+        'addDepartment': {method: 'POST', params: {path: 'department'}},
+        'editDepartment': {method: 'PUT', params: {path: 'department'}},
+        'deleteDepartment': {method: 'DELETE', params: {path: 'department', action: '@departmentIdPath'}}
+    });
+    return{
+        getCompaniesList: function (success, failure) {
+            userREST.getCompaniesList({}, success, failure);
+        },
+        getCompanyData: function (success, failure) {
+            userREST.getCompanyData({}, success, failure);
+        },
+        addCompany: function (companyData, success, failure) {
+            userREST.addCompany(companyData, success, failure);
+        },
+        editCompany: function (companyData, success, failure) {
+            userREST.editCompany(companyData, success, failure);
+        },
+        deleteCompany: function (success, failure) {
+            userREST.deleteCompany({}, success, failure);
+        },
+        getCompanysDepartments: function (success, failure) {
+            userREST.getCompanysDepartments({}, success, failure);
+        },
+        getDepartments: function (success, failure) {
+            userREST.getDepartments({}, success, failure);
+        },
+        getDepartmentData: function (success, failure) {
+            userREST.getDepartmentData({}, success, failure);
+        },
+        getSubdepartments: function (success, failure) {
+            userREST.getSubdepartments({}, success, failure);
+        },
+        addDepartment: function (departmentData, success, failure) {
+            userREST.addDepartment(departmentData, success, failure);
+        },
+        editDepartment: function (departmentData, success, failure) {
+            userREST.editDepartment(departmentData, success, failure);
+        },
+        deleteDepartment: function (success, failure) {
+            userREST.deleteDepartment({}, success, failure);
+        }
+    }
+});

@@ -1,0 +1,70 @@
+angular.module("calendarApp").factory("coreService", ["$resource", function ($resource) {
+    var userREST = $resource("./api/:path/:subpath/:action", {}, {
+        'getDepartmentList': {method: 'GET', params: {path: 'employee', subpath: 'by-user', action: '@userId'}, isArray: true},
+        'checkLoggedUser': {method: 'GET', params: {path: 'users', subpath: 'logged'}},
+        'getReaderMode': {method: 'GET', params: {path: 'readerfx', subpath: 'by-department', action: '@departmentId'}, isArray: true},
+        'changeReaderMode': {method: 'PUT', params: {path: 'readerfx'}},
+        'changeDepartment': {method: 'PUT', params: {path: 'users', subpath: 'default-employee'}}
+    });
+    return{
+        getDepartmentList: function (success, failure) {
+            userREST.getDepartmentList({}, success, failure);
+        },
+        checkLoggedUser: function (success, failure) {
+            userREST.checkLoggedUser({}, success, failure);
+        },
+        getReaderMode: function (success, failure) {
+            userREST.getReaderMode({}, success, failure);
+        },
+        changeReaderMode: function (readerData, success, failure) {
+            userREST.changeReaderMode(readerData, success, failure);
+        },
+        changeDepartment: function (departmentData, success, failure) {
+            userREST.changeDepartment(departmentData, success, failure);
+        }
+    }
+}]);
+
+angular.module("calendarApp").factory("modalService", ["$uibModal", function($uibModal){
+    return {
+        showInfoModal: function (dataObject) {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                controllerAs: 'vm',
+                resolve: {
+                    ctrl: function () {
+                        return dataObject;
+                    }
+                },
+                size: (dataObject.modalSize===undefined) ? 'sm' : dataObject.modalSize,
+                templateUrl: (dataObject.modalType===undefined) ? './modules/modals/modal_info.html' : './modules/modals/modal_OK.html',
+                controller: (dataObject.modalType===undefined) ? 'InfoModalCtrl' : 'OkModalCtrl'
+            }).result['finally'](function(){})
+        }
+    }
+}]);
+
+angular.module("calendarApp").factory("instructionService", ["$http", "$sce", "$window", function($http, $sce, $window){
+
+    var instructions = {};
+
+    instructions.getInstruction = function (urlParam) {
+        $http.get('./instruction?filename=' + urlParam + '.pdf', {responseType:'arraybuffer'})
+            .then(function (data) {
+                var file = new Blob([data.data], {type: 'application/pdf'});
+                var fileURL = URL.createObjectURL(file);
+                var sce = $sce.trustAsResourceUrl(fileURL);
+                $window.open(sce);
+            });
+    };
+
+    return instructions;
+}]);
+
+angular.module("calendarApp").constant("usersRoles", {
+    admin: "ADMIN",
+    deskofficer: "DESKOFFICER",
+    user: "USER"
+});

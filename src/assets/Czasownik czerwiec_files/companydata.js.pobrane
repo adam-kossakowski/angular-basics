@@ -1,0 +1,458 @@
+(function () {
+angular.module("companydata").config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $urlRouterProvider) {
+    $urlRouterProvider.otherwise("/");
+    $stateProvider
+        .state('companydata', {
+            abstract: true,
+            url: '/companydata',
+            templateUrl: './modules/companydata/companydata.html'
+        })
+        .state("companydata.list", {
+            url: "/list",
+            templateUrl: "./modules/companydata/companydata.list.html",
+            controllerAs: 'vm',
+            controller: function($scope, $rootScope, $state, companydataService, modalService, myModalService){
+
+                var ctrl = {};
+
+                ctrl = {
+
+                    // Companies
+
+                    companiesList: [],
+                    deleteCompany: deleteCompany,
+
+                    // Departments
+
+                    departmentsList: [],
+                    deleteDepartment: deleteDepartment
+                };
+
+                getData();
+
+                return ctrl;
+
+                function getData() {
+                    // Pobiera wszystkie firmy
+                    companydataService.getCompaniesList(function (result) {
+                        ctrl.companiesList = result;
+                    }, function (error) {
+                        var infoModalData = {
+                            serverResponse: "errorResponse",
+                            message: "Nie można pobrać listy firm. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                        };
+                        modalService.showInfoModal(infoModalData);
+                    });
+
+
+                    // Pobiera wszystkie oddziały
+                    companydataService.getDepartments(function (result) {
+                        ctrl.departmentsList = result;
+                    }, function (error) {
+                        var infoModalData = {
+                            serverResponse: "errorResponse",
+                            message: "Nie można pobrać listy oddziałów. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                        };
+                        modalService.showInfoModal(infoModalData);
+                    });
+
+                }
+
+                function deleteCompany(data) {
+
+                    var modalOptions = {
+                        closeButtonText: 'Anuluj',
+                        actionButtonText: 'Usuń',
+                        headerText: 'Usuwanie firmy',
+                        bodyText: 'Czy na pewno chcesz usunąć firmę ' + data.name + '?'
+                    };
+
+                    myModalService.showYesNoModal({}, modalOptions).then(function (result) {
+                        companydataService.deleteCompany({companyIdPath: data.id}, function (result) {
+                            var infoModalData = {
+                                serverResponse: "successResponse",
+                                message: 'Pomyślnie usunięto firmę'
+                            };
+                            modalService.showInfoModal(infoModalData);
+                            getData();
+                        }, function(error) {
+                            var infoModalData = {
+                                serverResponse: "errorResponse",
+                                message: "Nie można skasować firmy. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                            };
+                            modalService.showInfoModal(infoModalData);
+                        });
+                    }, function(error) {
+                    })
+                }
+
+                function deleteDepartment(data) {
+
+                    var modalOptions = {
+                        closeButtonText: 'Anuluj',
+                        actionButtonText: 'Usuń',
+                        headerText: 'Usuwanie oddziału',
+                        bodyText: 'Czy na pewno chcesz usunąć oddział ' + data.name + '?'
+                    };
+
+                    myModalService.showYesNoModal({}, modalOptions).then(function (result) {
+                        companydataService.deleteDepartment({departmentIdPath: data.id}, function (result) {
+                            var infoModalData = {
+                                serverResponse: "successResponse",
+                                message: 'Pomyślnie usunięto oddział'
+                            };
+                            modalService.showInfoModal(infoModalData);
+                            getData();
+                        }, function(error) {
+                            var infoModalData = {
+                                serverResponse: "errorResponse",
+                                message: "Nie można skasować oddziału. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                            };
+                            modalService.showInfoModal(infoModalData);
+                        });
+                    }, function(error) {
+                    })
+                }
+            }
+        })
+        .state("companydata.editCompany", {
+            url: "/company/:id",
+            templateUrl: "./modules/companydata/companydata.company.html",
+            controllerAs: 'vm',
+            controller: function($scope, $rootScope, $state, $stateParams, companydataService, modalService){
+
+                var ctrl = {};
+
+                ctrl = {
+
+                    companyName: "",
+                    companyNip: "",
+                    companyRegon: "",
+                    companyPhone: "",
+                    companyStreet: "",
+                    companyBuildingNumber: "",
+                    companyDoorNumber: "",
+                    companyPostalCode: "",
+                    companyCity: "",
+                    companyCountry: "",
+                    companyId: "",
+                    companyAddressDtoId: "",
+
+                    companyForm: companyForm
+
+                };
+
+                getData();
+
+                return ctrl;
+
+                function getData() {
+                    companydataService.getCompanyData({companyIdPath: $stateParams.id}, function (result) {
+                        ctrl.companyName = result.name;
+                        ctrl.companyNip = result.nip;
+                        ctrl.companyRegon = result.regon;
+                        ctrl.companyPhone = result.phone;
+                        ctrl.companyStreet = result.addressDto.street;
+                        ctrl.companyBuildingNumber = result.addressDto.houseNumber;
+                        ctrl.companyDoorNumber = result.addressDto.doorNumber;
+                        ctrl.companyPostalCode = result.addressDto.postalCode;
+                        ctrl.companyCity = result.addressDto.city;
+                        ctrl.companyCountry = result.addressDto.country;
+                        ctrl.companyAddressDtoId = result.addressDto.id;
+                        ctrl.companyId = result.id;
+                    }, function (error) {
+                        var infoModalData = {
+                            serverResponse: "errorResponse",
+                            message: "Nie można pobrać danych firmy. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                        };
+                        modalService.showInfoModal(infoModalData);
+                    });
+                }
+
+                function companyForm() {
+                    var companyData = {};
+
+                    companyData.id = ctrl.companyId;
+                    companyData.name = ctrl.companyName;
+                    companyData.nip = ctrl.companyNip;
+                    companyData.regon = ctrl.companyRegon;
+                    companyData.phone = ctrl.companyPhone;
+                    companyData.addressDto = {};
+                    companyData.addressDto.id = ctrl.companyAddressDtoId;
+                    companyData.addressDto.street = ctrl.companyStreet;
+                    companyData.addressDto.houseNumber = ctrl.companyBuildingNumber;
+                    companyData.addressDto.doorNumber = ctrl.companyDoorNumber;
+                    companyData.addressDto.postalCode = ctrl.companyPostalCode;
+                    companyData.addressDto.city = ctrl.companyCity;
+                    companyData.addressDto.country = ctrl.companyCountry;
+
+
+                    companydataService.editCompany(companyData, function (result) {
+                            companyData = {};
+
+                            var infoModalData = {
+                                serverResponse: "successResponse",
+                                message: "Dane zostały zapisane na serwerze."
+                            };
+                            modalService.showInfoModal(infoModalData);
+
+                        $state.go("companydata.list");
+
+                    }, function (error) {
+                            var infoModalData = {
+                                serverResponse: "errorResponse",
+                                message: "Nie można zapisać zmian. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                            };
+                            modalService.showInfoModal(infoModalData);
+                    })
+                }
+                
+            }
+        })
+        .state("companydata.addCompany", {
+            url: "/company/new",
+            templateUrl: "./modules/companydata/companydata.company.html",
+            controllerAs: 'vm',
+            controller: function($scope, $rootScope, $state, companydataService, modalService){
+
+                var ctrl = {};
+
+                ctrl = {
+
+                    companyName: "",
+                    companyNip: "",
+                    companyRegon: "",
+                    companyPhone: "",
+                    companyStreet: "",
+                    companyBuildingNumber: "",
+                    companyDoorNumber: "",
+                    companyPostalCode: "",
+                    companyCity: "",
+                    companyCountry: "",
+
+                    companyForm: companyForm
+
+                };
+
+                return ctrl;
+
+                function companyForm() {
+                    var companyData = {};
+
+                    companyData.name = ctrl.companyName;
+                    companyData.nip = ctrl.companyNip;
+                    companyData.regon = ctrl.companyRegon;
+                    companyData.phone = ctrl.companyPhone;
+                    companyData.addressDto = {};
+                    companyData.addressDto.street = ctrl.companyStreet;
+                    companyData.addressDto.houseNumber = ctrl.companyBuildingNumber;
+                    companyData.addressDto.doorNumber = ctrl.companyDoorNumber;
+                    companyData.addressDto.postalCode = ctrl.companyPostalCode;
+                    companyData.addressDto.city = ctrl.companyCity;
+                    companyData.addressDto.country = ctrl.companyCountry;
+
+
+                    companydataService.addCompany(companyData, function (result) {
+                        companyData = {};
+
+                        var infoModalData = {
+                            serverResponse: "successResponse",
+                            message: "Dane zostały zapisane na serwerze."
+                        };
+                        modalService.showInfoModal(infoModalData);
+
+                        $state.go("companydata.list");
+
+                    }, function (error) {
+                        var infoModalData = {
+                            serverResponse: "errorResponse",
+                            message: "Nie można zapisać zmian. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                        };
+                        modalService.showInfoModal(infoModalData);
+                    })
+                }
+
+            }
+        })
+        .state("companydata.editDepartment", {
+            url: "/department/:id",
+            templateUrl: "./modules/companydata/companydata.department.html",
+            controllerAs: 'vm',
+            controller: function($scope, $rootScope, $state, $stateParams, companydataService, modalService){
+
+                var ctrl = {};
+
+                ctrl = {
+                    companiesList: [],
+                    departmentOfCompany: "",
+                    departmentName: "",
+                    departmentPhone: "",
+                    departmentStreet: "",
+                    departmentBuildingNumber: "",
+                    departmentDoorNumber: "",
+                    departmentPostalCode: "",
+                    departmentCity: "",
+                    departmentCountry: "",
+                    departmentId: "",
+                    departmentAddressDtoId: "",
+
+                    departmentForm: departmentForm
+
+                };
+
+                getData();
+
+                return ctrl;
+
+                function getData() {
+                    companydataService.getCompaniesList(function (result) {
+                        ctrl.companiesList = result;
+                    }, function (error) {
+                        var infoModalData = {
+                            serverResponse: "errorResponse",
+                            message: "Nie można pobrać listy firm. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                        };
+                        modalService.showInfoModal(infoModalData);
+                    });
+
+                    companydataService.getDepartmentData({departmentIdPath: $stateParams.id}, function (result) {
+                        ctrl.departmentOfCompany = result.companyDto;
+                        ctrl.departmentName =result.name;
+                        ctrl.departmentPhone = result.phoneNumber;
+                        ctrl.departmentStreet = result.addressDto.street;
+                        ctrl.departmentBuildingNumber = result.addressDto.houseNumber;
+                        ctrl.departmentDoorNumber = result.addressDto.doorNumber;
+                        ctrl.departmentPostalCode = result.addressDto.postalCode;
+                        ctrl.departmentCity = result.addressDto.city;
+                        ctrl.departmentCountry = result.addressDto.country;
+                        ctrl.departmentAddressDtoId = result.addressDto.id;
+                        ctrl.departmentId = result.id;
+                    }, function (error) {
+                        var infoModalData = {
+                            serverResponse: "errorResponse",
+                            message: "Nie można pobrać danych firmy. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                        };
+                        modalService.showInfoModal(infoModalData);
+                    });
+                }
+
+                function departmentForm() {
+                    var departmentData = {};
+
+                    departmentData.subDepartmentOf = null;
+                    departmentData.companyDto = {};
+                    departmentData.companyDto.id = ctrl.departmentOfCompany.id;
+                    departmentData.name = ctrl.departmentName;
+                    departmentData.phoneNumber = ctrl.departmentPhone;
+                    departmentData.addressDto = {};
+                    departmentData.addressDto.id = ctrl.departmentAddressDtoId;
+                    departmentData.addressDto.street = ctrl.departmentStreet;
+                    departmentData.addressDto.houseNumber = ctrl.departmentBuildingNumber;
+                    departmentData.addressDto.doorNumber = ctrl.departmentDoorNumber;
+                    departmentData.addressDto.postalCode = ctrl.departmentPostalCode;
+                    departmentData.addressDto.city = ctrl.departmentCity;
+                    departmentData.addressDto.country = ctrl.departmentCountry;
+                    departmentData.id = ctrl.departmentId;
+
+                    companydataService.editDepartment(departmentData, function (result) {
+                        departmentData = {};
+
+                        var infoModalData = {
+                            serverResponse: "successResponse",
+                            message: "Dane zostały zapisane na serwerze."
+                        };
+                        modalService.showInfoModal(infoModalData);
+
+                        $state.go("companydata.list");
+
+                    }, function (error) {
+                        var infoModalData = {
+                            serverResponse: "errorResponse",
+                            message: "Nie można zapisać zmian. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                        };
+                        modalService.showInfoModal(infoModalData);
+                    })
+                }
+
+            }
+        })
+        .state("companydata.addDepartment", {
+            url: "/department/new",
+            templateUrl: "./modules/companydata/companydata.department.html",
+            controllerAs: 'vm',
+            controller: function($scope, $rootScope, $state, companydataService, modalService){
+
+                var ctrl = {};
+
+                ctrl = {
+                    companiesList: [],
+                    departmentOfCompany: "",
+                    departmentName: "",
+                    departmentPhone: "",
+                    departmentStreet: "",
+                    departmentBuildingNumber: "",
+                    departmentDoorNumber: "",
+                    departmentPostalCode: "",
+                    departmentCity: "",
+                    departmentCountry: "",
+
+                    departmentForm: departmentForm
+
+                };
+
+                getData();
+
+                return ctrl;
+
+                function getData() {
+                    companydataService.getCompaniesList(function (result) {
+                        ctrl.companiesList = result;
+                    }, function (error) {
+                        var infoModalData = {
+                            serverResponse: "errorResponse",
+                            message: "Nie można pobrać listy firm. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                        };
+                        modalService.showInfoModal(infoModalData);
+                    });
+                }
+
+                function departmentForm() {
+                    var departmentData = {};
+
+                    departmentData.subDepartmentOf = null;
+                    departmentData.companyDto = {};
+                    departmentData.companyDto.id = ctrl.departmentOfCompany.id;
+                    departmentData.name = ctrl.departmentName;
+                    departmentData.phoneNumber = ctrl.departmentPhone;
+                    departmentData.addressDto = {};
+                    departmentData.addressDto.street = ctrl.departmentStreet;
+                    departmentData.addressDto.houseNumber = ctrl.departmentBuildingNumber;
+                    departmentData.addressDto.doorNumber = ctrl.departmentDoorNumber;
+                    departmentData.addressDto.postalCode = ctrl.departmentPostalCode;
+                    departmentData.addressDto.city = ctrl.departmentCity;
+                    departmentData.addressDto.country = ctrl.departmentCountry;
+
+                    companydataService.addDepartment(departmentData, function (result) {
+                        departmentData = {};
+
+                        var infoModalData = {
+                            serverResponse: "successResponse",
+                            message: "Dane zostały zapisane na serwerze."
+                        };
+                        modalService.showInfoModal(infoModalData);
+
+                        $state.go("companydata.list");
+
+                    }, function (error) {
+                        var infoModalData = {
+                            serverResponse: "errorResponse",
+                            message: "Nie można zapisać zmian. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                        };
+                        modalService.showInfoModal(infoModalData);
+                    })
+                }
+
+            }
+        })
+}]);
+})();

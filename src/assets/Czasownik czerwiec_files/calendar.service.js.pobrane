@@ -1,0 +1,57 @@
+angular.module("calendar").factory("calendarService", function($resource, $http) {
+
+    var userREST = $resource("./api/:path/:subpath/:action", {}, {
+        'getCurrentServerTime': {method: 'GET', params: {path: 'summary', subpath: 'time'}},
+        'getDailySummary': {method: 'GET', params: {path: 'summary', subpath: 'today', action: '@userIdPath'}},
+        'getMonthlySummary': {method: 'POST', params: {path: 'summary', subpath: 'month'}},
+        'getDailyEntriesDepartment': {method: 'POST', params: {path: 'worktimes', subpath: 'for-employee-and-between'}, isArray: true},
+        'getWorkTypes': {method: 'GET', params: {path: 'worktypes'}, isArray: true},
+        'addWorkTimeEntry': {method: 'POST', params: {path: 'worktimes'}},
+        'updateWorkTimeEntry': {method: 'PUT', params: {path: 'worktimes'}},
+        'getWorkTimeEntry': {method: 'GET', params: {path: 'worktimes', action: '@entryIdPath'}},
+        'deleteWorkTimeEntry': {method: 'DELETE', params: {path: 'worktimes', action: '@entryIdPath'}},
+        'getUserInfo': {method: 'GET', params: {path: 'employee', action: '@viewedEmployeeId'}}
+    });
+    return{
+        getCurrentServerTime: function (success, failure) {
+            userREST.getCurrentServerTime({}, success, failure);
+        },
+        getDailySummary: function (success, failure) {
+            userREST.getDailySummary({}, success, failure);
+        },
+        getMonthlySummary: function (timeRange, success, failure) {
+            userREST.getMonthlySummary(timeRange, success, failure);
+        },
+        checkIsPresent: function(path) {
+            return $http.get('./api/employeeRecords/inwork/' + path, {});
+        },
+        getHolidays: function(passedData) {
+            return $http.post('./api/freeday/between', passedData, {});
+        },
+        getMonthlyInfo: function(passedData) {
+            return $http.post('./api/monthlyinfo', passedData, {});
+        },
+        getDailyEntriesDepartment: function(timeRange, success, failure) {
+            userREST.getDailyEntriesDepartment(timeRange, success, failure);
+        },
+        getWorkTypes: function(success, failure) {
+            userREST.getWorkTypes({}, success, failure);
+        },
+        addWorkTimeEntry: function(entryData, success, failure) {
+            userREST.addWorkTimeEntry(entryData, success, failure);
+        },
+        updateWorkTimeEntry: function(entryData, success, failure) {
+            userREST.updateWorkTimeEntry(entryData, success, failure);
+        },
+        getWorkTimeEntry: function(success, failure) {
+            userREST.getWorkTimeEntry({}, success, failure);
+        },
+        deleteWorkTimeEntry: function(success, failure) {
+            userREST.deleteWorkTimeEntry({}, success, failure);
+        },
+        getUserInfo: function(success, failure) {
+            userREST.getUserInfo({}, success, failure);
+        }
+    }
+
+});

@@ -1,0 +1,30 @@
+angular.module("readerconfig").factory("readerconfigService", function ($resource) {
+    var userREST = $resource("./api/:path/:subpath/:action", {}, {
+        'getDepartmentsList':{method: 'GET', params: {path: 'department'}, isArray: true},
+        'getUnassignedReaders': {method: 'GET', params: {path: 'readerfx', subpath: 'unassigned'}, isArray: true},
+        'addReader': {method: 'PUT', params: {path: 'readerfx', subpath: 'assign'}},
+        'removeReader': {method: 'GET', params: {path: 'readerfx', subpath: 'unconnect', action: '@readerIdPath'}},
+        'getConfiguration' : {method: 'GET', params: {path: 'readerfx-configuration', subpath: 'department', action: '@departmentIdPath'}},
+        'updateConfiguration' : {method: 'PUT', params: {path: 'readerfx-configuration'}}
+    });
+    return{
+        getDepartmentsList: function (success, failure) {
+            userREST.getDepartmentsList({}, success, failure);
+        },
+        getUnassignedReaders: function (success, failure) {
+            userREST.getUnassignedReaders({}, success, failure);
+        },
+        addReader: function (readerData, success, failure) {
+            userREST.addReader(readerData, success, failure);
+        },
+        removeReader: function (success, failure) {
+            userREST.removeReader({}, success, failure);
+        },
+        getConfiguration: function (success, failure) {
+            userREST.getConfiguration({}, success, failure);
+        },
+        updateConfiguration: function (configData, success, failure) {
+            userREST.updateConfiguration(configData, success, failure);
+        }
+    }
+});

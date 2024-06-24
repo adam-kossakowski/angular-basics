@@ -1,0 +1,320 @@
+(function () {
+    angular.module("employeedata").config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $urlRouterProvider) {
+        $urlRouterProvider.otherwise("/");
+        $stateProvider
+            .state("employeedata", {
+                url: "/employeedata",
+                templateUrl: "./modules/employeedata/employeedata.html",
+                controllerAs: 'vm',
+                controller: function($scope, $rootScope, $state, employeedataService, modalService){
+
+                    var ctrl = {};
+
+                    ctrl = {
+
+                        // Jobs title
+
+                        jobsList: [],
+                        jobTitle: "",
+                        // jobId: "",
+                        editedJob: {},
+
+                        cancelEditingJob: cancelEditingJob,
+                        editJobTitle: editJobTitle,
+                        jobTitleForm: jobTitleForm,
+
+                        // Group title
+
+                        groupList: [],
+                        groupTitle: "",
+                        groupDesc: "",
+                        editedGroup: {},
+                        pickedJobs: [],
+
+                        cancelEditingGroup: cancelEditingGroup,
+                        editGroupTitle: editGroupTitle,
+                        groupTitleForm: groupTitleForm,
+
+                        // Worktypes
+
+                        workTypes: [],
+                        workTypeName: "",
+                        // workTypeId: "",
+                        workTypeSymbol: "",
+                        workTypeIncludeInWorktime: true,
+                        workTypeForDeskOfficer: false,
+                        editedWorkType: {},
+
+                        cancelEditingWorkType: cancelEditingWorkType,
+                        editWorkType: editWorkType,
+                        workTypeForm: workTypeForm
+                    };
+
+                    var currentDepartment = $rootScope.$watch('pickedDepartment', function (newValue, oldValue) {
+                        if(newValue){
+                            getData();
+                        }
+
+                    }, true);
+
+
+                    return ctrl;
+
+                    function getData() {
+                        employeedataService.getJobsList(function(result){
+                            ctrl.jobsList = result;
+                        }, function (error) {
+                            var infoModalData = {
+                                serverResponse: "errorResponse",
+                                message: "Nie można pobrać listy stanowisk. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                            };
+                            modalService.showInfoModal(infoModalData);
+                        });
+
+                        employeedataService.getGroupList({departmentIdPath: $rootScope.loggedUser.departmentId}, function(result){
+                            ctrl.groupList = result;
+                        }, function (error) {
+                            var infoModalData = {
+                                serverResponse: "errorResponse",
+                                message: "Nie można pobrać listy stanowisk. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                            };
+                            modalService.showInfoModal(infoModalData);
+                        });
+
+                        employeedataService.getWorkTypes(function (result) {
+                            ctrl.workTypes = result;
+                        }, function (error) {
+                            var infoModalData = {
+                                serverResponse: "errorResponse",
+                                message: "Nie można pobrać listy statusów. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                            };
+                            modalService.showInfoModal(infoModalData);
+                        });
+
+                    }
+
+                    function editJobTitle(job) {
+                        ctrl.editedJob = angular.copy(job);
+                    }
+
+                    function cancelEditingJob(e) {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        ctrl.editedJob = {};
+                    }
+
+                    function jobTitleForm(data) {
+                        var jobTitle = {};
+
+                        if(data) {
+                            jobTitle.name = data.name;
+                        } else {
+                            jobTitle.name = ctrl.jobTitle;
+                        }
+
+                        if(data) {
+                            jobTitle.id = data.id;
+                            employeedataService.editJobsList(jobTitle, function (result) {
+                                getData();
+                                ctrl.editedJob = {};
+                                ctrl.jobTitle = "";
+                                // ctrl.jobId = "";
+                                jobTitle = {};
+
+                                var infoModalData = {
+                                    serverResponse: "successResponse",
+                                    message: "Dane zostały zapisane na serwerze."
+                                };
+                                modalService.showInfoModal(infoModalData);
+
+                            }, function (error) {
+                                var infoModalData = {
+                                    serverResponse: "errorResponse",
+                                    message: "Nie można zapisać zmian. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                                };
+                                modalService.showInfoModal(infoModalData);
+                            })
+                        } else {
+                            employeedataService.addJobsList(jobTitle, function (result) {
+                                getData();
+                                ctrl.jobTitle = "";
+                                // ctrl.jobId = "";
+                                jobTitle = {};
+
+                                var infoModalData = {
+                                    serverResponse: "successResponse",
+                                    message: "Dane zostały zapisane na serwerze."
+                                };
+                                modalService.showInfoModal(infoModalData);
+
+                            }, function (error) {
+                                var infoModalData = {
+                                    serverResponse: "errorResponse",
+                                    message: "Nie można dodać wpisu. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                                };
+                                modalService.showInfoModal(infoModalData);
+                            });
+                        }
+                    }
+
+                    function editGroupTitle(group) {
+                        ctrl.editedGroup = angular.copy(group);
+                    }
+
+                    function cancelEditingGroup(e) {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        ctrl.editedGroup = {};
+                    }
+
+                    function groupTitleForm(data) {
+                        var groupTitle = {};
+                        groupTitle.jobTitleDtos = [];
+
+                        if(data) {
+                            groupTitle.name = data.name;
+                            groupTitle.description = data.description;
+                            data.jobTitleDtos.forEach(function (elem) {
+                                groupTitle.jobTitleDtos.push({"id": elem.id});
+                            });
+                        } else {
+                            groupTitle.name = ctrl.groupTitle;
+                            groupTitle.departmentDtos = [{"id": $rootScope.pickedDepartment.departmentDto.id}];
+                            groupTitle.description = ctrl.groupDesc;
+                            ctrl.pickedJobs.forEach(function (elem) {
+                                groupTitle.jobTitleDtos.push({"id": elem.id});
+                            });
+                        }
+
+                        if(data) {
+                            groupTitle.id = data.id;
+                            employeedataService.editGroupList(groupTitle, function (result) {
+                                getData();
+                                ctrl.editedGroup = {};
+                                ctrl.groupTitle = "";
+                                ctrl.groupDesc = "";
+                                groupTitle = {};
+
+                                var infoModalData = {
+                                    serverResponse: "successResponse",
+                                    message: "Dane zostały zapisane na serwerze."
+                                };
+                                modalService.showInfoModal(infoModalData);
+
+                            }, function (error) {
+                                var infoModalData = {
+                                    serverResponse: "errorResponse",
+                                    message: "Nie można zapisać zmian. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                                };
+                                modalService.showInfoModal(infoModalData);
+                            })
+                        } else {
+                            employeedataService.addGroupList(groupTitle, function (result) {
+                                getData();
+                                ctrl.groupTitle = "";
+                                ctrl.groupDesc = "";
+                                ctrl.pickedJobs = [];
+                                groupTitle = {};
+
+                                var infoModalData = {
+                                    serverResponse: "successResponse",
+                                    message: "Dane zostały zapisane na serwerze."
+                                };
+                                modalService.showInfoModal(infoModalData);
+
+                            }, function (error) {
+                                var infoModalData = {
+                                    serverResponse: "errorResponse",
+                                    message: "Nie można dodać wpisu. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                                };
+                                modalService.showInfoModal(infoModalData);
+                            });
+                        }
+                    }
+
+                    function editWorkType(data) {
+                        ctrl.editedWorkType = angular.copy(data);
+                    }
+
+                    function cancelEditingWorkType(e) {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        ctrl.editedWorkType = {};
+                    }
+
+                    function workTypeForm(data) {
+                        var jobTitle = {};
+
+                        if(data) {
+                            jobTitle.name = data.name;
+                        } else {
+                            jobTitle.name = ctrl.jobTitle;
+                        }
+
+
+                        var workType = {};
+
+                        if(data){
+                            workType.symbol = data.symbol;
+                            workType.name = data.name;
+                            workType.includedInWorkedTime = data.includedInWorkedTime;
+                            workType.editableByDeskOfficer = data.editableByDeskOfficer;
+                        } else {
+                            workType.symbol = ctrl.workTypeSymbol;
+                            workType.name = ctrl.workTypeName;
+                            workType.includedInWorkedTime = ctrl.workTypeIncludeInWorktime;
+                            workType.editableByDeskOfficer = ctrl.workTypeForDeskOfficer;
+                        }
+                        if(data) {
+                            workType.id = data.id;
+                            employeedataService.editWorkTypes(workType, function (result) {
+                                getData();
+                                ctrl.editedWorkType = {};
+                                ctrl.workTypeSymbol = "";
+                                ctrl.workTypeName = "";
+                                ctrl.workTypeIncludeInWorktime = true;
+                                ctrl.workTypeForDeskOfficer = false;
+                                workType = {};
+
+                                var infoModalData = {
+                                    serverResponse: "successResponse",
+                                    message: "Dane zostały zapisane na serwerze."
+                                };
+                                modalService.showInfoModal(infoModalData);
+
+                            }, function (error) {
+                                var infoModalData = {
+                                    serverResponse: "errorResponse",
+                                    message: "Nie można zapisać zmian. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                                };
+                                modalService.showInfoModal(infoModalData);
+                            })
+                        } else {
+                            employeedataService.addWorkTypes(workType, function (result) {
+                                getData();
+                                ctrl.workTypeSymbol = "";
+                                ctrl.workTypeName = "";
+                                ctrl.workTypeIncludeInWorktime = true;
+                                ctrl.workTypeForDeskOfficer = false;
+                                workType = {};
+
+                                var infoModalData = {
+                                    serverResponse: "successResponse",
+                                    message: "Dane zostały zapisane na serwerze."
+                                };
+                                modalService.showInfoModal(infoModalData);
+
+                            }, function (error) {
+                                var infoModalData = {
+                                    serverResponse: "errorResponse",
+                                    message: "Nie można dodać wpisu. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                                };
+                                modalService.showInfoModal(infoModalData);
+                            });
+                        }
+                    }
+
+                }
+            })
+    }]);
+})();

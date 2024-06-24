@@ -1,0 +1,49 @@
+angular.module("calendar").filter('timeIntoHours', function() {
+
+    return function(number) {
+
+        if(isNaN(number) || number < 1) {
+
+            return "0:00h";
+
+        } else {
+
+//            var hours = Math.floor(number / (1000 * 60 * 60));
+//            var minutes = Math.floor((number - hours * 1000 * 60 * 60) / (1000 * 60));
+            let minutes = Math.floor(number / 60000);
+            let leftoverTime = number % 60000;
+            if (leftoverTime > 59900) {
+                minutes++;
+            }
+            let hours = Math.floor(minutes / 60);
+            minutes = minutes % 60;
+            minutes = ("0" + minutes).slice(-2);
+
+            return hours + ":" + minutes + "h";
+        }
+    }
+});
+
+angular.module("calendar").filter('workTypesForDeskOfficer', function($rootScope, usersRoles) {
+
+    return function(list) {
+
+        var arr = [],
+            i,
+            max = list.length;
+
+        for(i = 0; i < max; i += 1) {
+            if(list[i].editableByDeskOfficer === true) {
+                arr.push(list[i]);
+            }
+        }
+
+        if($rootScope.userRole === usersRoles.deskofficer) {
+            return arr;
+        } else {
+            return list;
+        }
+
+        //return arr; //tymczasowe rozwiązanie, po prawidłowym ologowaniu użytkownika przywrócić wyższą wersję
+    }
+});

@@ -1,0 +1,212 @@
+(function () {
+angular.module("readerconfig")
+    .config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $urlRouterProvider) {
+        $urlRouterProvider.otherwise("/");
+        $stateProvider
+            .state("readerconfig", {
+                url: "/readerconfig",
+                templateUrl: "./modules/readerconfig/readerconfig.html",
+                controllerAs: 'vm',
+                controller: function($scope, $rootScope, $state, readerconfigService, modalService, myModalService){
+
+                    var ctrl = {};
+
+                    ctrl = {
+                        companiesList: [],
+                        pickedDepartment: "",
+                        pickedReader: "",
+                        readersList: [],
+
+                        addReaderForm: addReaderForm,
+
+                        currentDepartmentReaders: [],
+                        removeReader: removeReader,
+
+                        bgColor: "",
+                        startColor: "",
+                        stopColor: "",
+                        errorColor: "",
+                        alternativeColor: "",
+                        messageShowDuration: "",
+                        logoPicture: {},
+                        configurationId: "",
+                        formSend: false,
+                        clearLogoInput: clearLogoInput,
+                        configReaderForm: configReaderForm,
+                        getDepartmentConfiguration: getDepartmentConfiguration
+                    };
+
+                    var currentDepartment = $rootScope.$watch('pickedDepartment', function (newValue, oldValue) {
+                        if(newValue){
+                            getData();
+                        }
+
+                    }, true);
+
+                    var currentReadersList = $rootScope.$watch('readersStatuses', function (newValue, oldValue) {
+                        if(newValue){
+                            ctrl.currentDepartmentReaders = $rootScope.readersStatuses;
+                            if(ctrl.currentDepartmentReaders.length > 0) {
+                                getDepartmentConfiguration ();
+                            }
+                        }
+
+                    });
+
+                    return ctrl;
+
+                    function getData() {
+                        // readerconfigService.getDepartmentsList(function (result) {
+                        //     ctrl.departmentsList = result;
+                        // }, function (error) {
+                        //     var infoModalData = {
+                        //         serverResponse: "errorResponse",
+                        //         message: "Nie można pobrać listy oddziałów. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                        //     };
+                        //     modalService.showInfoModal(infoModalData);
+                        // });
+
+                        readerconfigService.getUnassignedReaders(function (result) {
+                            ctrl.readersList = result;
+                        }, function (error) {
+                            var infoModalData = {
+                                serverResponse: "errorResponse",
+                                message: "Nie można pobrać listy czytników. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                            };
+                            modalService.showInfoModal(infoModalData);
+                        });
+
+                        if(ctrl.currentDepartmentReaders.length > 0) {
+                            getDepartmentConfiguration ();
+                        }
+                    }
+
+                    function addReaderForm() {
+                        var newReader = {
+                            "readerFxMacAddress": ctrl.pickedReader.mac,
+                            "departmentId": $rootScope.pickedDepartment.departmentDto.id
+                        };
+                        readerconfigService.addReader(newReader, function (result) {
+                            var infoModalData = {
+                                serverResponse: "successResponse",
+                                message: "Dane zostały zapisane na serwerze."
+                            };
+                            modalService.showInfoModal(infoModalData);
+                            $rootScope.getReaderModeStatus($rootScope.pickedDepartment.departmentDto.id);
+                            getData();
+                            ctrl.pickedReader = "";
+                            ctrl.pickedDepartment = "";
+                            newReader = {};
+                        }, function (error) {
+                            var infoModalData = {
+                                serverResponse: "errorResponse",
+                                message: "Nie można dodać czytnika. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                            };
+                            modalService.showInfoModal(infoModalData);
+                        });
+                    }
+
+                    function removeReader(reader) {
+                        var modalOptions = {
+                            closeButtonText: 'Anuluj',
+                            actionButtonText: 'Usuń',
+                            headerText: 'Usuwanie czytnika',
+                            bodyText: 'Czy na pewno chcesz usunąć czytnik ' + reader.name + '?'
+                        };
+
+                        myModalService.showYesNoModal({}, modalOptions).then(function (result) {
+                            readerconfigService.removeReader({readerIdPath: reader.id}, function (result) {
+                                var infoModalData = {
+                                    serverResponse: "successResponse",
+                                    message: 'Pomyślnie usunięto czytnik z oddziału'
+                                };
+                                modalService.showInfoModal(infoModalData);
+                                $rootScope.getReaderModeStatus($rootScope.pickedDepartment.departmentDto.id);
+                                getData();
+                            }, function(error) {
+                                var infoModalData = {
+                                    serverResponse: "errorResponse",
+                                    message: "Nie można skasować użytkownika. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                                };
+                                modalService.showInfoModal(infoModalData);
+                            });
+                        }, function(error) {
+                        })
+                    }
+
+                    function configReaderForm() {
+                        var configData = {
+                            id: ctrl.configurationId,
+                            colorStart: ctrl.startColor,
+                            colorStop: ctrl.stopColor,
+                            colorBackground: ctrl.bgColor,
+                            colorError: ctrl.errorColor,
+                            colorAlternative: ctrl.alternativeColor,
+                            resetViewDelayInSec: ctrl.messageShowDuration
+                        };
+
+                        if(ctrl.logoPicture.base64) {
+                            configData.logoDto = {
+                                fileName: ctrl.logoPicture.filename,
+                                fileExtension: ctrl.logoPicture.filetype,
+                                base64: ctrl.logoPicture.base64
+                            }
+                        }
+
+                        if(!configData.logoDto || (configData.logoDto && configData.logoDto.fileExtension === 'image/png')) {
+                            readerconfigService.updateConfiguration(configData, function (result) {
+                                ctrl.formSend = true;
+                                ctrl.logoPicture = {};
+                                var infoModalData = {
+                                    serverResponse: "successResponse",
+                                    message: "Dane zostały zapisane na serwerze."
+                                };
+                                modalService.showInfoModal(infoModalData);
+                            }, function (error) {
+                                var infoModalData = {
+                                    serverResponse: "errorResponse",
+                                    message: "Nie można zapisać konfiguracji. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                                };
+                                modalService.showInfoModal(infoModalData);
+                            });
+                        } else {
+                            var infoModalData = {
+                                serverResponse: "errorResponse",
+                                message: "Zły format pliku. Upewnij się, że dodajesz logo w formacie png."
+                            };
+                            modalService.showInfoModal(infoModalData);
+                        }
+                    }
+
+                    function getDepartmentConfiguration () {
+                        readerconfigService.getConfiguration({departmentIdPath: $rootScope.pickedDepartment.departmentDto.id}, function (result) {
+                            ctrl.bgColor = result.colorBackground;
+                            ctrl.startColor = result.colorStart;
+                            ctrl.stopColor = result.colorStop;
+                            ctrl.errorColor = result.colorError;
+                            ctrl.alternativeColor = result.colorAlternative;
+                            ctrl.messageShowDuration = result.resetViewDelayInSec;
+                            ctrl.configurationId = result.id;
+                            ctrl.formSend = false;
+                        }, function (response) {
+                            if(response.status === 404){
+                                console.log("404");
+                            }
+                            var infoModalData = {
+                                serverResponse: "errorResponse",
+                                message: "Nie można pobrać konfiguracji. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                            };
+                            modalService.showInfoModal(infoModalData);
+                        });
+                    }
+                    
+                    function clearLogoInput(e) {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        ctrl.logoPicture = "";
+                    }
+
+                }
+            })
+    }]);
+})();

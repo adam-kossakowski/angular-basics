@@ -1,0 +1,671 @@
+(function () {
+angular.module("calendar").config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $urlRouterProvider) {
+    $urlRouterProvider.otherwise("/");
+    $stateProvider
+        .state("calendar", {
+            params: {
+                id: {
+                    value: null
+                }
+            },
+            url: "/calendar/:id",
+            templateUrl: "./modules/calendar/calendar.html",
+            controllerAs: 'vm',
+            controller: function($scope, $rootScope, $state, $stateParams, calendarService, $http, $q, $uibModal, $interval, modalService){
+
+                var ctrl = {};
+                var employeeDetails = $stateParams;
+
+                ctrl = {
+                    dayList: ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota", "Niedziela"],
+                    monthList: ["styczeń", "luty", "marzec", "kwiecień", "maj", "czerwiec", "lipiec", "sierpień", "wrzesień", "październik", "listopad", "grudzień"],
+                    yearList: [2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026],
+                    dailySummary: [],
+                    monthlySummary: [],
+                    todayDate: "",
+                    currentDay: "",
+                    currentMonth: "",
+                    currentYear: "",
+                    pickedDayOfWeek: "",
+                    pickedDay: "",
+                    pickedMonth: "",
+                    pickedYear: "",
+                    firstDayOfMonth: "",
+                    firstDayOfMonthUSFormat: "",
+                    pickedMonthLength: "",
+                    pickedMonthLengthArray: [],
+                    pickedMonthWeeksNumber: "",
+                    pickedMonthWeeksArray: [],
+                    monthBeginDate: "",
+                    monthEndDate: "",
+                    monthlyDataFromDatabase: [],
+                    monthlyData: [],
+                    listOfHolidays: [],
+                    pickedEmployeeId: employeeDetails.id,
+                    presentInWork: false,
+                    calendarUserName: "",
+                    calendarUserContract: "1/1",
+                    calendarUserFirstDayOfWork: "",
+                    calendarUserLastDayOfWork: "",
+
+                    showDailyTooltip: false,
+                    showMonthlyTooltip: false,
+
+                    startTrueStopFalseButton: true,
+
+                    getDateData: getDateData,
+                    openModal: openModal,
+                    displayStartOrStopButton: displayStartOrStopButton,
+                    startStopButtonClicked: startStopButtonClicked
+                };
+
+                var loggedUserWatcher = $rootScope.$watch('isUserReady', function (newValue, oldValue) {
+                    if(newValue === true){
+                        getData();
+                        loggedUserWatcher();
+                        displayStartOrStopButton();
+                    }
+                }, true);
+
+                var currentDepartment = $rootScope.$watch('pickedDepartment', function (newValue, oldValue) {
+                    if(newValue){
+                        getData();
+                        $interval(getData, 600000);
+                    }
+                }, true);
+
+                return ctrl;
+
+                function getData() {
+
+                    ctrl.todayDate = new Date();
+                    ctrl.currentDay = ctrl.todayDate.getDate();
+                    ctrl.currentMonth = ctrl.todayDate.getMonth();
+                    ctrl.currentYear = ctrl.todayDate.getFullYear();
+
+                    ctrl.pickedMonth = ctrl.currentMonth;
+                    ctrl.pickedYear = ctrl.currentYear;
+
+                    if(ctrl.pickedEmployeeId) {
+                        calendarService.getUserInfo({viewedEmployeeId: ctrl.pickedEmployeeId}, function (result) {
+                            ctrl.calendarUserName = result.userDto.surname + " " + result.userDto.name;
+                            ctrl.calendarUserContract = result.contractTypeDto.regularPostFraction;
+                            ctrl.calendarUserFirstDayOfWork = result.firstDayOfWork;
+                            ctrl.calendarUserLastDayOfWork = result.lastDayOfWork;
+                        }, function (error) {
+                            showMessage("errorResponse", "Nie można pobrać danych o użytkowniku. Spróbuj ponownie albo skontaktuj się z Administratorem.");
+                        });
+                    } else {
+                        ctrl.calendarUserName = "";
+
+                        // ctrl.calendarUserContract = $rootScope.pickedDepartment.contractTypeDto.regularPostFraction;
+                        // ctrl.calendarUserFirstDayOfWork = $rootScope.pickedDepartment.firstDayOfWork;
+
+                        calendarService.getUserInfo({viewedEmployeeId: $rootScope.pickedDepartment.id}, function (result) {
+                            ctrl.calendarUserContract = result.contractTypeDto.regularPostFraction;
+                            ctrl.calendarUserFirstDayOfWork = result.firstDayOfWork;
+                            ctrl.calendarUserLastDayOfWork = result.lastDayOfWork;
+                        }, function (error) {
+                            showMessage("errorResponse","Nie można pobrać danych o użytkowniku. Spróbuj ponownie albo skontaktuj się z Administratorem.");
+                        });
+                    }
+
+                    ctrl.getDateData();
+                }
+
+                function getDateData() {
+
+                    calendarService.getDailySummary({userIdPath: ctrl.pickedEmployeeId ? ctrl.pickedEmployeeId : $rootScope.pickedDepartment.id}, function (result) {
+                        ctrl.dailySummary = result.summaryItems;
+                    }, function (error) {
+                        showMessage("errorResponse", "Nie można pobrać podsumowania dziennego. Spróbuj ponownie albo skontaktuj się z Administratorem.");
+                    });
+
+                    calendarService.checkIsPresent(ctrl.pickedEmployeeId ? ctrl.pickedEmployeeId : $rootScope.pickedDepartment.id).then(function(result){
+                        ctrl.presentInWork = result.data;
+                    }, function (error) {
+                        showMessage("errorResponse", "Nie można sprawdzić obecności pracownika. Spróbuj ponownie albo skontaktuj się z Administratorem.");
+                    });
+
+                    calendarService.getMonthlySummary({'employeeId': ctrl.pickedEmployeeId  ? parseInt(ctrl.pickedEmployeeId) : $rootScope.pickedDepartment.id, 'month': ctrl.pickedMonth + 1, 'year': ctrl.pickedYear}, function (result) {
+                        ctrl.monthlySummary = result.summaryItems;
+                    }, function (error) {
+                        showMessage("errorResponse", "Nie można pobrać podsumowania miesięcznego. Spróbuj ponownie albo skontaktuj się z Administratorem.");
+                    });
+
+                    ctrl.firstDayOfMonthUSFormat = new Date(ctrl.pickedYear, ctrl.pickedMonth, 1, 0, 0, 0, 0).getDay();
+                    ctrl.firstDayOfMonthUSFormat === 0 ? ctrl.firstDayOfMonth = 6 : ctrl.firstDayOfMonth = ctrl.firstDayOfMonthUSFormat - 1;
+
+                    ctrl.pickedMonthLength = Math.round((new Date(ctrl.pickedYear, ctrl.pickedMonth + 1, 1, 0, 0, 0, 0) - new Date(ctrl.pickedYear, ctrl.pickedMonth, 1, 0, 0, 0, 0)) / (1000 * 60 * 60 * 24));
+                    ctrl.pickedMonthWeeksNumber = Math.ceil((ctrl.pickedMonthLength + ctrl.firstDayOfMonth) / 7);
+
+                    ctrl.pickedMonthLengthArray = [];
+                    ctrl.pickedMonthWeeksArray = [];
+
+                    for(var i = 0; i < ctrl.pickedMonthLength; i++){
+                        ctrl.pickedMonthLengthArray.push(i);
+                    }
+
+                    for(var j = 0; j < ctrl.pickedMonthWeeksNumber; j++){
+                        ctrl.pickedMonthWeeksArray.push(j);
+                    }
+
+                    ctrl.monthBeginDate = new Date(ctrl.pickedYear, ctrl.pickedMonth, 1, 0, 0, 0, 0);
+                    ctrl.monthEndDate = new Date(ctrl.pickedYear, ctrl.pickedMonth, ctrl.pickedMonthLength, 23, 59, 59, 999);
+
+                    var monthlyInfo = calendarService.getMonthlyInfo({employeeId: ctrl.pickedEmployeeId  ? ctrl.pickedEmployeeId : $rootScope.pickedDepartment.id, startDate: ctrl.monthBeginDate, endDate: ctrl.monthEndDate}).then(function(result){
+                        ctrl.monthlyDataFromDatabase = result.data;
+                    }, function (error) {
+                        showMessage("errorResponse", "Nie można pobrać danych miesięcznych pracownika. Spróbuj ponownie albo skontaktuj się z Administratorem.");
+                    });
+
+                    var monthlyHolidays = calendarService.getHolidays({"startDate": ctrl.monthBeginDate, "endDate": ctrl.monthEndDate}).then(function (result) {
+                        ctrl.listOfHolidays = result.data;
+                    }, function (error) {
+                        showMessage("errorResponse", "Nie można pobrać listy świąt. Spróbuj ponownie albo skontaktuj się z Administratorem.")
+                    });
+
+                    ctrl.monthlyData = [];
+
+                    $q.all([monthlyInfo, monthlyHolidays]).then(function () {
+                        var cellNumber = 0;
+                        var dayNumber = 1;
+                        var startWorkingYear = new Date(ctrl.calendarUserFirstDayOfWork).getFullYear();
+                        var startWorkingMonth = new Date(ctrl.calendarUserFirstDayOfWork).getMonth();
+                        var startWorkingDay = new Date(ctrl.calendarUserFirstDayOfWork).getDate();
+                        var endWorkingYear = new Date(ctrl.calendarUserLastDayOfWork).getFullYear();
+                        var endWorkingMonth = new Date(ctrl.calendarUserLastDayOfWork).getMonth();
+                        var endWorkingDay = new Date(ctrl.calendarUserLastDayOfWork).getDate();
+
+                        for(var k = 0; k < (ctrl.pickedMonthWeeksNumber * 7); k++){
+                            var dailyObjData = {
+                                cellNumber: cellNumber,
+                                dayNumber: null,
+                                date: null,
+                                clickable: false,
+                                saturday: false,
+                                holiday: false,
+                                entries: false,
+                                firstDayInWork: false,
+                                lastDayInWork: false,
+                                betweenFirstAndLastDayInWork: true
+                            };
+                            ctrl.monthlyData.push(dailyObjData);
+
+                            if(cellNumber - ctrl.firstDayOfMonth >= 0 && cellNumber <= ctrl.firstDayOfMonth + ctrl.pickedMonthLength - 1){
+                                dailyObjData.dayNumber = dayNumber;
+                                dayNumber += 1;
+                            }
+                            if(dailyObjData.dayNumber){
+                                dailyObjData.date = new Date(ctrl.pickedYear, ctrl.pickedMonth, dailyObjData.dayNumber, 12, 0, 0, 0);
+                            }
+                            if(startWorkingYear === ctrl.pickedYear && startWorkingMonth === ctrl.pickedMonth && startWorkingDay === dailyObjData.dayNumber) {
+                                dailyObjData.firstDayInWork = true;
+                            }
+                            if(ctrl.calendarUserLastDayOfWork !== null && endWorkingYear === ctrl.pickedYear && endWorkingMonth === ctrl.pickedMonth && endWorkingDay === dailyObjData.dayNumber) {
+                                dailyObjData.lastDayInWork = true;
+                            }
+                            if (ctrl.calendarUserLastDayOfWork !== null
+                                    && (new Date(ctrl.calendarUserFirstDayOfWork) > ctrl.todayDate || new Date(ctrl.calendarUserLastDayOfWork) < ctrl.todayDate)) {
+                                dailyObjData.betweenFirstAndLastDayInWork = false;
+                            }
+                            if (ctrl.calendarUserLastDayOfWork !== null) {
+                                if(dailyObjData.date && dailyObjData.date >= new Date(ctrl.calendarUserFirstDayOfWork)
+                                    && dailyObjData.date <= new Date(ctrl.calendarUserLastDayOfWork)) {
+                                    dailyObjData.clickable = true;
+                                }
+                            } else {
+                                if(dailyObjData.date && dailyObjData.date >= new Date(ctrl.calendarUserFirstDayOfWork)) {
+                                    dailyObjData.clickable = true;
+                                }
+                            }
+                            if(cellNumber % 7 === 5) {
+                                dailyObjData.saturday = true;
+                            }
+                            if(cellNumber % 7 === 6) {
+                                dailyObjData.holiday = true;
+                            }
+                            if(ctrl.monthlyDataFromDatabase.length > 0) {
+                                for(var l = 0; l < ctrl.monthlyDataFromDatabase.length; l++) {
+                                    var dayOfEvent = new Date(ctrl.monthlyDataFromDatabase[l].day).getDate();
+                                    if(dailyObjData.dayNumber === dayOfEvent) {
+                                        dailyObjData.workTypeDailyList = ctrl.monthlyDataFromDatabase[l].uniqueWorkTypesSummary;
+                                        dailyObjData.workTimeToDay = ctrl.monthlyDataFromDatabase[l].dailyWorkingTime;
+                                        dailyObjData.entries = true;
+                                    }
+                                }
+                            }
+                            if(ctrl.listOfHolidays.length > 0) {
+                                for(var m = 0; m < ctrl.listOfHolidays.length; m++){
+                                    var dayOfHoliday = ctrl.listOfHolidays[m].day.lastIndexOf("0") === 8 ? ctrl.listOfHolidays[m].day.slice(9) : ctrl.listOfHolidays[m].day.slice(8);
+                                    if(k === parseInt(dayOfHoliday) + ctrl.firstDayOfMonth - 1) {
+                                        dailyObjData.holiday = true;
+                                    }
+                                }
+                            }
+                            cellNumber += 1;
+                        }
+                    });
+                }
+
+                function openModal(dateOfDay) {
+                    $rootScope.resetSession();
+                    var modalInstance = $uibModal.open({
+                        animation: true,
+                        ariaLabelledBy: 'modal-title',
+                        ariaDescribedBy: 'modal-body',
+                        templateUrl: './modules/calendar/modal_calendar.html',
+                        controller: 'ModalInstanceCtrl',
+                        controllerAs: 'vm',
+                        // backdrop: 'static',
+                        keyboard: true,
+                        scope: $scope.$new(true),
+                        size: 'lg',
+                        resolve: {
+                            ctrl: function () {
+                                ctrl.pickedDate = dateOfDay;
+                                return ctrl;
+                            },
+                            userRole: function () {
+                                return $rootScope.userRole;
+                            },
+                            roles: function () {
+                                return $rootScope.roles;
+                            }
+                        }
+                    }).result.then(function (result) {
+                        ctrl.getDateData();
+                    }, function (reason) {
+                        ctrl.getDateData();
+                    });
+                }
+
+                function showMessage(serverResponse, message, optional1, optional2) {
+                    let infoModalData = {
+                        serverResponse: serverResponse,
+                        message: message
+                    }
+                    if (optional1==="OK" || optional2==="OK") {
+                        infoModalData.modalType = "OK";
+                    }
+                    if (optional1==="md" || optional2==="md") {
+                        infoModalData.modalSize = "md";
+                    }
+                    modalService.showInfoModal(infoModalData);
+                }
+
+                function calculateOvertime(listOfEntries, lastStopTime) {
+                    let totalTime = 0;
+                    for (const item of listOfEntries) {
+                        if (item.stop !== null) {
+                            totalTime += new Date(item.stop).getTime() - new Date(item.start).getTime();
+                        } else {
+                            if (lastStopTime !== undefined) {
+                                totalTime += lastStopTime - new Date(item.start).getTime();
+                            }
+                        }
+                    }
+            //      28800000 -> 8h in millis (8 * 60 * 60 * 1000)
+                    return totalTime - 28800000;
+                }
+
+                function prepareRequestToGetDailyEntries() {
+                    startDate = new Date();
+                    startDate.setHours(0, 0, 0, 0);
+                    stopDate = new Date();
+                    stopDate.setHours(23, 59, 59, 999);
+                    return {
+                        "employeeId": ctrl.pickedEmployeeId ? ctrl.pickedEmployeeId : $rootScope.pickedDepartment.id,
+                        "startDate": startDate.getTime(),
+                        "endDate": stopDate.getTime()
+                    };
+                }
+
+                function returnOpenSessionsOrNull(){
+                    return new Promise(function(resolve, reject) {
+                        let listOfEntries = [];
+                        let listOfOpenEntries = [];
+                        calendarService.getDailyEntriesDepartment(prepareRequestToGetDailyEntries(), function (result) {
+                            listOfEntries = result;
+                            listOfEntries.slice().reverse().forEach((item) => {
+                                if(item.stop == null) {
+                                    listOfOpenEntries.push(item);
+                                }
+                            });
+                            if (listOfOpenEntries.length == 0) resolve(null);
+                            if (listOfOpenEntries.length == 1) resolve(listOfOpenEntries);
+                            reject(listOfOpenEntries.length);
+                        }, function (error) {
+                            showMessage("errorResponse", "Nie można pobrać dziennych wpisów. Spróbuj ponownie albo skontaktuj się z Administratorem.");
+                        });
+                    });
+                }
+
+                function startStopButtonClicked(cellNumber, employeeId) {
+                    entryData = {};
+                    dateOfDay = ctrl.monthlyData[cellNumber].date
+                    calendarService.getCurrentServerTime(function(result) {
+                        let now = new Date(parseInt(result.value));
+                        if(ctrl.startTrueStopFalseButton == true) {
+                            startNewRemoteWorkSession(cellNumber, employeeId, entryData, dateOfDay, now);
+                        } else {
+                            finishExistingRemoteWorkSession(cellNumber, employeeId, entryData, dateOfDay, now);
+                        }
+                    }, function (error) {
+                        showMessage("errorResponse", "Nie można pobrać czasu z serwera. Spróbuj ponownie albo skontaktuj się z Administratorem.");
+                    });
+                }
+
+                function startNewRemoteWorkSession(cellNumber, employeeId, entryData, dateOfDay, now) {
+                    returnOpenSessionsOrNull().then(
+                        function(result) {
+                            if (ctrl.monthlyData[cellNumber].workTimeToDay >= 28800000) {
+                                showMessage("errorResponse", "Maksymalny czas pracy to 8h. <br>Skontaktuj się z przełożonym w sprawie nadgodzin!", "md");
+                                return;
+                            }
+                            if (result !== null) {
+                                ctrl.startTrueStopFalseButton = false;
+                                showMessage("errorResponse", "Jest już otwarta sesja!", "OK");
+                                return;
+                            }
+                            entryData.workTimeTasks = "";
+                            entryData.workTypeDto = {};
+                            entryData.workTypeDto.id = 5;
+                            entryData.employeeDto = {};
+                            entryData.employeeDto.id = ctrl.pickedEmployeeId ? ctrl.pickedEmployeeId : $rootScope.pickedDepartment.id;
+                            entryData.start = new Date
+                                (dateOfDay.getFullYear(), dateOfDay.getMonth(), dateOfDay.getDate(), now.getHours(), now.getMinutes(), 0, 0).getTime();
+                            entryData.stop = null;
+                            calendarService.addWorkTimeEntry(entryData, function(result) {
+                                ctrl.startTrueStopFalseButton = false;
+                                showMessage("successResponse","Praca zdalna rozpoczęta o <br>" + now.getHours() + ":" + String(now.getMinutes()).padStart(2,'0'));
+                            }, function (error) {
+                                showMessage( "errorResponse", "Nie można dodać wpisu do bazy. Spróbuj ponownie albo skontaktuj się z Administratorem.");
+                            });
+                            getDateData();
+                        },
+                        function(error) {console.log('Masz otwartych kilka sesji pracy równolegle(' + error + ')!')}
+                    );
+                }
+
+                function finishExistingRemoteWorkSession(cellNumber, employeeId, entryData, dateOfDay, now) {
+                    calendarService.getDailyEntriesDepartment(prepareRequestToGetDailyEntries(), function (result) {
+                        let listOfEntries = result;
+                        listOfEntries.slice().reverse().forEach(function(item) {
+                            if(item.stop == null) {
+                                entryData = {};
+                                entryData.id = item.id;
+                                entryData.workTimeTasks = item.workTimeTasks;
+                                entryData.workTypeDto = item.workTypeDto;
+                                entryData.employeeDto = item.employeeDto;
+                                entryData.start = item.start;
+                                entryData.stop =
+                                    new Date(dateOfDay.getFullYear(), dateOfDay.getMonth(), dateOfDay.getDate(), now.getHours(), now.getMinutes(), 0, 0).getTime();
+                                let overTime = calculateOvertime(listOfEntries, entryData.stop);
+                                let messageStartHour = now.getHours();
+                                let messageEndHour = String(now.getMinutes()).padStart(2,'0');
+                                let overTimeH;
+                                let overTimeM;
+                                if (overTime > 0 ) {
+                                    overTimeH = String(Math.floor(overTime / 3600000));
+                                    overTimeM = String(Math.floor((overTime % 3600000) / 60000)).padStart(2,'0');
+                                    entryData.stop -= overTime;
+                                }
+                                calendarService.updateWorkTimeEntry(entryData, function(result) {
+                                    ctrl.startTrueStopFalseButton = true;
+                                    if (ctrl.monthlyData[cellNumber].workTimeToDay > 28800000) {
+                                        ctrl.monthlyData[cellNumber].workTimeToDay = 28800000;
+                                    }
+                                    getDateData();
+                                    if (overTime > 0) {
+                                        showMessage("successResponse", `Praca zdalna zakończona o ${messageStartHour}:${messageEndHour}<br><b>Czas pracy przekroczony o ${overTimeH}:${overTimeM}h</b><br>Skontaktuj się z przełożonym w sprawie nadgodzin!`, "md", "OK");
+                                    } else {
+                                        showMessage("successResponse", `Praca zdalna zakończona o ${messageStartHour}:${messageEndHour}`);
+                                    }
+                                }, function (error) {
+                                    showMessage("errorResponse", "Nie można dodać wpisu do bazy. Spróbuj ponownie albo skontaktuj się z Administratorem.");
+                                });
+                            }
+                        });
+                    }, function (error) {
+                        showMessage("errorResponse", "Nie można pobrać dziennych wpisów. Spróbuj ponownie albo skontaktuj się z Administratorem.");
+                    });
+                }
+
+                function displayStartOrStopButton() {
+                    return new Promise(function(resolve, reject) {
+                        listOfEntries = [];
+                        calendarService.getDailyEntriesDepartment(prepareRequestToGetDailyEntries(), function (result) {
+                            listOfEntries = result;
+                            if (listOfEntries.length != 0 && listOfEntries[listOfEntries.length - 1].stop == null) {
+                                ctrl.startTrueStopFalseButton = false;
+                            } else {
+                                ctrl.startTrueStopFalseButton = true;
+                            }
+                            resolve();
+                        }, function (error) {
+                            showMessage("errorResponse", "Nie można pobrać dziennych wpisów. Spróbuj ponownie albo skontaktuj się z Administratorem.");
+                        });
+                    });
+                }
+            }
+        })
+        .state("modal", {
+            parent: "calendar",
+            url: "/modal",
+            controller: "ModalInstanceCtrl"
+        })
+}]);
+
+angular.module('calendar').controller('ModalInstanceCtrl', function ($scope, $rootScope, $uibModalInstance, ctrl, userRole, roles, calendarService, modalService) {
+    var vm = this;
+
+    vm.ctrl = ctrl;
+    vm.userRole = userRole;
+    vm.roles = roles;
+    vm.pickedWorkType = "";
+    vm.workTimeTasks = "";
+    vm.filterList = ['Pz','Pb'];
+
+    // Compare date
+
+    vm.prepareDate = function (date) {
+        var tempDate = date;
+        var dd = String(tempDate.getDate()).padStart(2, '0');
+        var mm = String(tempDate.getMonth() + 1).padStart(2, '0');
+        var yyyy = tempDate.getFullYear();
+        return dd + '.' + mm + '.' + yyyy;
+    };
+
+    vm.checkDate = function (date) {
+        date = vm.prepareDate(date)
+        today = vm.prepareDate(new Date())
+        return today === date;
+    };
+
+    // Checking if stop date - start date > 8h for USER
+
+    vm.checkIfMoreThanEightHours = function() {
+        var startTime = 0;
+
+        // Checking
+        for (const item of vm.listOfEntries) {
+            if ((item.workTypeDto.symbol === "Pz" || item.workTypeDto.symbol === "Pb") && vm.entryId !== undefined && item.id !== vm.entryId && item.stop !== null) {
+                startTime += new Date(item.stop).getTime() - new Date(item.start).getTime();
+            }
+        }
+        var start = new Date(vm.ctrl.pickedYear, vm.ctrl.pickedMonth, vm.ctrl.pickedDay, vm.startHour, vm.startMinute, 0, 0).getTime();
+        var stop = new Date(vm.ctrl.pickedYear, vm.ctrl.pickedMonth, vm.ctrl.pickedDay, vm.stopHour, vm.stopMinute, 0, 0).getTime();
+//      28800000 -> 8h in millis    ->    8 * 60 * 60 * 1000   -  times from other remote work
+        return stop - start > 28800000 - startTime;
+    }
+
+    // Closing modal
+
+    vm.ok = function () {
+        vm.ctrl.displayStartOrStopButton();
+        $uibModalInstance.close();
+    };
+
+    vm.ctrl.pickedDay = vm.ctrl.pickedDate.getDate();
+    vm.ctrl.pickedDayOfWeek = vm.ctrl.dayList[vm.ctrl.pickedDate.getDay() - 1 < 0 ? 6 : vm.ctrl.pickedDate.getDay() - 1];
+
+    // Getting entries for picked day and list of worktypes
+
+    vm.listOfEntries = [];
+    vm.listOfWorkTypes = [];
+
+    vm.startDate = new Date(vm.ctrl.pickedYear, vm.ctrl.pickedMonth, vm.ctrl.pickedDay, 0, 0, 0, 0);
+    vm.stopDate = new Date(vm.ctrl.pickedYear, vm.ctrl.pickedMonth, vm.ctrl.pickedDay, 23, 59, 59, 999);
+
+    vm.entriesDepartment = {
+        "employeeId": vm.ctrl.pickedEmployeeId ? vm.ctrl.pickedEmployeeId : $rootScope.pickedDepartment.id,
+        "startDate": vm.startDate.getTime(),
+        "endDate": vm.stopDate.getTime()
+    };
+
+    calendarService.getDailyEntriesDepartment(vm.entriesDepartment, function (result) {
+        vm.listOfEntries = result;
+        if (vm.userRole === "USER" && !vm.checkDate(vm.ctrl.pickedDate) && vm.listOfEntries[0] !== undefined) {
+            vm.workTimeTasks = vm.listOfEntries[0].workTimeTasks
+            vm.entryId = vm.listOfEntries[0].id;
+            vm.editedEntry = true;
+        }
+    }, function (error) {
+        vm.ctrl.showMessage("errorResponse", "Nie można pobrać dziennych wpisów. Spróbuj ponownie albo skontaktuj się z Administratorem.");
+    });
+
+    $scope.findStatus = function(){
+          return function(item){
+            return vm.filterList.find(k=> item.symbol == k);
+          }
+    }
+
+    calendarService.getWorkTypes( function(result) {
+        vm.listOfWorkTypes = result;
+        if (vm.userRole === "USER") {
+            vm.pickedWorkType = vm.listOfWorkTypes.find(elem => elem.symbol === "Pz");
+        }
+        else {
+            vm.listOfWorkTypes.forEach(function (elem) {
+                if(elem.symbol === "Dr"){
+                    vm.pickedWorkType = elem;
+                }
+            });
+        }
+    }, function (error) {
+        vm.ctrl.showMessage("errorResponse", "Nie można pobrać listy statusów pracownika. Spróbuj ponownie albo skontaktuj się z Administratorem.");
+    });
+
+    // Add / edit entries - form service
+
+    vm.lengthOfWorkingDay = vm.ctrl.calendarUserContract * 8 * 60;
+    vm.startHour = 8;
+    vm.startMinute = 0;
+
+    vm.stopHour = parseInt(vm.startHour) + parseInt(vm.lengthOfWorkingDay / 60);
+    vm.stopMinute = parseInt((vm.lengthOfWorkingDay % 60));
+
+    vm.notFinishedShift = false;
+    vm.endOfShiftNextDay = false;
+    vm.editedEntry = false;
+    vm.wrongTime = false;
+    vm.entryData = {};
+    vm.entryId = "";
+
+    $scope.$watch("vm.pickedWorkType", function() {
+        if(["UW", "Wś", "L4", "K", "Wb", "Nż", "O", "Wn", "Wo", "Um", "Us"].indexOf(vm.pickedWorkType.symbol) > -1) {
+            vm.disableInputs = true;
+        } else {
+            vm.disableInputs = false;
+        }
+    });
+
+    vm.submitForm = function () {
+        vm.entryData.workTimeTasks = vm.workTimeTasks;
+
+        vm.entryData.workTypeDto = {};
+        vm.entryData.workTypeDto.id = vm.pickedWorkType.id;
+
+        vm.entryData.employeeDto = {};
+        vm.entryData.employeeDto.id = vm.ctrl.pickedEmployeeId ? vm.ctrl.pickedEmployeeId : $rootScope.pickedDepartment.id;
+
+        vm.entryData.start = new Date(vm.ctrl.pickedYear, vm.ctrl.pickedMonth, vm.ctrl.pickedDay, vm.startHour, vm.startMinute, 0, 0).getTime();
+        if(vm.notFinishedShift === true) {
+            vm.entryData.stop = null;
+        } else {
+            if(vm.endOfShiftNextDay === true) {
+                vm.entryData.stop = new Date(vm.ctrl.pickedYear, vm.ctrl.pickedMonth, vm.ctrl.pickedDay + 1, vm.stopHour, vm.stopMinute, 0, 0).getTime();
+            } else {
+                vm.entryData.stop = new Date(vm.ctrl.pickedYear, vm.ctrl.pickedMonth, vm.ctrl.pickedDay, vm.stopHour, vm.stopMinute, 0, 0).getTime();
+            }
+        }
+
+        if((vm.entryData.stop && vm.entryData.start < vm.entryData.stop) || (vm.entryData.start && !vm.entryData.stop) || (vm.entryData.stop && vm.entryData.start > vm.entryData.stop && vm.endOfShiftNextDay)) {
+            vm.wrongTime = false;
+            if(vm.editedEntry === true) {
+                vm.entryData.id = vm.entryId;
+                calendarService.updateWorkTimeEntry(vm.entryData, function(result) {
+                    calendarService.getDailyEntriesDepartment(vm.entriesDepartment, function (result) {
+                        vm.listOfEntries = result;
+                        vm.entryData = {};
+                        vm.editedEntry = false;
+                        vm.endOfShiftNextDay = false;
+                        location.reload();
+                    }, function (error) {
+                        vm.ctrl.showMessage("errorResponse", "Nie można pobrać dziennych wpisów. Spróbuj ponownie albo skontaktuj się z Administratorem.");
+                    });
+                }, function (error) {
+                    vm.ctrl.showMessage("errorResponse", "Nie można dodać wpisu do bazy. Spróbuj ponownie albo skontaktuj się z Administratorem.");
+                });
+            } else {
+                calendarService.addWorkTimeEntry(vm.entryData, function(result) {
+                    vm.entryData = {};
+                    vm.endOfShiftNextDay = false;
+                    calendarService.getDailyEntriesDepartment(vm.entriesDepartment, function (result) {
+                        vm.listOfEntries = result;
+                    }, function (error) {
+                        vm.ctrl.showMessage("errorResponse", "Nie można pobrać dziennych wpisów. Spróbuj ponownie albo skontaktuj się z Administratorem.");
+                    });
+                }, function (error) {
+                    vm.ctrl.showMessage( "errorResponse", "Nie można dodać wpisu do bazy. Spróbuj ponownie albo skontaktuj się z Administratorem.");
+                });
+            }
+        } else {
+            vm.wrongTime = true;
+        }
+    };
+
+    vm.deleteEntry = function (entryId) {
+        calendarService.deleteWorkTimeEntry({entryIdPath: entryId}, function (result) {
+            calendarService.getDailyEntriesDepartment(vm.entriesDepartment, function (result) {
+                vm.listOfEntries = result;
+            });
+        }, function (error) {
+            vm.ctrl.showMessage("errorResponse", "Nie można usunąć wpisu. Spróbuj ponownie albo skontaktuj się z Administratorem.");
+        });
+    };
+
+    vm.editEntry = function (entryId) {
+        vm.entryId = entryId;
+        calendarService.getWorkTimeEntry({entryIdPath: entryId}, function (result) {
+            vm.pickedWorkType = result.workTypeDto;
+            vm.startHour = new Date(result.start).getHours();
+            vm.startMinute = new Date(result.start).getMinutes();
+            vm.workTimeTasks = result.workTimeTasks;
+            if(result.stop === null) {
+                vm.stopHour = null;
+                vm.stopMinute = null;
+                vm.notFinishedShift = true;
+            } else {
+                vm.stopHour = new Date(result.stop).getHours();
+                vm.stopMinute = new Date(result.stop).getMinutes();
+                vm.notFinishedShift = false;
+            }
+            vm.editedEntry = true;
+        }, function (error) {
+            vm.ctrl.showMessage("errorResponse", "Nie można pobrać danych z serwera. Spróbuj ponownie albo skontaktuj się z Administratorem.");
+        });
+    }
+});
+})();

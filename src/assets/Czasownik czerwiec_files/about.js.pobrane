@@ -1,0 +1,14 @@
+(function () {
+angular.module("about").config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $urlRouterProvider) {
+    $urlRouterProvider.otherwise("/");
+    $stateProvider
+        .state("about", {
+            url: "/about",
+            templateUrl: "./modules/about/about.html",
+            controllerAs: 'vm',
+            controller: function($scope, $state){
+
+            }
+        })
+}]);
+})();

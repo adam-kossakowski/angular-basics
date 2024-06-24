@@ -1,0 +1,228 @@
+(function () {
+    angular.module("reports").config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $urlRouterProvider) {
+        $urlRouterProvider.otherwise("/");
+        $stateProvider
+            .state("reports", {
+                url: "/reports",
+                templateUrl: "./modules/reports/reports.html",
+                controllerAs: 'vm',
+                controller: function($scope, $rootScope, $state, reportsService, $http, $sce, modalService, usersListService){
+
+                    var ctrl = {};
+
+                    ctrl = {
+                        startDate: "",
+                        endDate: "",
+                        usersList: [],
+                        pickedPerson: "",
+                        workTypesList: [],
+                        employeeGroups: [],
+                        pickedWorkTypes: [],
+                        groupPicked: undefined,
+                        everyTypePicked: true,
+                        showAnimation: false,
+                        showAlert: false,
+                        wrongData: false,
+
+                        allPicked: "all",
+                        actualPicked: "actual",
+                        oldPicked: "old",
+
+                        currentDate: "",
+                        currentYear: "",
+                        currentMonth: "",
+                        currentDay: "",
+
+                        checkDate: checkDate,
+
+                        clearPickedGroup: clearPickedGroup,
+                        clearPickedPerson: clearPickedPerson,
+                        changeEveryWorktypeCheckbox: changeEveryWorktypeCheckbox,
+                        clearPickedWorktypes: clearPickedWorktypes,
+
+                        submitForm: submitForm,
+                        showReportInNewTab: showReportInNewTab,
+                        clearModelData: clearModelData
+                    };
+
+                    var currentDepartment = $rootScope.$watch('pickedDepartment', function (newValue, oldValue) {
+                        if(newValue){
+                            getData();
+                        }
+
+                    }, true);
+
+                    return ctrl;
+
+                    function checkDate() {
+                        ctrl.currentDate = new Date();
+                        ctrl.currentYear = ctrl.currentDate.getFullYear();
+                        ctrl.currentMonth = ctrl.currentDate.getMonth();
+                        ctrl.currentDay = ctrl.currentDate.getDate();
+                        if(ctrl.currentDay <= 10) {
+                            ctrl.startDate = new Date(ctrl.currentYear, ctrl.currentMonth - 1, 1);
+                            ctrl.endDate = new Date(ctrl.currentYear, ctrl.currentMonth, 0);
+                        } else if(ctrl.currentDay > 10) {
+                            ctrl.startDate = new Date(ctrl.currentYear, ctrl.currentMonth, 1);
+                            ctrl.endDate = new Date(ctrl.currentYear, ctrl.currentMonth, ctrl.currentDay);
+                        }
+                    }
+
+                    function showReportInNewTab(receivedData) {
+                        ctrl.showAlert = false;
+                        var reportWindow = window.open();
+                        if(reportWindow) {
+                            reportWindow.document.open();
+                            reportWindow.document.writeln($sce.trustAsHtml(receivedData.data));
+                            reportWindow.document.close();
+                        } else {
+                            ctrl.showAnimation = false;
+                            ctrl.showAlert = true;
+                        }
+
+
+                    }
+
+                    function clearModelData() {
+                        ctrl.startDate = "";
+                        ctrl.endDate = "";
+                        ctrl.pickedPerson = "";
+                        ctrl.pickedWorkTypes = "";
+                        ctrl.groupPicked = undefined;
+                        ctrl.everyTypePicked = true;
+
+                        ctrl.showAnimation = false;
+
+                        ctrl.checkDate();
+                    }
+
+                    function getData() {
+                        usersListService.getAllUsersBrief({departmentIdPath: $rootScope.pickedDepartment.departmentDto.id},function (result) {
+                            ctrl.usersList = result;
+                        }, function (error) {
+                            var infoModalData = {
+                                serverResponse: "errorResponse",
+                                message: "Nie można pobrać listy użytkowników. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                            };
+                            modalService.showInfoModal(infoModalData);
+                        });
+
+                        reportsService.getListOfWorkTypes(function (result) {
+                            ctrl.workTypesList = result;
+                        }, function (error) {
+                            var infoModalData = {
+                                serverResponse: "errorResponse",
+                                message: "Nie można pobrać listy statusów. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                            };
+                            modalService.showInfoModal(infoModalData);
+                        });
+
+                        reportsService.getReportEmployeeGroups(function (result) {
+                            ctrl.employeeGroups = result;
+                        }, function (error) {
+                            var infoModalData = {
+                                serverResponse: "errorResponse",
+                                message: "Nie można pobrać grup użytkowników. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                            };
+                            modalService.showInfoModal(infoModalData);
+                        });
+
+                        ctrl.checkDate();
+                    }
+
+                    function clearPickedGroup() {
+                        if(ctrl.pickedPerson) {
+                            ctrl.groupPicked = undefined;
+                        }
+                    }
+
+                    function clearPickedPerson() {
+                        if(ctrl.groupPicked) {
+                            ctrl.pickedPerson = "";
+                        }
+                    }
+
+                    function changeEveryWorktypeCheckbox() {
+                        if(ctrl.pickedWorkTypes.length > 0) {
+                            ctrl.everyTypePicked = false;
+                        }
+                    }
+
+                    function clearPickedWorktypes() {
+                        if(ctrl.everyTypePicked) {
+                            ctrl.pickedWorkTypes= [];
+                        }
+                    }
+
+                    function submitForm () {
+                        if(ctrl.startDate > ctrl.endDate || (!ctrl.pickedPerson && !ctrl.groupPicked) || (ctrl.pickedWorkTypes.length === 0 && !ctrl.everyTypePicked)) {
+                            ctrl.wrongData = true;
+                        } else {
+                            ctrl.wrongData = false;
+                            ctrl.showAnimation = true;
+
+                            var startDateRange = new Date(ctrl.startDate).setHours(0,0,0,1);
+                            var endDateRange = new Date(ctrl.endDate).setHours(23,59,59,999);
+
+                            var workTypesArray = [];
+                            if(ctrl.pickedWorkTypes.length > 0) {
+                                workTypesArray = ctrl.pickedWorkTypes.map(function(a) {return a.symbol});
+                            } else {
+                                workTypesArray = ctrl.workTypesList.map(function (a) {return a.symbol});
+                            }
+
+                            var reportRange = {
+                                "startDate": startDateRange,
+                                "endDate": endDateRange,
+                                "workTypeList": workTypesArray,
+                                "departmentId": $rootScope.pickedDepartment.departmentDto.id
+                            };
+
+                            if(ctrl.pickedPerson) {
+
+                                reportRange.employeeId = ctrl.pickedPerson.employeeId;
+
+                                reportsService.getReportForUser(reportRange).then(
+                                    function(response) {
+                                        ctrl.showReportInNewTab(response);
+                                        ctrl.clearModelData();
+                                    },
+                                    function(error) {
+                                        ctrl.showAnimation = false;
+                                        var infoModalData = {
+                                            serverResponse: "errorResponse",
+                                            message: "Nie można wygenerować raportu. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                                        };
+                                        modalService.showInfoModal(infoModalData);
+                                    }
+                                );
+
+                            } else {
+
+                                reportRange.employeeGroup = ctrl.groupPicked.value;
+
+                                reportsService.getReportForGroup(reportRange).then(
+                                    function(response) {
+                                        ctrl.showReportInNewTab(response);
+                                        ctrl.clearModelData();
+                                    },
+                                    function(error) {
+                                        ctrl.showAnimation = false;
+                                        var infoModalData = {
+                                            serverResponse: "errorResponse"
+                                        };
+                                        if (error.data.error === "Not Found") {
+                                            infoModalData.message = error.data.message;
+                                        } else {
+                                            infoModalData.message = "Nie można wygenerować raportu. Spróbuj ponownie albo skontaktuj się z Administratorem.";
+                                        }
+                                        modalService.showInfoModal(infoModalData);
+                                    }
+                                );
+                            }
+                        }
+                    }
+                }
+            })
+    }]);
+})();

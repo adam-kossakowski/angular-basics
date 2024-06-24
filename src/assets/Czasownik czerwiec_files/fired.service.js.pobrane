@@ -1,0 +1,10 @@
+angular.module("fired").factory("firedService", function ($resource) {
+    var firedREST = $resource("./api/fired/:action", {}, {
+        'getFiredBrief': {method: 'GET', params: {action: '@departmentIdPath'}}
+    });
+    return {
+        getFiredBrief: function(success, failure) {
+            firedREST.getFiredBrief({}, success, failure);
+        }
+    }
+});

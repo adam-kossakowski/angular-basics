@@ -1,0 +1,10 @@
+angular.module("logs").factory("logsService", function ($resource) {
+    var userREST = $resource("./api/log/between", {}, {
+        'getLogs': {method: 'POST', isArray: true}
+    });
+    return{
+        getLogs: function (timeRange, success, failure) {
+            userREST.getLogs(timeRange, success, failure);
+        }
+    }
+});

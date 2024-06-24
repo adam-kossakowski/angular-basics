@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<!-- saved from url=(0067)http://192.168.11.100:8080/calendar/index.html?logout#/calendar/149 -->
+<html lang="pl" ng-app="calendarApp" class="ng-scope"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><style type="text/css">[uib-typeahead-popup].dropdown-menu{display:block;}</style><style type="text/css">.uib-time input{width:50px;}</style><style type="text/css">[uib-tooltip-popup].tooltip.top-left > .tooltip-arrow,[uib-tooltip-popup].tooltip.top-right > .tooltip-arrow,[uib-tooltip-popup].tooltip.bottom-left > .tooltip-arrow,[uib-tooltip-popup].tooltip.bottom-right > .tooltip-arrow,[uib-tooltip-popup].tooltip.left-top > .tooltip-arrow,[uib-tooltip-popup].tooltip.left-bottom > .tooltip-arrow,[uib-tooltip-popup].tooltip.right-top > .tooltip-arrow,[uib-tooltip-popup].tooltip.right-bottom > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.top-left > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.top-right > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.bottom-left > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.bottom-right > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.left-top > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.left-bottom > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.right-top > .tooltip-arrow,[uib-tooltip-html-popup].tooltip.right-bottom > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.top-left > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.top-right > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.bottom-left > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.bottom-right > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.left-top > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.left-bottom > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.right-top > .tooltip-arrow,[uib-tooltip-template-popup].tooltip.right-bottom > .tooltip-arrow,[uib-popover-popup].popover.top-left > .arrow,[uib-popover-popup].popover.top-right > .arrow,[uib-popover-popup].popover.bottom-left > .arrow,[uib-popover-popup].popover.bottom-right > .arrow,[uib-popover-popup].popover.left-top > .arrow,[uib-popover-popup].popover.left-bottom > .arrow,[uib-popover-popup].popover.right-top > .arrow,[uib-popover-popup].popover.right-bottom > .arrow,[uib-popover-html-popup].popover.top-left > .arrow,[uib-popover-html-popup].popover.top-right > .arrow,[uib-popover-html-popup].popover.bottom-left > .arrow,[uib-popover-html-popup].popover.bottom-right > .arrow,[uib-popover-html-popup].popover.left-top > .arrow,[uib-popover-html-popup].popover.left-bottom > .arrow,[uib-popover-html-popup].popover.right-top > .arrow,[uib-popover-html-popup].popover.right-bottom > .arrow,[uib-popover-template-popup].popover.top-left > .arrow,[uib-popover-template-popup].popover.top-right > .arrow,[uib-popover-template-popup].popover.bottom-left > .arrow,[uib-popover-template-popup].popover.bottom-right > .arrow,[uib-popover-template-popup].popover.left-top > .arrow,[uib-popover-template-popup].popover.left-bottom > .arrow,[uib-popover-template-popup].popover.right-top > .arrow,[uib-popover-template-popup].popover.right-bottom > .arrow{top:auto;bottom:auto;left:auto;right:auto;margin:0;}[uib-popover-popup].popover,[uib-popover-html-popup].popover,[uib-popover-template-popup].popover{display:block !important;}</style><style type="text/css">.uib-datepicker-popup.dropdown-menu{display:block;float:none;margin:0;}.uib-button-bar{padding:10px 9px 2px;}</style><style type="text/css">.uib-position-measure{display:block !important;visibility:hidden !important;position:absolute !important;top:-9999px !important;left:-9999px !important;}.uib-position-scrollbar-measure{position:absolute !important;top:-9999px !important;width:50px !important;height:50px !important;overflow:scroll !important;}.uib-position-body-scrollbar-measure{overflow:scroll !important;}</style><style type="text/css">.uib-datepicker .uib-title{width:100%;}.uib-day button,.uib-month button,.uib-year button{min-width:100%;}.uib-left,.uib-right{width:100%}</style><style type="text/css">.ng-animate.item:not(.left):not(.right){-webkit-transition:0s ease-in-out left;transition:0s ease-in-out left}</style><style type="text/css">@charset "UTF-8";[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>
+    
+    <title>Czasownik</title>
+
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+    <link href="http://192.168.11.100:8080/calendar/images/stopwatch-tool.png" type="image/png" rel="icon">
+    <link href="./Czasownik czerwiec_files/bootstrap.css" rel="stylesheet">
+    <link href="./Czasownik czerwiec_files/select.min.css" rel="stylesheet">
+    <link href="./Czasownik czerwiec_files/main.css" rel="stylesheet" type="text/css">
+    <link href="./Czasownik czerwiec_files/preload.css" rel="stylesheet" type="text/css">
+
+</head>
+<body ng-controller="rootCtrl" class="ng-scope">
+<header class="navbar navbar-default navbar-fixed-top navbar-inner">
+    <div class="container">
+        <nav class="clearfix">
+            <ul class="nav navbar-nav">
+                <li><a href="http://192.168.11.100:8080/calendar/index.html?logout#/" role="button" class="navbar-brand" ui-sref="userslist">Czas <i class="glyphicon glyphicon-time"></i> wnik</a></li>
+                <li><a ui-sref="calendar({id:&#39;149&#39;})" ui-sref-opts="{inherit: false}" href="http://192.168.11.100:8080/calendar/index.html?logout#/calendar/">Mój panel</a></li>
+                <li><a ui-sref="settings" href="http://192.168.11.100:8080/calendar/index.html?logout#/settings">Ustawienia konta</a></li>
+                <li class="dropdown hidden-element" uib-dropdown="" ng-class="{&#39;visible-element&#39;: isElementVisible}">
+                    <a role="button" class="dropdown-toggle" uib-dropdown-toggle="" aria-haspopup="true" aria-expanded="false">Narzędzia administratora<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <!-- ngIf: userRole === roles.admin -->
+                        <!-- ngIf: userRole === roles.admin -->
+                        <!-- ngIf: userRole === roles.admin -->
+                        <!-- ngIf: userRole === roles.admin -->
+                        <li><a ui-sref="reports" href="http://192.168.11.100:8080/calendar/index.html?logout#/reports">Raporty</a></li>
+                        <!-- ngIf: userRole === roles.admin -->
+                        <!-- ngIf: userRole === roles.admin -->
+                        <!-- ngIf: userRole === roles.admin -->
+                        <!-- ngIf: userRole === roles.admin -->
+                    </ul>
+                </li>
+            </ul>
+            <a href="http://192.168.11.100:8080/calendar/logout" class="btn btn-default pull-right btn-nav">Wyloguj się</a>
+            <div class="btn-group pull-right btn-nav hidden-element dropdown" uib-dropdown="" ng-class="{&#39;visible-element&#39;: isElementVisible}">
+                <button id="single-button" type="button" class="btn btn-success dropdown-toggle" ng-class="{&#39;btn-danger&#39;: readerModeWarning}" uib-dropdown-toggle="" aria-haspopup="true" aria-expanded="false">
+                    Tryby czytników <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu readers-panel" uib-dropdown-menu="" role="menu" aria-labelledby="single-button">
+                    <!-- ngRepeat: reader in readersStatuses -->
+                    <!-- ngIf: readersStatuses.length === 0 -->
+                </ul>
+            </div>
+
+            <div class="btn-group pull-right btn-nav dropdown" uib-dropdown="">
+                <button id="company-button" type="button" class="btn btn-primary company-button ng-binding dropdown-toggle" uib-dropdown-toggle="" ng-bind="pickedDepartment.departmentDto.name" aria-haspopup="true" aria-expanded="false">Unity-t (Al. Jerozolimskie)</button>
+                <ul class="dropdown-menu readers-panel" uib-dropdown-menu="" role="menu" aria-labelledby="company-button">
+                    <!-- ngRepeat: department in departmentList --><li ng-repeat="department in departmentList" role="menuitem" class="text-left company-list ng-binding ng-scope" ng-click="updateDepartment(department);" ng-selected="" style="">Unity-t (Al. Jerozolimskie)</li><!-- end ngRepeat: department in departmentList -->
+                </ul>
+            </div>
+
+        </nav>
+    </div>
+</header>
+<div class="container">
+    <div class="name-container">
+        <h4><span ng-bind="&#39;Dzień dobry, &#39; + loggedUser.name + &#39;!&#39;" class="ng-binding">Dzień dobry, Adam!</span></h4>
+    </div>
+</div>
+
+<!--Dynamic html content-->
+<!-- uiView: --><ui-view class="ng-scope" style=""><section class="module-section module-smaller-padding ng-scope">
+    <div class="container">
+        <div class="row margin-bottom">
+            <div class="col-xs-12 col-md-9">
+                <div class="calendar-control clearfix">
+                <div class="col-md-6">
+                    <form class="form-inline date-picker ng-valid ng-dirty ng-valid-parse" style="">
+                        <label for="year">Rok:</label>
+                        <select class="form-control ng-pristine ng-untouched ng-valid ng-not-empty" id="year" ng-options="option for option in vm.yearList" ng-model="vm.pickedYear" ng-selected="false" ng-change="vm.getDateData()" style=""><option label="2017" value="number:2017">2017</option><option label="2018" value="number:2018">2018</option><option label="2019" value="number:2019">2019</option><option label="2020" value="number:2020">2020</option><option label="2021" value="number:2021">2021</option><option label="2022" value="number:2022">2022</option><option label="2023" value="number:2023">2023</option><option label="2024" value="number:2024" selected="selected">2024</option><option label="2025" value="number:2025">2025</option><option label="2026" value="number:2026">2026</option></select>
+                        <label for="month">Miesiąc:</label>
+                        <select class="form-control ng-valid ng-not-empty ng-dirty ng-valid-parse ng-touched" id="month" ng-model="vm.pickedMonth" ng-change="vm.getDateData()" style="">
+                            <!-- ngRepeat: option in vm.monthList track by $index --><option ng-repeat="option in vm.monthList track by $index" ng-value="$index" ng-bind="option" class="ng-binding ng-scope" value="number:0">styczeń</option><!-- end ngRepeat: option in vm.monthList track by $index --><option ng-repeat="option in vm.monthList track by $index" ng-value="$index" ng-bind="option" class="ng-binding ng-scope" value="number:1">luty</option><!-- end ngRepeat: option in vm.monthList track by $index --><option ng-repeat="option in vm.monthList track by $index" ng-value="$index" ng-bind="option" class="ng-binding ng-scope" value="number:2">marzec</option><!-- end ngRepeat: option in vm.monthList track by $index --><option ng-repeat="option in vm.monthList track by $index" ng-value="$index" ng-bind="option" class="ng-binding ng-scope" value="number:3">kwiecień</option><!-- end ngRepeat: option in vm.monthList track by $index --><option ng-repeat="option in vm.monthList track by $index" ng-value="$index" ng-bind="option" class="ng-binding ng-scope" value="number:4">maj</option><!-- end ngRepeat: option in vm.monthList track by $index --><option ng-repeat="option in vm.monthList track by $index" ng-value="$index" ng-bind="option" class="ng-binding ng-scope" value="number:5" selected="selected">czerwiec</option><!-- end ngRepeat: option in vm.monthList track by $index --><option ng-repeat="option in vm.monthList track by $index" ng-value="$index" ng-bind="option" class="ng-binding ng-scope" value="number:6">lipiec</option><!-- end ngRepeat: option in vm.monthList track by $index --><option ng-repeat="option in vm.monthList track by $index" ng-value="$index" ng-bind="option" class="ng-binding ng-scope" value="number:7">sierpień</option><!-- end ngRepeat: option in vm.monthList track by $index --><option ng-repeat="option in vm.monthList track by $index" ng-value="$index" ng-bind="option" class="ng-binding ng-scope" value="number:8">wrzesień</option><!-- end ngRepeat: option in vm.monthList track by $index --><option ng-repeat="option in vm.monthList track by $index" ng-value="$index" ng-bind="option" class="ng-binding ng-scope" value="number:9">październik</option><!-- end ngRepeat: option in vm.monthList track by $index --><option ng-repeat="option in vm.monthList track by $index" ng-value="$index" ng-bind="option" class="ng-binding ng-scope" value="number:10">listopad</option><!-- end ngRepeat: option in vm.monthList track by $index --><option ng-repeat="option in vm.monthList track by $index" ng-value="$index" ng-bind="option" class="ng-binding ng-scope" value="number:11">grudzień</option><!-- end ngRepeat: option in vm.monthList track by $index -->
+                        </select>
+                    </form>
+                </div>
+                <div class="col-md-6">
+                    <!-- ngIf: userRole !== roles.user -->
+                </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-md-3 col-md-push-9 no-padding">
+                <div class="summary-box">
+                    <div class="summary-header">
+                        <p class="summary-header-text ng-binding" ng-bind="&#39;Podsumowanie bieżącego dnia: &#39; + (vm.todayDate | date: &#39;dd.MM.yyyy&#39;)">Podsumowanie bieżącego dnia: 24.06.2024</p>
+                    </div>
+                    <div class="summary-content">
+                        <table class="table">
+                            <tbody><!-- ngRepeat: entry in vm.dailySummary --><tr ng-repeat="entry in vm.dailySummary" class="ng-scope" style="">
+                                <td><span ng-bind="entry.name" class="ng-binding">Start pracy [h]: </span></td>
+                                <td class="text-right" ng-init="entry.value == &#39;null&#39; ? entry.value = &#39;Brak danych&#39; : entry.value"><span ng-bind="entry.value" class="ng-binding">07:40</span></td>
+                            </tr><!-- end ngRepeat: entry in vm.dailySummary --><tr ng-repeat="entry in vm.dailySummary" class="ng-scope">
+                                <td><span ng-bind="entry.name" class="ng-binding">Czas pracy [h]: </span></td>
+                                <td class="text-right" ng-init="entry.value == &#39;null&#39; ? entry.value = &#39;Brak danych&#39; : entry.value"><span ng-bind="entry.value" class="ng-binding">06:30</span></td>
+                            </tr><!-- end ngRepeat: entry in vm.dailySummary --><tr ng-repeat="entry in vm.dailySummary" class="ng-scope">
+                                <td><span ng-bind="entry.name" class="ng-binding">Nadgodziny na wczoraj [h]: </span></td>
+                                <td class="text-right" ng-init="entry.value == &#39;null&#39; ? entry.value = &#39;Brak danych&#39; : entry.value"><span ng-bind="entry.value" class="ng-binding">28:32</span></td>
+                            </tr><!-- end ngRepeat: entry in vm.dailySummary -->
+                        </tbody></table>
+                    </div>
+                    <div class="summary-footer">
+                        <p class="text-right"><span class="glyphicon glyphicon-alert" ng-mouseenter="vm.showDailyTooltip = true" ng-mouseleave="vm.showDailyTooltip = false"></span> </p>
+                    </div>
+                    <!-- ngIf: vm.showDailyTooltip -->
+                </div>
+
+                <div class="summary-box">
+                    <div class="summary-header">
+                        <p class="summary-header-text">Podsumowanie wybranego miesiąca</p>
+                    </div>
+                    <div class="summary-content">
+                        <table class="table">
+                            <tbody><!-- ngRepeat: entry in vm.monthlySummary --><tr ng-repeat="entry in vm.monthlySummary" class="ng-scope" style="">
+                                <td><span ng-bind="entry.name" class="ng-binding">Ilość dni roboczych: </span></td>
+                                <td class="text-right"><span ng-bind="entry.value" class="ng-binding">20</span></td>
+                            </tr><!-- end ngRepeat: entry in vm.monthlySummary --><tr ng-repeat="entry in vm.monthlySummary" class="ng-scope">
+                                <td><span ng-bind="entry.name" class="ng-binding">Chorobowe [dni]: </span></td>
+                                <td class="text-right"><span ng-bind="entry.value" class="ng-binding">1</span></td>
+                            </tr><!-- end ngRepeat: entry in vm.monthlySummary --><tr ng-repeat="entry in vm.monthlySummary" class="ng-scope">
+                                <td><span ng-bind="entry.name" class="ng-binding">Urlopy [dni]: </span></td>
+                                <td class="text-right"><span ng-bind="entry.value" class="ng-binding">2</span></td>
+                            </tr><!-- end ngRepeat: entry in vm.monthlySummary --><tr ng-repeat="entry in vm.monthlySummary" class="ng-scope">
+                                <td><span ng-bind="entry.name" class="ng-binding">Delegacje [dni]: </span></td>
+                                <td class="text-right"><span ng-bind="entry.value" class="ng-binding">0</span></td>
+                            </tr><!-- end ngRepeat: entry in vm.monthlySummary --><tr ng-repeat="entry in vm.monthlySummary" class="ng-scope">
+                                <td><span ng-bind="entry.name" class="ng-binding">Liczba  godzin w tym miesiącu [h]: </span></td>
+                                <td class="text-right"><span ng-bind="entry.value" class="ng-binding">160:00</span></td>
+                            </tr><!-- end ngRepeat: entry in vm.monthlySummary --><tr ng-repeat="entry in vm.monthlySummary" class="ng-scope">
+                                <td><span ng-bind="entry.name" class="ng-binding">Przepracowano [h]: </span></td>
+                                <td class="text-right"><span ng-bind="entry.value" class="ng-binding">158:41</span></td>
+                            </tr><!-- end ngRepeat: entry in vm.monthlySummary -->
+                        </tbody></table>
+                    </div>
+                    <div class="summary-footer">
+                        <p class="text-right"><span class="glyphicon glyphicon-alert" ng-mouseenter="vm.showMonthlyTooltip = true" ng-mouseleave="vm.showMonthlyTooltip = false"></span> </p>
+                    </div>
+                    <!-- ngIf: vm.showMonthlyTooltip -->
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-9 col-md-pull-3">
+                <table class="calendar-table">
+                    <tbody><tr>
+                        <!-- ngRepeat: day in vm.dayList --><th ng-repeat="day in vm.dayList" class="ng-scope"><span ng-bind="day" class="ng-binding">Poniedziałek</span></th><!-- end ngRepeat: day in vm.dayList --><th ng-repeat="day in vm.dayList" class="ng-scope"><span ng-bind="day" class="ng-binding">Wtorek</span></th><!-- end ngRepeat: day in vm.dayList --><th ng-repeat="day in vm.dayList" class="ng-scope"><span ng-bind="day" class="ng-binding">Środa</span></th><!-- end ngRepeat: day in vm.dayList --><th ng-repeat="day in vm.dayList" class="ng-scope"><span ng-bind="day" class="ng-binding">Czwartek</span></th><!-- end ngRepeat: day in vm.dayList --><th ng-repeat="day in vm.dayList" class="ng-scope"><span ng-bind="day" class="ng-binding">Piątek</span></th><!-- end ngRepeat: day in vm.dayList --><th ng-repeat="day in vm.dayList" class="ng-scope"><span ng-bind="day" class="ng-binding">Sobota</span></th><!-- end ngRepeat: day in vm.dayList --><th ng-repeat="day in vm.dayList" class="ng-scope"><span ng-bind="day" class="ng-binding">Niedziela</span></th><!-- end ngRepeat: day in vm.dayList -->
+                    </tr>
+                    <!-- ngRepeat: week in vm.pickedMonthWeeksArray track by $index --><tr ng-repeat="week in vm.pickedMonthWeeksArray track by $index" ng-init="rowNumber = $index" class="ng-scope" style="">
+                        <!-- ngRepeat: day in vm.dayList track by $index --><td ng-repeat="day in vm.dayList track by $index" data-id="0" ng-mouseenter="showButtons = true" ng-mouseleave="showButtons = false" ng-init="columnNumber = $index; cellNumber = rowNumber * 7 + columnNumber;" ng-class="vm.monthlyData[cellNumber].firstDayInWork ?
+                            &#39;first-day&#39; : (vm.monthlyData[cellNumber].lastDayInWork ? &#39;last-day&#39; : &#39;&#39;)" class="ng-scope">
+                            <!-- ngIf: vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].entries -->
+                            <!-- ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList -->
+                            <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: showButtons && vm.monthlyData[cellNumber].clickable && vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) -->
+                        </td><!-- end ngRepeat: day in vm.dayList track by $index --><td ng-repeat="day in vm.dayList track by $index" data-id="1" ng-mouseenter="showButtons = true" ng-mouseleave="showButtons = false" ng-init="columnNumber = $index; cellNumber = rowNumber * 7 + columnNumber;" ng-class="vm.monthlyData[cellNumber].firstDayInWork ?
+                            &#39;first-day&#39; : (vm.monthlyData[cellNumber].lastDayInWork ? &#39;last-day&#39; : &#39;&#39;)" class="ng-scope">
+                            <!-- ngIf: vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].entries -->
+                            <!-- ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList -->
+                            <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: showButtons && vm.monthlyData[cellNumber].clickable && vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) -->
+                        </td><!-- end ngRepeat: day in vm.dayList track by $index --><td ng-repeat="day in vm.dayList track by $index" data-id="2" ng-mouseenter="showButtons = true" ng-mouseleave="showButtons = false" ng-init="columnNumber = $index; cellNumber = rowNumber * 7 + columnNumber;" ng-class="vm.monthlyData[cellNumber].firstDayInWork ?
+                            &#39;first-day&#39; : (vm.monthlyData[cellNumber].lastDayInWork ? &#39;last-day&#39; : &#39;&#39;)" class="ng-scope">
+                            <!-- ngIf: vm.monthlyData[cellNumber].dayNumber --><div class="calendar-day-number ng-scope holiday" ng-class="{&#39;saturday&#39;: vm.monthlyData[cellNumber].saturday,
+                            &#39;holiday&#39;: vm.monthlyData[cellNumber].holiday}" ng-if="vm.monthlyData[cellNumber].dayNumber" style="">
+                                <span ng-bind="vm.monthlyData[cellNumber].dayNumber" class="ng-binding">1</span>
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].entries -->
+                            <!-- ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList -->
+                            <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: showButtons && vm.monthlyData[cellNumber].clickable && vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) --><div class="overlay-button ng-scope" ng-init="dayToShow = cellNumber - vm.firstDayOfMonth + 1; dayOfWeek = cellNumber % 7" ng-if="vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &amp;&amp;
+                                ((vm.monthlyData[cellNumber].entries &amp;&amp; userRole === roles.user) || (vm.monthlyData[cellNumber].clickable))" ng-click="vm.openModal(vm.monthlyData[cellNumber].date)" style="">
+                                <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) -->
+                        </td><!-- end ngRepeat: day in vm.dayList track by $index --><td ng-repeat="day in vm.dayList track by $index" data-id="3" ng-mouseenter="showButtons = true" ng-mouseleave="showButtons = false" ng-init="columnNumber = $index; cellNumber = rowNumber * 7 + columnNumber;" ng-class="vm.monthlyData[cellNumber].firstDayInWork ?
+                            &#39;first-day&#39; : (vm.monthlyData[cellNumber].lastDayInWork ? &#39;last-day&#39; : &#39;&#39;)" class="ng-scope">
+                            <!-- ngIf: vm.monthlyData[cellNumber].dayNumber --><div class="calendar-day-number ng-scope" ng-class="{&#39;saturday&#39;: vm.monthlyData[cellNumber].saturday,
+                            &#39;holiday&#39;: vm.monthlyData[cellNumber].holiday}" ng-if="vm.monthlyData[cellNumber].dayNumber" style="">
+                                <span ng-bind="vm.monthlyData[cellNumber].dayNumber" class="ng-binding">2</span>
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries-summary ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-init="vm.monthlyData[cellNumber].workTimeToDay ? cellHeader = &#39;Łączny czas&#39; : cellHeader = &#39;Nie wliczone do czasu pracy&#39;" style="">
+                                <span ng-bind="cellHeader" class="ng-binding">Łączny czas</span>
+                                <!-- ngIf: vm.monthlyData[cellNumber].workTimeToDay --><span ng-if="vm.monthlyData[cellNumber].workTimeToDay" ng-bind="(vm.monthlyData[cellNumber].workTimeToDay | timeIntoHours)" class="ng-binding ng-scope">8:00h</span><!-- end ngIf: vm.monthlyData[cellNumber].workTimeToDay -->
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries -->
+                            <!-- ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList --><!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-repeat="(key, value) in vm.monthlyData[cellNumber].workTypeDailyList" style="">
+                                <span ng-bind="key + &#39; &#39; + (value | timeIntoHours)" class="ng-binding">Urlop 8:00h</span>
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries --><!-- end ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList -->
+                            <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: showButtons && vm.monthlyData[cellNumber].clickable && vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) --><div class="overlay-button ng-scope" ng-init="dayToShow = cellNumber - vm.firstDayOfMonth + 1; dayOfWeek = cellNumber % 7" ng-if="vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &amp;&amp;
+                                ((vm.monthlyData[cellNumber].entries &amp;&amp; userRole === roles.user) || (vm.monthlyData[cellNumber].clickable))" ng-click="vm.openModal(vm.monthlyData[cellNumber].date)" style="">
+                                <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) -->
+                        </td><!-- end ngRepeat: day in vm.dayList track by $index --><td ng-repeat="day in vm.dayList track by $index" data-id="4" ng-mouseenter="showButtons = true" ng-mouseleave="showButtons = false" ng-init="columnNumber = $index; cellNumber = rowNumber * 7 + columnNumber;" ng-class="vm.monthlyData[cellNumber].firstDayInWork ?
+                            &#39;first-day&#39; : (vm.monthlyData[cellNumber].lastDayInWork ? &#39;last-day&#39; : &#39;&#39;)" class="ng-scope">
+                            <!-- ngIf: vm.monthlyData[cellNumber].dayNumber --><div class="calendar-day-number ng-scope holiday" ng-class="{&#39;saturday&#39;: vm.monthlyData[cellNumber].saturday,
+                            &#39;holiday&#39;: vm.monthlyData[cellNumber].holiday}" ng-if="vm.monthlyData[cellNumber].dayNumber" style="">
+                                <span ng-bind="vm.monthlyData[cellNumber].dayNumber" class="ng-binding">3</span>
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].entries -->
+                            <!-- ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList -->
+                            <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: showButtons && vm.monthlyData[cellNumber].clickable && vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) --><div class="overlay-button ng-scope" ng-init="dayToShow = cellNumber - vm.firstDayOfMonth + 1; dayOfWeek = cellNumber % 7" ng-if="vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &amp;&amp;
+                                ((vm.monthlyData[cellNumber].entries &amp;&amp; userRole === roles.user) || (vm.monthlyData[cellNumber].clickable))" ng-click="vm.openModal(vm.monthlyData[cellNumber].date)" style="">
+                                <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) -->
+                        </td><!-- end ngRepeat: day in vm.dayList track by $index --><td ng-repeat="day in vm.dayList track by $index" data-id="5" ng-mouseenter="showButtons = true" ng-mouseleave="showButtons = false" ng-init="columnNumber = $index; cellNumber = rowNumber * 7 + columnNumber;" ng-class="vm.monthlyData[cellNumber].firstDayInWork ?
+                            &#39;first-day&#39; : (vm.monthlyData[cellNumber].lastDayInWork ? &#39;last-day&#39; : &#39;&#39;)" class="ng-scope">
+                            <!-- ngIf: vm.monthlyData[cellNumber].dayNumber --><div class="calendar-day-number ng-scope saturday" ng-class="{&#39;saturday&#39;: vm.monthlyData[cellNumber].saturday,
+                            &#39;holiday&#39;: vm.monthlyData[cellNumber].holiday}" ng-if="vm.monthlyData[cellNumber].dayNumber" style="">
+                                <span ng-bind="vm.monthlyData[cellNumber].dayNumber" class="ng-binding">4</span>
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].entries -->
+                            <!-- ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList -->
+                            <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: showButtons && vm.monthlyData[cellNumber].clickable && vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) --><div class="overlay-button ng-scope" ng-init="dayToShow = cellNumber - vm.firstDayOfMonth + 1; dayOfWeek = cellNumber % 7" ng-if="vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &amp;&amp;
+                                ((vm.monthlyData[cellNumber].entries &amp;&amp; userRole === roles.user) || (vm.monthlyData[cellNumber].clickable))" ng-click="vm.openModal(vm.monthlyData[cellNumber].date)" style="">
+                                <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) -->
+                        </td><!-- end ngRepeat: day in vm.dayList track by $index --><td ng-repeat="day in vm.dayList track by $index" data-id="6" ng-mouseenter="showButtons = true" ng-mouseleave="showButtons = false" ng-init="columnNumber = $index; cellNumber = rowNumber * 7 + columnNumber;" ng-class="vm.monthlyData[cellNumber].firstDayInWork ?
+                            &#39;first-day&#39; : (vm.monthlyData[cellNumber].lastDayInWork ? &#39;last-day&#39; : &#39;&#39;)" class="ng-scope">
+                            <!-- ngIf: vm.monthlyData[cellNumber].dayNumber --><div class="calendar-day-number ng-scope holiday" ng-class="{&#39;saturday&#39;: vm.monthlyData[cellNumber].saturday,
+                            &#39;holiday&#39;: vm.monthlyData[cellNumber].holiday}" ng-if="vm.monthlyData[cellNumber].dayNumber" style="">
+                                <span ng-bind="vm.monthlyData[cellNumber].dayNumber" class="ng-binding">5</span>
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].entries -->
+                            <!-- ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList -->
+                            <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: showButtons && vm.monthlyData[cellNumber].clickable && vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) --><div class="overlay-button ng-scope" ng-init="dayToShow = cellNumber - vm.firstDayOfMonth + 1; dayOfWeek = cellNumber % 7" ng-if="vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &amp;&amp;
+                                ((vm.monthlyData[cellNumber].entries &amp;&amp; userRole === roles.user) || (vm.monthlyData[cellNumber].clickable))" ng-click="vm.openModal(vm.monthlyData[cellNumber].date)" style="">
+                                <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) -->
+                        </td><!-- end ngRepeat: day in vm.dayList track by $index -->
+                    </tr><!-- end ngRepeat: week in vm.pickedMonthWeeksArray track by $index --><tr ng-repeat="week in vm.pickedMonthWeeksArray track by $index" ng-init="rowNumber = $index" class="ng-scope">
+                        <!-- ngRepeat: day in vm.dayList track by $index --><td ng-repeat="day in vm.dayList track by $index" data-id="7" ng-mouseenter="showButtons = true" ng-mouseleave="showButtons = false" ng-init="columnNumber = $index; cellNumber = rowNumber * 7 + columnNumber;" ng-class="vm.monthlyData[cellNumber].firstDayInWork ?
+                            &#39;first-day&#39; : (vm.monthlyData[cellNumber].lastDayInWork ? &#39;last-day&#39; : &#39;&#39;)" class="ng-scope">
+                            <!-- ngIf: vm.monthlyData[cellNumber].dayNumber --><div class="calendar-day-number ng-scope" ng-class="{&#39;saturday&#39;: vm.monthlyData[cellNumber].saturday,
+                            &#39;holiday&#39;: vm.monthlyData[cellNumber].holiday}" ng-if="vm.monthlyData[cellNumber].dayNumber" style="">
+                                <span ng-bind="vm.monthlyData[cellNumber].dayNumber" class="ng-binding">6</span>
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries-summary ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-init="vm.monthlyData[cellNumber].workTimeToDay ? cellHeader = &#39;Łączny czas&#39; : cellHeader = &#39;Nie wliczone do czasu pracy&#39;" style="">
+                                <span ng-bind="cellHeader" class="ng-binding">Łączny czas</span>
+                                <!-- ngIf: vm.monthlyData[cellNumber].workTimeToDay --><span ng-if="vm.monthlyData[cellNumber].workTimeToDay" ng-bind="(vm.monthlyData[cellNumber].workTimeToDay | timeIntoHours)" class="ng-binding ng-scope">6:00h</span><!-- end ngIf: vm.monthlyData[cellNumber].workTimeToDay -->
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries -->
+                            <!-- ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList --><!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-repeat="(key, value) in vm.monthlyData[cellNumber].workTypeDailyList" style="">
+                                <span ng-bind="key + &#39; &#39; + (value | timeIntoHours)" class="ng-binding">Praca zdalna 6:00h</span>
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries --><!-- end ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList -->
+                            <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: showButtons && vm.monthlyData[cellNumber].clickable && vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) --><div class="overlay-button ng-scope" ng-init="dayToShow = cellNumber - vm.firstDayOfMonth + 1; dayOfWeek = cellNumber % 7" ng-if="vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &amp;&amp;
+                                ((vm.monthlyData[cellNumber].entries &amp;&amp; userRole === roles.user) || (vm.monthlyData[cellNumber].clickable))" ng-click="vm.openModal(vm.monthlyData[cellNumber].date)" style="">
+                                <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) -->
+                        </td><!-- end ngRepeat: day in vm.dayList track by $index --><td ng-repeat="day in vm.dayList track by $index" data-id="8" ng-mouseenter="showButtons = true" ng-mouseleave="showButtons = false" ng-init="columnNumber = $index; cellNumber = rowNumber * 7 + columnNumber;" ng-class="vm.monthlyData[cellNumber].firstDayInWork ?
+                            &#39;first-day&#39; : (vm.monthlyData[cellNumber].lastDayInWork ? &#39;last-day&#39; : &#39;&#39;)" class="ng-scope">
+                            <!-- ngIf: vm.monthlyData[cellNumber].dayNumber --><div class="calendar-day-number ng-scope" ng-class="{&#39;saturday&#39;: vm.monthlyData[cellNumber].saturday,
+                            &#39;holiday&#39;: vm.monthlyData[cellNumber].holiday}" ng-if="vm.monthlyData[cellNumber].dayNumber" style="">
+                                <span ng-bind="vm.monthlyData[cellNumber].dayNumber" class="ng-binding">7</span>
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries-summary ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-init="vm.monthlyData[cellNumber].workTimeToDay ? cellHeader = &#39;Łączny czas&#39; : cellHeader = &#39;Nie wliczone do czasu pracy&#39;" style="">
+                                <span ng-bind="cellHeader" class="ng-binding">Łączny czas</span>
+                                <!-- ngIf: vm.monthlyData[cellNumber].workTimeToDay --><span ng-if="vm.monthlyData[cellNumber].workTimeToDay" ng-bind="(vm.monthlyData[cellNumber].workTimeToDay | timeIntoHours)" class="ng-binding ng-scope">8:00h</span><!-- end ngIf: vm.monthlyData[cellNumber].workTimeToDay -->
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries -->
+                            <!-- ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList --><!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-repeat="(key, value) in vm.monthlyData[cellNumber].workTypeDailyList" style="">
+                                <span ng-bind="key + &#39; &#39; + (value | timeIntoHours)" class="ng-binding">Dzień roboczy 8:00h</span>
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries --><!-- end ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList -->
+                            <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: showButtons && vm.monthlyData[cellNumber].clickable && vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) --><div class="overlay-button ng-scope" ng-init="dayToShow = cellNumber - vm.firstDayOfMonth + 1; dayOfWeek = cellNumber % 7" ng-if="vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &amp;&amp;
+                                ((vm.monthlyData[cellNumber].entries &amp;&amp; userRole === roles.user) || (vm.monthlyData[cellNumber].clickable))" ng-click="vm.openModal(vm.monthlyData[cellNumber].date)" style="">
+                                <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) -->
+                        </td><!-- end ngRepeat: day in vm.dayList track by $index --><td ng-repeat="day in vm.dayList track by $index" data-id="9" ng-mouseenter="showButtons = true" ng-mouseleave="showButtons = false" ng-init="columnNumber = $index; cellNumber = rowNumber * 7 + columnNumber;" ng-class="vm.monthlyData[cellNumber].firstDayInWork ?
+                            &#39;first-day&#39; : (vm.monthlyData[cellNumber].lastDayInWork ? &#39;last-day&#39; : &#39;&#39;)" class="ng-scope">
+                            <!-- ngIf: vm.monthlyData[cellNumber].dayNumber --><div class="calendar-day-number ng-scope" ng-class="{&#39;saturday&#39;: vm.monthlyData[cellNumber].saturday,
+                            &#39;holiday&#39;: vm.monthlyData[cellNumber].holiday}" ng-if="vm.monthlyData[cellNumber].dayNumber" style="">
+                                <span ng-bind="vm.monthlyData[cellNumber].dayNumber" class="ng-binding">8</span>
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries-summary ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-init="vm.monthlyData[cellNumber].workTimeToDay ? cellHeader = &#39;Łączny czas&#39; : cellHeader = &#39;Nie wliczone do czasu pracy&#39;" style="">
+                                <span ng-bind="cellHeader" class="ng-binding">Łączny czas</span>
+                                <!-- ngIf: vm.monthlyData[cellNumber].workTimeToDay --><span ng-if="vm.monthlyData[cellNumber].workTimeToDay" ng-bind="(vm.monthlyData[cellNumber].workTimeToDay | timeIntoHours)" class="ng-binding ng-scope">8:05h</span><!-- end ngIf: vm.monthlyData[cellNumber].workTimeToDay -->
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries -->
+                            <!-- ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList --><!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-repeat="(key, value) in vm.monthlyData[cellNumber].workTypeDailyList" style="">
+                                <span ng-bind="key + &#39; &#39; + (value | timeIntoHours)" class="ng-binding">Dzień roboczy 8:05h</span>
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries --><!-- end ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList -->
+                            <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: showButtons && vm.monthlyData[cellNumber].clickable && vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) --><div class="overlay-button ng-scope" ng-init="dayToShow = cellNumber - vm.firstDayOfMonth + 1; dayOfWeek = cellNumber % 7" ng-if="vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &amp;&amp;
+                                ((vm.monthlyData[cellNumber].entries &amp;&amp; userRole === roles.user) || (vm.monthlyData[cellNumber].clickable))" ng-click="vm.openModal(vm.monthlyData[cellNumber].date)" style="">
+                                <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) -->
+                        </td><!-- end ngRepeat: day in vm.dayList track by $index --><td ng-repeat="day in vm.dayList track by $index" data-id="10" ng-mouseenter="showButtons = true" ng-mouseleave="showButtons = false" ng-init="columnNumber = $index; cellNumber = rowNumber * 7 + columnNumber;" ng-class="vm.monthlyData[cellNumber].firstDayInWork ?
+                            &#39;first-day&#39; : (vm.monthlyData[cellNumber].lastDayInWork ? &#39;last-day&#39; : &#39;&#39;)" class="ng-scope">
+                            <!-- ngIf: vm.monthlyData[cellNumber].dayNumber --><div class="calendar-day-number ng-scope" ng-class="{&#39;saturday&#39;: vm.monthlyData[cellNumber].saturday,
+                            &#39;holiday&#39;: vm.monthlyData[cellNumber].holiday}" ng-if="vm.monthlyData[cellNumber].dayNumber" style="">
+                                <span ng-bind="vm.monthlyData[cellNumber].dayNumber" class="ng-binding">9</span>
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries-summary ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-init="vm.monthlyData[cellNumber].workTimeToDay ? cellHeader = &#39;Łączny czas&#39; : cellHeader = &#39;Nie wliczone do czasu pracy&#39;" style="">
+                                <span ng-bind="cellHeader" class="ng-binding">Łączny czas</span>
+                                <!-- ngIf: vm.monthlyData[cellNumber].workTimeToDay --><span ng-if="vm.monthlyData[cellNumber].workTimeToDay" ng-bind="(vm.monthlyData[cellNumber].workTimeToDay | timeIntoHours)" class="ng-binding ng-scope">8:00h</span><!-- end ngIf: vm.monthlyData[cellNumber].workTimeToDay -->
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries -->
+                            <!-- ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList --><!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-repeat="(key, value) in vm.monthlyData[cellNumber].workTypeDailyList" style="">
+                                <span ng-bind="key + &#39; &#39; + (value | timeIntoHours)" class="ng-binding">Dzień roboczy 8:00h</span>
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries --><!-- end ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList -->
+                            <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: showButtons && vm.monthlyData[cellNumber].clickable && vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) --><div class="overlay-button ng-scope" ng-init="dayToShow = cellNumber - vm.firstDayOfMonth + 1; dayOfWeek = cellNumber % 7" ng-if="vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &amp;&amp;
+                                ((vm.monthlyData[cellNumber].entries &amp;&amp; userRole === roles.user) || (vm.monthlyData[cellNumber].clickable))" ng-click="vm.openModal(vm.monthlyData[cellNumber].date)" style="">
+                                <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) -->
+                        </td><!-- end ngRepeat: day in vm.dayList track by $index --><td ng-repeat="day in vm.dayList track by $index" data-id="11" ng-mouseenter="showButtons = true" ng-mouseleave="showButtons = false" ng-init="columnNumber = $index; cellNumber = rowNumber * 7 + columnNumber;" ng-class="vm.monthlyData[cellNumber].firstDayInWork ?
+                            &#39;first-day&#39; : (vm.monthlyData[cellNumber].lastDayInWork ? &#39;last-day&#39; : &#39;&#39;)" class="ng-scope">
+                            <!-- ngIf: vm.monthlyData[cellNumber].dayNumber --><div class="calendar-day-number ng-scope" ng-class="{&#39;saturday&#39;: vm.monthlyData[cellNumber].saturday,
+                            &#39;holiday&#39;: vm.monthlyData[cellNumber].holiday}" ng-if="vm.monthlyData[cellNumber].dayNumber" style="">
+                                <span ng-bind="vm.monthlyData[cellNumber].dayNumber" class="ng-binding">10</span>
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries-summary ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-init="vm.monthlyData[cellNumber].workTimeToDay ? cellHeader = &#39;Łączny czas&#39; : cellHeader = &#39;Nie wliczone do czasu pracy&#39;" style="">
+                                <span ng-bind="cellHeader" class="ng-binding">Łączny czas</span>
+                                <!-- ngIf: vm.monthlyData[cellNumber].workTimeToDay --><span ng-if="vm.monthlyData[cellNumber].workTimeToDay" ng-bind="(vm.monthlyData[cellNumber].workTimeToDay | timeIntoHours)" class="ng-binding ng-scope">8:00h</span><!-- end ngIf: vm.monthlyData[cellNumber].workTimeToDay -->
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries -->
+                            <!-- ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList --><!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-repeat="(key, value) in vm.monthlyData[cellNumber].workTypeDailyList" style="">
+                                <span ng-bind="key + &#39; &#39; + (value | timeIntoHours)" class="ng-binding">Praca zdalna 8:00h</span>
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries --><!-- end ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList -->
+                            <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: showButtons && vm.monthlyData[cellNumber].clickable && vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) --><div class="overlay-button ng-scope" ng-init="dayToShow = cellNumber - vm.firstDayOfMonth + 1; dayOfWeek = cellNumber % 7" ng-if="vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &amp;&amp;
+                                ((vm.monthlyData[cellNumber].entries &amp;&amp; userRole === roles.user) || (vm.monthlyData[cellNumber].clickable))" ng-click="vm.openModal(vm.monthlyData[cellNumber].date)" style="">
+                                <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) -->
+                        </td><!-- end ngRepeat: day in vm.dayList track by $index --><td ng-repeat="day in vm.dayList track by $index" data-id="12" ng-mouseenter="showButtons = true" ng-mouseleave="showButtons = false" ng-init="columnNumber = $index; cellNumber = rowNumber * 7 + columnNumber;" ng-class="vm.monthlyData[cellNumber].firstDayInWork ?
+                            &#39;first-day&#39; : (vm.monthlyData[cellNumber].lastDayInWork ? &#39;last-day&#39; : &#39;&#39;)" class="ng-scope">
+                            <!-- ngIf: vm.monthlyData[cellNumber].dayNumber --><div class="calendar-day-number ng-scope saturday" ng-class="{&#39;saturday&#39;: vm.monthlyData[cellNumber].saturday,
+                            &#39;holiday&#39;: vm.monthlyData[cellNumber].holiday}" ng-if="vm.monthlyData[cellNumber].dayNumber" style="">
+                                <span ng-bind="vm.monthlyData[cellNumber].dayNumber" class="ng-binding">11</span>
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].entries -->
+                            <!-- ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList -->
+                            <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: showButtons && vm.monthlyData[cellNumber].clickable && vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) --><div class="overlay-button ng-scope" ng-init="dayToShow = cellNumber - vm.firstDayOfMonth + 1; dayOfWeek = cellNumber % 7" ng-if="vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &amp;&amp;
+                                ((vm.monthlyData[cellNumber].entries &amp;&amp; userRole === roles.user) || (vm.monthlyData[cellNumber].clickable))" ng-click="vm.openModal(vm.monthlyData[cellNumber].date)" style="">
+                                <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) -->
+                        </td><!-- end ngRepeat: day in vm.dayList track by $index --><td ng-repeat="day in vm.dayList track by $index" data-id="13" ng-mouseenter="showButtons = true" ng-mouseleave="showButtons = false" ng-init="columnNumber = $index; cellNumber = rowNumber * 7 + columnNumber;" ng-class="vm.monthlyData[cellNumber].firstDayInWork ?
+                            &#39;first-day&#39; : (vm.monthlyData[cellNumber].lastDayInWork ? &#39;last-day&#39; : &#39;&#39;)" class="ng-scope">
+                            <!-- ngIf: vm.monthlyData[cellNumber].dayNumber --><div class="calendar-day-number ng-scope holiday" ng-class="{&#39;saturday&#39;: vm.monthlyData[cellNumber].saturday,
+                            &#39;holiday&#39;: vm.monthlyData[cellNumber].holiday}" ng-if="vm.monthlyData[cellNumber].dayNumber" style="">
+                                <span ng-bind="vm.monthlyData[cellNumber].dayNumber" class="ng-binding">12</span>
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].entries -->
+                            <!-- ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList -->
+                            <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: showButtons && vm.monthlyData[cellNumber].clickable && vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) --><div class="overlay-button ng-scope" ng-init="dayToShow = cellNumber - vm.firstDayOfMonth + 1; dayOfWeek = cellNumber % 7" ng-if="vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &amp;&amp;
+                                ((vm.monthlyData[cellNumber].entries &amp;&amp; userRole === roles.user) || (vm.monthlyData[cellNumber].clickable))" ng-click="vm.openModal(vm.monthlyData[cellNumber].date)" style="">
+                                <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) -->
+                        </td><!-- end ngRepeat: day in vm.dayList track by $index -->
+                    </tr><!-- end ngRepeat: week in vm.pickedMonthWeeksArray track by $index --><tr ng-repeat="week in vm.pickedMonthWeeksArray track by $index" ng-init="rowNumber = $index" class="ng-scope">
+                        <!-- ngRepeat: day in vm.dayList track by $index --><td ng-repeat="day in vm.dayList track by $index" data-id="14" ng-mouseenter="showButtons = true" ng-mouseleave="showButtons = false" ng-init="columnNumber = $index; cellNumber = rowNumber * 7 + columnNumber;" ng-class="vm.monthlyData[cellNumber].firstDayInWork ?
+                            &#39;first-day&#39; : (vm.monthlyData[cellNumber].lastDayInWork ? &#39;last-day&#39; : &#39;&#39;)" class="ng-scope">
+                            <!-- ngIf: vm.monthlyData[cellNumber].dayNumber --><div class="calendar-day-number ng-scope" ng-class="{&#39;saturday&#39;: vm.monthlyData[cellNumber].saturday,
+                            &#39;holiday&#39;: vm.monthlyData[cellNumber].holiday}" ng-if="vm.monthlyData[cellNumber].dayNumber" style="">
+                                <span ng-bind="vm.monthlyData[cellNumber].dayNumber" class="ng-binding">13</span>
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries-summary ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-init="vm.monthlyData[cellNumber].workTimeToDay ? cellHeader = &#39;Łączny czas&#39; : cellHeader = &#39;Nie wliczone do czasu pracy&#39;" style="">
+                                <span ng-bind="cellHeader" class="ng-binding">Łączny czas</span>
+                                <!-- ngIf: vm.monthlyData[cellNumber].workTimeToDay --><span ng-if="vm.monthlyData[cellNumber].workTimeToDay" ng-bind="(vm.monthlyData[cellNumber].workTimeToDay | timeIntoHours)" class="ng-binding ng-scope">8:00h</span><!-- end ngIf: vm.monthlyData[cellNumber].workTimeToDay -->
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries -->
+                            <!-- ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList --><!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-repeat="(key, value) in vm.monthlyData[cellNumber].workTypeDailyList" style="">
+                                <span ng-bind="key + &#39; &#39; + (value | timeIntoHours)" class="ng-binding">Praca zdalna 8:00h</span>
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries --><!-- end ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList -->
+                            <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: showButtons && vm.monthlyData[cellNumber].clickable && vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) --><div class="overlay-button ng-scope" ng-init="dayToShow = cellNumber - vm.firstDayOfMonth + 1; dayOfWeek = cellNumber % 7" ng-if="vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &amp;&amp;
+                                ((vm.monthlyData[cellNumber].entries &amp;&amp; userRole === roles.user) || (vm.monthlyData[cellNumber].clickable))" ng-click="vm.openModal(vm.monthlyData[cellNumber].date)" style="">
+                                <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) -->
+                        </td><!-- end ngRepeat: day in vm.dayList track by $index --><td ng-repeat="day in vm.dayList track by $index" data-id="15" ng-mouseenter="showButtons = true" ng-mouseleave="showButtons = false" ng-init="columnNumber = $index; cellNumber = rowNumber * 7 + columnNumber;" ng-class="vm.monthlyData[cellNumber].firstDayInWork ?
+                            &#39;first-day&#39; : (vm.monthlyData[cellNumber].lastDayInWork ? &#39;last-day&#39; : &#39;&#39;)" class="ng-scope">
+                            <!-- ngIf: vm.monthlyData[cellNumber].dayNumber --><div class="calendar-day-number ng-scope" ng-class="{&#39;saturday&#39;: vm.monthlyData[cellNumber].saturday,
+                            &#39;holiday&#39;: vm.monthlyData[cellNumber].holiday}" ng-if="vm.monthlyData[cellNumber].dayNumber" style="">
+                                <span ng-bind="vm.monthlyData[cellNumber].dayNumber" class="ng-binding">14</span>
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries-summary ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-init="vm.monthlyData[cellNumber].workTimeToDay ? cellHeader = &#39;Łączny czas&#39; : cellHeader = &#39;Nie wliczone do czasu pracy&#39;" style="">
+                                <span ng-bind="cellHeader" class="ng-binding">Łączny czas</span>
+                                <!-- ngIf: vm.monthlyData[cellNumber].workTimeToDay --><span ng-if="vm.monthlyData[cellNumber].workTimeToDay" ng-bind="(vm.monthlyData[cellNumber].workTimeToDay | timeIntoHours)" class="ng-binding ng-scope">8:00h</span><!-- end ngIf: vm.monthlyData[cellNumber].workTimeToDay -->
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries -->
+                            <!-- ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList --><!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-repeat="(key, value) in vm.monthlyData[cellNumber].workTypeDailyList" style="">
+                                <span ng-bind="key + &#39; &#39; + (value | timeIntoHours)" class="ng-binding">Chorobowe 8:00h</span>
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries --><!-- end ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList -->
+                            <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: showButtons && vm.monthlyData[cellNumber].clickable && vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) --><div class="overlay-button ng-scope" ng-init="dayToShow = cellNumber - vm.firstDayOfMonth + 1; dayOfWeek = cellNumber % 7" ng-if="vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &amp;&amp;
+                                ((vm.monthlyData[cellNumber].entries &amp;&amp; userRole === roles.user) || (vm.monthlyData[cellNumber].clickable))" ng-click="vm.openModal(vm.monthlyData[cellNumber].date)" style="">
+                                <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) -->
+                        </td><!-- end ngRepeat: day in vm.dayList track by $index --><td ng-repeat="day in vm.dayList track by $index" data-id="16" ng-mouseenter="showButtons = true" ng-mouseleave="showButtons = false" ng-init="columnNumber = $index; cellNumber = rowNumber * 7 + columnNumber;" ng-class="vm.monthlyData[cellNumber].firstDayInWork ?
+                            &#39;first-day&#39; : (vm.monthlyData[cellNumber].lastDayInWork ? &#39;last-day&#39; : &#39;&#39;)" class="ng-scope">
+                            <!-- ngIf: vm.monthlyData[cellNumber].dayNumber --><div class="calendar-day-number ng-scope" ng-class="{&#39;saturday&#39;: vm.monthlyData[cellNumber].saturday,
+                            &#39;holiday&#39;: vm.monthlyData[cellNumber].holiday}" ng-if="vm.monthlyData[cellNumber].dayNumber" style="">
+                                <span ng-bind="vm.monthlyData[cellNumber].dayNumber" class="ng-binding">15</span>
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries-summary ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-init="vm.monthlyData[cellNumber].workTimeToDay ? cellHeader = &#39;Łączny czas&#39; : cellHeader = &#39;Nie wliczone do czasu pracy&#39;" style="">
+                                <span ng-bind="cellHeader" class="ng-binding">Łączny czas</span>
+                                <!-- ngIf: vm.monthlyData[cellNumber].workTimeToDay --><span ng-if="vm.monthlyData[cellNumber].workTimeToDay" ng-bind="(vm.monthlyData[cellNumber].workTimeToDay | timeIntoHours)" class="ng-binding ng-scope">8:00h</span><!-- end ngIf: vm.monthlyData[cellNumber].workTimeToDay -->
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries -->
+                            <!-- ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList --><!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-repeat="(key, value) in vm.monthlyData[cellNumber].workTypeDailyList" style="">
+                                <span ng-bind="key + &#39; &#39; + (value | timeIntoHours)" class="ng-binding">Praca zdalna 8:00h</span>
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries --><!-- end ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList -->
+                            <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: showButtons && vm.monthlyData[cellNumber].clickable && vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) --><div class="overlay-button ng-scope" ng-init="dayToShow = cellNumber - vm.firstDayOfMonth + 1; dayOfWeek = cellNumber % 7" ng-if="vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &amp;&amp;
+                                ((vm.monthlyData[cellNumber].entries &amp;&amp; userRole === roles.user) || (vm.monthlyData[cellNumber].clickable))" ng-click="vm.openModal(vm.monthlyData[cellNumber].date)" style="">
+                                <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) -->
+                        </td><!-- end ngRepeat: day in vm.dayList track by $index --><td ng-repeat="day in vm.dayList track by $index" data-id="17" ng-mouseenter="showButtons = true" ng-mouseleave="showButtons = false" ng-init="columnNumber = $index; cellNumber = rowNumber * 7 + columnNumber;" ng-class="vm.monthlyData[cellNumber].firstDayInWork ?
+                            &#39;first-day&#39; : (vm.monthlyData[cellNumber].lastDayInWork ? &#39;last-day&#39; : &#39;&#39;)" class="ng-scope">
+                            <!-- ngIf: vm.monthlyData[cellNumber].dayNumber --><div class="calendar-day-number ng-scope" ng-class="{&#39;saturday&#39;: vm.monthlyData[cellNumber].saturday,
+                            &#39;holiday&#39;: vm.monthlyData[cellNumber].holiday}" ng-if="vm.monthlyData[cellNumber].dayNumber" style="">
+                                <span ng-bind="vm.monthlyData[cellNumber].dayNumber" class="ng-binding">16</span>
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries-summary ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-init="vm.monthlyData[cellNumber].workTimeToDay ? cellHeader = &#39;Łączny czas&#39; : cellHeader = &#39;Nie wliczone do czasu pracy&#39;" style="">
+                                <span ng-bind="cellHeader" class="ng-binding">Łączny czas</span>
+                                <!-- ngIf: vm.monthlyData[cellNumber].workTimeToDay --><span ng-if="vm.monthlyData[cellNumber].workTimeToDay" ng-bind="(vm.monthlyData[cellNumber].workTimeToDay | timeIntoHours)" class="ng-binding ng-scope">7:49h</span><!-- end ngIf: vm.monthlyData[cellNumber].workTimeToDay -->
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries -->
+                            <!-- ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList --><!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-repeat="(key, value) in vm.monthlyData[cellNumber].workTypeDailyList" style="">
+                                <span ng-bind="key + &#39; &#39; + (value | timeIntoHours)" class="ng-binding">Dzień roboczy 7:49h</span>
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries --><!-- end ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList -->
+                            <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: showButtons && vm.monthlyData[cellNumber].clickable && vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) --><div class="overlay-button ng-scope" ng-init="dayToShow = cellNumber - vm.firstDayOfMonth + 1; dayOfWeek = cellNumber % 7" ng-if="vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &amp;&amp;
+                                ((vm.monthlyData[cellNumber].entries &amp;&amp; userRole === roles.user) || (vm.monthlyData[cellNumber].clickable))" ng-click="vm.openModal(vm.monthlyData[cellNumber].date)" style="">
+                                <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) -->
+                        </td><!-- end ngRepeat: day in vm.dayList track by $index --><td ng-repeat="day in vm.dayList track by $index" data-id="18" ng-mouseenter="showButtons = true" ng-mouseleave="showButtons = false" ng-init="columnNumber = $index; cellNumber = rowNumber * 7 + columnNumber;" ng-class="vm.monthlyData[cellNumber].firstDayInWork ?
+                            &#39;first-day&#39; : (vm.monthlyData[cellNumber].lastDayInWork ? &#39;last-day&#39; : &#39;&#39;)" class="ng-scope">
+                            <!-- ngIf: vm.monthlyData[cellNumber].dayNumber --><div class="calendar-day-number ng-scope" ng-class="{&#39;saturday&#39;: vm.monthlyData[cellNumber].saturday,
+                            &#39;holiday&#39;: vm.monthlyData[cellNumber].holiday}" ng-if="vm.monthlyData[cellNumber].dayNumber" style="">
+                                <span ng-bind="vm.monthlyData[cellNumber].dayNumber" class="ng-binding">17</span>
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries-summary ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-init="vm.monthlyData[cellNumber].workTimeToDay ? cellHeader = &#39;Łączny czas&#39; : cellHeader = &#39;Nie wliczone do czasu pracy&#39;" style="">
+                                <span ng-bind="cellHeader" class="ng-binding">Łączny czas</span>
+                                <!-- ngIf: vm.monthlyData[cellNumber].workTimeToDay --><span ng-if="vm.monthlyData[cellNumber].workTimeToDay" ng-bind="(vm.monthlyData[cellNumber].workTimeToDay | timeIntoHours)" class="ng-binding ng-scope">8:00h</span><!-- end ngIf: vm.monthlyData[cellNumber].workTimeToDay -->
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries -->
+                            <!-- ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList --><!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-repeat="(key, value) in vm.monthlyData[cellNumber].workTypeDailyList" style="">
+                                <span ng-bind="key + &#39; &#39; + (value | timeIntoHours)" class="ng-binding">Praca zdalna 8:00h</span>
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries --><!-- end ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList -->
+                            <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: showButtons && vm.monthlyData[cellNumber].clickable && vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) --><div class="overlay-button ng-scope" ng-init="dayToShow = cellNumber - vm.firstDayOfMonth + 1; dayOfWeek = cellNumber % 7" ng-if="vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &amp;&amp;
+                                ((vm.monthlyData[cellNumber].entries &amp;&amp; userRole === roles.user) || (vm.monthlyData[cellNumber].clickable))" ng-click="vm.openModal(vm.monthlyData[cellNumber].date)" style="">
+                                <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) -->
+                        </td><!-- end ngRepeat: day in vm.dayList track by $index --><td ng-repeat="day in vm.dayList track by $index" data-id="19" ng-mouseenter="showButtons = true" ng-mouseleave="showButtons = false" ng-init="columnNumber = $index; cellNumber = rowNumber * 7 + columnNumber;" ng-class="vm.monthlyData[cellNumber].firstDayInWork ?
+                            &#39;first-day&#39; : (vm.monthlyData[cellNumber].lastDayInWork ? &#39;last-day&#39; : &#39;&#39;)" class="ng-scope">
+                            <!-- ngIf: vm.monthlyData[cellNumber].dayNumber --><div class="calendar-day-number ng-scope saturday" ng-class="{&#39;saturday&#39;: vm.monthlyData[cellNumber].saturday,
+                            &#39;holiday&#39;: vm.monthlyData[cellNumber].holiday}" ng-if="vm.monthlyData[cellNumber].dayNumber" style="">
+                                <span ng-bind="vm.monthlyData[cellNumber].dayNumber" class="ng-binding">18</span>
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].entries -->
+                            <!-- ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList -->
+                            <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: showButtons && vm.monthlyData[cellNumber].clickable && vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) --><div class="overlay-button ng-scope" ng-init="dayToShow = cellNumber - vm.firstDayOfMonth + 1; dayOfWeek = cellNumber % 7" ng-if="vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &amp;&amp;
+                                ((vm.monthlyData[cellNumber].entries &amp;&amp; userRole === roles.user) || (vm.monthlyData[cellNumber].clickable))" ng-click="vm.openModal(vm.monthlyData[cellNumber].date)" style="">
+                                <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) -->
+                        </td><!-- end ngRepeat: day in vm.dayList track by $index --><td ng-repeat="day in vm.dayList track by $index" data-id="20" ng-mouseenter="showButtons = true" ng-mouseleave="showButtons = false" ng-init="columnNumber = $index; cellNumber = rowNumber * 7 + columnNumber;" ng-class="vm.monthlyData[cellNumber].firstDayInWork ?
+                            &#39;first-day&#39; : (vm.monthlyData[cellNumber].lastDayInWork ? &#39;last-day&#39; : &#39;&#39;)" class="ng-scope">
+                            <!-- ngIf: vm.monthlyData[cellNumber].dayNumber --><div class="calendar-day-number ng-scope holiday" ng-class="{&#39;saturday&#39;: vm.monthlyData[cellNumber].saturday,
+                            &#39;holiday&#39;: vm.monthlyData[cellNumber].holiday}" ng-if="vm.monthlyData[cellNumber].dayNumber" style="">
+                                <span ng-bind="vm.monthlyData[cellNumber].dayNumber" class="ng-binding">19</span>
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].entries -->
+                            <!-- ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList -->
+                            <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: showButtons && vm.monthlyData[cellNumber].clickable && vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) --><div class="overlay-button ng-scope" ng-init="dayToShow = cellNumber - vm.firstDayOfMonth + 1; dayOfWeek = cellNumber % 7" ng-if="vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &amp;&amp;
+                                ((vm.monthlyData[cellNumber].entries &amp;&amp; userRole === roles.user) || (vm.monthlyData[cellNumber].clickable))" ng-click="vm.openModal(vm.monthlyData[cellNumber].date)" style="">
+                                <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) -->
+                        </td><!-- end ngRepeat: day in vm.dayList track by $index -->
+                    </tr><!-- end ngRepeat: week in vm.pickedMonthWeeksArray track by $index --><tr ng-repeat="week in vm.pickedMonthWeeksArray track by $index" ng-init="rowNumber = $index" class="ng-scope">
+                        <!-- ngRepeat: day in vm.dayList track by $index --><td ng-repeat="day in vm.dayList track by $index" data-id="21" ng-mouseenter="showButtons = true" ng-mouseleave="showButtons = false" ng-init="columnNumber = $index; cellNumber = rowNumber * 7 + columnNumber;" ng-class="vm.monthlyData[cellNumber].firstDayInWork ?
+                            &#39;first-day&#39; : (vm.monthlyData[cellNumber].lastDayInWork ? &#39;last-day&#39; : &#39;&#39;)" class="ng-scope">
+                            <!-- ngIf: vm.monthlyData[cellNumber].dayNumber --><div class="calendar-day-number ng-scope" ng-class="{&#39;saturday&#39;: vm.monthlyData[cellNumber].saturday,
+                            &#39;holiday&#39;: vm.monthlyData[cellNumber].holiday}" ng-if="vm.monthlyData[cellNumber].dayNumber" style="">
+                                <span ng-bind="vm.monthlyData[cellNumber].dayNumber" class="ng-binding">20</span>
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries-summary ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-init="vm.monthlyData[cellNumber].workTimeToDay ? cellHeader = &#39;Łączny czas&#39; : cellHeader = &#39;Nie wliczone do czasu pracy&#39;" style="">
+                                <span ng-bind="cellHeader" class="ng-binding">Łączny czas</span>
+                                <!-- ngIf: vm.monthlyData[cellNumber].workTimeToDay --><span ng-if="vm.monthlyData[cellNumber].workTimeToDay" ng-bind="(vm.monthlyData[cellNumber].workTimeToDay | timeIntoHours)" class="ng-binding ng-scope">8:10h</span><!-- end ngIf: vm.monthlyData[cellNumber].workTimeToDay -->
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries -->
+                            <!-- ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList --><!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-repeat="(key, value) in vm.monthlyData[cellNumber].workTypeDailyList" style="">
+                                <span ng-bind="key + &#39; &#39; + (value | timeIntoHours)" class="ng-binding">Dzień roboczy 8:10h</span>
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries --><!-- end ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList -->
+                            <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: showButtons && vm.monthlyData[cellNumber].clickable && vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) --><div class="overlay-button ng-scope" ng-init="dayToShow = cellNumber - vm.firstDayOfMonth + 1; dayOfWeek = cellNumber % 7" ng-if="vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &amp;&amp;
+                                ((vm.monthlyData[cellNumber].entries &amp;&amp; userRole === roles.user) || (vm.monthlyData[cellNumber].clickable))" ng-click="vm.openModal(vm.monthlyData[cellNumber].date)" style="">
+                                <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) -->
+                        </td><!-- end ngRepeat: day in vm.dayList track by $index --><td ng-repeat="day in vm.dayList track by $index" data-id="22" ng-mouseenter="showButtons = true" ng-mouseleave="showButtons = false" ng-init="columnNumber = $index; cellNumber = rowNumber * 7 + columnNumber;" ng-class="vm.monthlyData[cellNumber].firstDayInWork ?
+                            &#39;first-day&#39; : (vm.monthlyData[cellNumber].lastDayInWork ? &#39;last-day&#39; : &#39;&#39;)" class="ng-scope">
+                            <!-- ngIf: vm.monthlyData[cellNumber].dayNumber --><div class="calendar-day-number ng-scope" ng-class="{&#39;saturday&#39;: vm.monthlyData[cellNumber].saturday,
+                            &#39;holiday&#39;: vm.monthlyData[cellNumber].holiday}" ng-if="vm.monthlyData[cellNumber].dayNumber" style="">
+                                <span ng-bind="vm.monthlyData[cellNumber].dayNumber" class="ng-binding">21</span>
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries-summary ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-init="vm.monthlyData[cellNumber].workTimeToDay ? cellHeader = &#39;Łączny czas&#39; : cellHeader = &#39;Nie wliczone do czasu pracy&#39;" style="">
+                                <span ng-bind="cellHeader" class="ng-binding">Łączny czas</span>
+                                <!-- ngIf: vm.monthlyData[cellNumber].workTimeToDay --><span ng-if="vm.monthlyData[cellNumber].workTimeToDay" ng-bind="(vm.monthlyData[cellNumber].workTimeToDay | timeIntoHours)" class="ng-binding ng-scope">8:10h</span><!-- end ngIf: vm.monthlyData[cellNumber].workTimeToDay -->
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries -->
+                            <!-- ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList --><!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-repeat="(key, value) in vm.monthlyData[cellNumber].workTypeDailyList" style="">
+                                <span ng-bind="key + &#39; &#39; + (value | timeIntoHours)" class="ng-binding">Dzień roboczy 8:10h</span>
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries --><!-- end ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList -->
+                            <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: showButtons && vm.monthlyData[cellNumber].clickable && vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) --><div class="overlay-button ng-scope" ng-init="dayToShow = cellNumber - vm.firstDayOfMonth + 1; dayOfWeek = cellNumber % 7" ng-if="vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &amp;&amp;
+                                ((vm.monthlyData[cellNumber].entries &amp;&amp; userRole === roles.user) || (vm.monthlyData[cellNumber].clickable))" ng-click="vm.openModal(vm.monthlyData[cellNumber].date)" style="">
+                                <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) -->
+                        </td><!-- end ngRepeat: day in vm.dayList track by $index --><td ng-repeat="day in vm.dayList track by $index" data-id="23" ng-mouseenter="showButtons = true" ng-mouseleave="showButtons = false" ng-init="columnNumber = $index; cellNumber = rowNumber * 7 + columnNumber;" ng-class="vm.monthlyData[cellNumber].firstDayInWork ?
+                            &#39;first-day&#39; : (vm.monthlyData[cellNumber].lastDayInWork ? &#39;last-day&#39; : &#39;&#39;)" class="ng-scope">
+                            <!-- ngIf: vm.monthlyData[cellNumber].dayNumber --><div class="calendar-day-number ng-scope" ng-class="{&#39;saturday&#39;: vm.monthlyData[cellNumber].saturday,
+                            &#39;holiday&#39;: vm.monthlyData[cellNumber].holiday}" ng-if="vm.monthlyData[cellNumber].dayNumber" style="">
+                                <span ng-bind="vm.monthlyData[cellNumber].dayNumber" class="ng-binding">22</span>
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries-summary ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-init="vm.monthlyData[cellNumber].workTimeToDay ? cellHeader = &#39;Łączny czas&#39; : cellHeader = &#39;Nie wliczone do czasu pracy&#39;" style="">
+                                <span ng-bind="cellHeader" class="ng-binding">Łączny czas</span>
+                                <!-- ngIf: vm.monthlyData[cellNumber].workTimeToDay --><span ng-if="vm.monthlyData[cellNumber].workTimeToDay" ng-bind="(vm.monthlyData[cellNumber].workTimeToDay | timeIntoHours)" class="ng-binding ng-scope">8:00h</span><!-- end ngIf: vm.monthlyData[cellNumber].workTimeToDay -->
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries -->
+                            <!-- ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList --><!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-repeat="(key, value) in vm.monthlyData[cellNumber].workTypeDailyList" style="">
+                                <span ng-bind="key + &#39; &#39; + (value | timeIntoHours)" class="ng-binding">Dzień roboczy 8:00h</span>
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries --><!-- end ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList -->
+                            <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: showButtons && vm.monthlyData[cellNumber].clickable && vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) --><div class="overlay-button ng-scope" ng-init="dayToShow = cellNumber - vm.firstDayOfMonth + 1; dayOfWeek = cellNumber % 7" ng-if="vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &amp;&amp;
+                                ((vm.monthlyData[cellNumber].entries &amp;&amp; userRole === roles.user) || (vm.monthlyData[cellNumber].clickable))" ng-click="vm.openModal(vm.monthlyData[cellNumber].date)" style="">
+                                <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) -->
+                        </td><!-- end ngRepeat: day in vm.dayList track by $index --><td ng-repeat="day in vm.dayList track by $index" data-id="24" ng-mouseenter="showButtons = true" ng-mouseleave="showButtons = false" ng-init="columnNumber = $index; cellNumber = rowNumber * 7 + columnNumber;" ng-class="vm.monthlyData[cellNumber].firstDayInWork ?
+                            &#39;first-day&#39; : (vm.monthlyData[cellNumber].lastDayInWork ? &#39;last-day&#39; : &#39;&#39;)" class="ng-scope">
+                            <!-- ngIf: vm.monthlyData[cellNumber].dayNumber --><div class="calendar-day-number ng-scope" ng-class="{&#39;saturday&#39;: vm.monthlyData[cellNumber].saturday,
+                            &#39;holiday&#39;: vm.monthlyData[cellNumber].holiday}" ng-if="vm.monthlyData[cellNumber].dayNumber" style="">
+                                <span ng-bind="vm.monthlyData[cellNumber].dayNumber" class="ng-binding">23</span>
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries-summary ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-init="vm.monthlyData[cellNumber].workTimeToDay ? cellHeader = &#39;Łączny czas&#39; : cellHeader = &#39;Nie wliczone do czasu pracy&#39;" style="">
+                                <span ng-bind="cellHeader" class="ng-binding">Łączny czas</span>
+                                <!-- ngIf: vm.monthlyData[cellNumber].workTimeToDay --><span ng-if="vm.monthlyData[cellNumber].workTimeToDay" ng-bind="(vm.monthlyData[cellNumber].workTimeToDay | timeIntoHours)" class="ng-binding ng-scope">8:00h</span><!-- end ngIf: vm.monthlyData[cellNumber].workTimeToDay -->
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries -->
+                            <!-- ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList --><!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-repeat="(key, value) in vm.monthlyData[cellNumber].workTypeDailyList" style="">
+                                <span ng-bind="key + &#39; &#39; + (value | timeIntoHours)" class="ng-binding">Praca zdalna 8:00h</span>
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries --><!-- end ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList -->
+                            <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: showButtons && vm.monthlyData[cellNumber].clickable && vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) --><div class="overlay-button ng-scope" ng-init="dayToShow = cellNumber - vm.firstDayOfMonth + 1; dayOfWeek = cellNumber % 7" ng-if="vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &amp;&amp;
+                                ((vm.monthlyData[cellNumber].entries &amp;&amp; userRole === roles.user) || (vm.monthlyData[cellNumber].clickable))" ng-click="vm.openModal(vm.monthlyData[cellNumber].date)" style="">
+                                <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) -->
+                        </td><!-- end ngRepeat: day in vm.dayList track by $index --><td ng-repeat="day in vm.dayList track by $index" data-id="25" ng-mouseenter="showButtons = true" ng-mouseleave="showButtons = false" ng-init="columnNumber = $index; cellNumber = rowNumber * 7 + columnNumber;" ng-class="vm.monthlyData[cellNumber].firstDayInWork ?
+                            &#39;first-day&#39; : (vm.monthlyData[cellNumber].lastDayInWork ? &#39;last-day&#39; : &#39;&#39;)" class="ng-scope">
+                            <!-- ngIf: vm.monthlyData[cellNumber].dayNumber --><div class="calendar-day-number ng-scope" ng-class="{&#39;saturday&#39;: vm.monthlyData[cellNumber].saturday,
+                            &#39;holiday&#39;: vm.monthlyData[cellNumber].holiday}" ng-if="vm.monthlyData[cellNumber].dayNumber" style="">
+                                <span ng-bind="vm.monthlyData[cellNumber].dayNumber" class="ng-binding">24</span>
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries-summary ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-init="vm.monthlyData[cellNumber].workTimeToDay ? cellHeader = &#39;Łączny czas&#39; : cellHeader = &#39;Nie wliczone do czasu pracy&#39;" style="">
+                                <span ng-bind="cellHeader" class="ng-binding">Łączny czas</span>
+                                <!-- ngIf: vm.monthlyData[cellNumber].workTimeToDay --><span ng-if="vm.monthlyData[cellNumber].workTimeToDay" ng-bind="(vm.monthlyData[cellNumber].workTimeToDay | timeIntoHours)" class="ng-binding ng-scope">8:00h</span><!-- end ngIf: vm.monthlyData[cellNumber].workTimeToDay -->
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries -->
+                            <!-- ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList --><!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-repeat="(key, value) in vm.monthlyData[cellNumber].workTypeDailyList" style="">
+                                <span ng-bind="key + &#39; &#39; + (value | timeIntoHours)" class="ng-binding">Praca zdalna 8:00h</span>
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries --><!-- end ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList -->
+                            <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: showButtons && vm.monthlyData[cellNumber].clickable && vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) --><div class="overlay-button ng-scope" ng-init="dayToShow = cellNumber - vm.firstDayOfMonth + 1; dayOfWeek = cellNumber % 7" ng-if="vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &amp;&amp;
+                                ((vm.monthlyData[cellNumber].entries &amp;&amp; userRole === roles.user) || (vm.monthlyData[cellNumber].clickable))" ng-click="vm.openModal(vm.monthlyData[cellNumber].date)" style="">
+                                <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) -->
+                        </td><!-- end ngRepeat: day in vm.dayList track by $index --><td ng-repeat="day in vm.dayList track by $index" data-id="26" ng-mouseenter="showButtons = true" ng-mouseleave="showButtons = false" ng-init="columnNumber = $index; cellNumber = rowNumber * 7 + columnNumber;" ng-class="vm.monthlyData[cellNumber].firstDayInWork ?
+                            &#39;first-day&#39; : (vm.monthlyData[cellNumber].lastDayInWork ? &#39;last-day&#39; : &#39;&#39;)" class="ng-scope">
+                            <!-- ngIf: vm.monthlyData[cellNumber].dayNumber --><div class="calendar-day-number ng-scope saturday" ng-class="{&#39;saturday&#39;: vm.monthlyData[cellNumber].saturday,
+                            &#39;holiday&#39;: vm.monthlyData[cellNumber].holiday}" ng-if="vm.monthlyData[cellNumber].dayNumber" style="">
+                                <span ng-bind="vm.monthlyData[cellNumber].dayNumber" class="ng-binding">25</span>
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].entries -->
+                            <!-- ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList -->
+                            <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: showButtons && vm.monthlyData[cellNumber].clickable && vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) --><div class="overlay-button ng-scope" ng-init="dayToShow = cellNumber - vm.firstDayOfMonth + 1; dayOfWeek = cellNumber % 7" ng-if="vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &amp;&amp;
+                                ((vm.monthlyData[cellNumber].entries &amp;&amp; userRole === roles.user) || (vm.monthlyData[cellNumber].clickable))" ng-click="vm.openModal(vm.monthlyData[cellNumber].date)" style="">
+                                <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) -->
+                        </td><!-- end ngRepeat: day in vm.dayList track by $index --><td ng-repeat="day in vm.dayList track by $index" data-id="27" ng-mouseenter="showButtons = true" ng-mouseleave="showButtons = false" ng-init="columnNumber = $index; cellNumber = rowNumber * 7 + columnNumber;" ng-class="vm.monthlyData[cellNumber].firstDayInWork ?
+                            &#39;first-day&#39; : (vm.monthlyData[cellNumber].lastDayInWork ? &#39;last-day&#39; : &#39;&#39;)" class="ng-scope">
+                            <!-- ngIf: vm.monthlyData[cellNumber].dayNumber --><div class="calendar-day-number ng-scope holiday" ng-class="{&#39;saturday&#39;: vm.monthlyData[cellNumber].saturday,
+                            &#39;holiday&#39;: vm.monthlyData[cellNumber].holiday}" ng-if="vm.monthlyData[cellNumber].dayNumber" style="">
+                                <span ng-bind="vm.monthlyData[cellNumber].dayNumber" class="ng-binding">26</span>
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].entries -->
+                            <!-- ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList -->
+                            <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: showButtons && vm.monthlyData[cellNumber].clickable && vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) --><div class="overlay-button ng-scope" ng-init="dayToShow = cellNumber - vm.firstDayOfMonth + 1; dayOfWeek = cellNumber % 7" ng-if="vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &amp;&amp;
+                                ((vm.monthlyData[cellNumber].entries &amp;&amp; userRole === roles.user) || (vm.monthlyData[cellNumber].clickable))" ng-click="vm.openModal(vm.monthlyData[cellNumber].date)" style="">
+                                <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) -->
+                        </td><!-- end ngRepeat: day in vm.dayList track by $index -->
+                    </tr><!-- end ngRepeat: week in vm.pickedMonthWeeksArray track by $index --><tr ng-repeat="week in vm.pickedMonthWeeksArray track by $index" ng-init="rowNumber = $index" class="ng-scope">
+                        <!-- ngRepeat: day in vm.dayList track by $index --><td ng-repeat="day in vm.dayList track by $index" data-id="28" ng-mouseenter="showButtons = true" ng-mouseleave="showButtons = false" ng-init="columnNumber = $index; cellNumber = rowNumber * 7 + columnNumber;" ng-class="vm.monthlyData[cellNumber].firstDayInWork ?
+                            &#39;first-day&#39; : (vm.monthlyData[cellNumber].lastDayInWork ? &#39;last-day&#39; : &#39;&#39;)" class="ng-scope">
+                            <!-- ngIf: vm.monthlyData[cellNumber].dayNumber --><div class="calendar-day-number ng-scope" ng-class="{&#39;saturday&#39;: vm.monthlyData[cellNumber].saturday,
+                            &#39;holiday&#39;: vm.monthlyData[cellNumber].holiday}" ng-if="vm.monthlyData[cellNumber].dayNumber" style="">
+                                <span ng-bind="vm.monthlyData[cellNumber].dayNumber" class="ng-binding">27</span>
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries-summary ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-init="vm.monthlyData[cellNumber].workTimeToDay ? cellHeader = &#39;Łączny czas&#39; : cellHeader = &#39;Nie wliczone do czasu pracy&#39;" style="">
+                                <span ng-bind="cellHeader" class="ng-binding">Łączny czas</span>
+                                <!-- ngIf: vm.monthlyData[cellNumber].workTimeToDay --><span ng-if="vm.monthlyData[cellNumber].workTimeToDay" ng-bind="(vm.monthlyData[cellNumber].workTimeToDay | timeIntoHours)" class="ng-binding ng-scope">8:27h</span><!-- end ngIf: vm.monthlyData[cellNumber].workTimeToDay -->
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries -->
+                            <!-- ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList --><!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-repeat="(key, value) in vm.monthlyData[cellNumber].workTypeDailyList" style="">
+                                <span ng-bind="key + &#39; &#39; + (value | timeIntoHours)" class="ng-binding">Praca zdalna 8:27h</span>
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries --><!-- end ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList -->
+                            <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: showButtons && vm.monthlyData[cellNumber].clickable && vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) --><div class="overlay-button ng-scope" ng-init="dayToShow = cellNumber - vm.firstDayOfMonth + 1; dayOfWeek = cellNumber % 7" ng-if="vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &amp;&amp;
+                                ((vm.monthlyData[cellNumber].entries &amp;&amp; userRole === roles.user) || (vm.monthlyData[cellNumber].clickable))" ng-click="vm.openModal(vm.monthlyData[cellNumber].date)" style="">
+                                <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) -->
+                        </td><!-- end ngRepeat: day in vm.dayList track by $index --><td ng-repeat="day in vm.dayList track by $index" data-id="29" ng-mouseenter="showButtons = true" ng-mouseleave="showButtons = false" ng-init="columnNumber = $index; cellNumber = rowNumber * 7 + columnNumber;" ng-class="vm.monthlyData[cellNumber].firstDayInWork ?
+                            &#39;first-day&#39; : (vm.monthlyData[cellNumber].lastDayInWork ? &#39;last-day&#39; : &#39;&#39;)" class="ng-scope">
+                            <!-- ngIf: vm.monthlyData[cellNumber].dayNumber --><div class="calendar-day-number ng-scope" ng-class="{&#39;saturday&#39;: vm.monthlyData[cellNumber].saturday,
+                            &#39;holiday&#39;: vm.monthlyData[cellNumber].holiday}" ng-if="vm.monthlyData[cellNumber].dayNumber" style="">
+                                <span ng-bind="vm.monthlyData[cellNumber].dayNumber" class="ng-binding">28</span>
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries-summary ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-init="vm.monthlyData[cellNumber].workTimeToDay ? cellHeader = &#39;Łączny czas&#39; : cellHeader = &#39;Nie wliczone do czasu pracy&#39;" style="">
+                                <span ng-bind="cellHeader" class="ng-binding">Łączny czas</span>
+                                <!-- ngIf: vm.monthlyData[cellNumber].workTimeToDay --><span ng-if="vm.monthlyData[cellNumber].workTimeToDay" ng-bind="(vm.monthlyData[cellNumber].workTimeToDay | timeIntoHours)" class="ng-binding ng-scope">8:00h</span><!-- end ngIf: vm.monthlyData[cellNumber].workTimeToDay -->
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries -->
+                            <!-- ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList --><!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-repeat="(key, value) in vm.monthlyData[cellNumber].workTypeDailyList" style="">
+                                <span ng-bind="key + &#39; &#39; + (value | timeIntoHours)" class="ng-binding">Dzień roboczy 8:00h</span>
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries --><!-- end ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList -->
+                            <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: showButtons && vm.monthlyData[cellNumber].clickable && vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) --><div class="overlay-button ng-scope" ng-init="dayToShow = cellNumber - vm.firstDayOfMonth + 1; dayOfWeek = cellNumber % 7" ng-if="vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &amp;&amp;
+                                ((vm.monthlyData[cellNumber].entries &amp;&amp; userRole === roles.user) || (vm.monthlyData[cellNumber].clickable))" ng-click="vm.openModal(vm.monthlyData[cellNumber].date)" style="">
+                                <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) -->
+                        </td><!-- end ngRepeat: day in vm.dayList track by $index --><td ng-repeat="day in vm.dayList track by $index" data-id="30" ng-mouseenter="showButtons = true" ng-mouseleave="showButtons = false" ng-init="columnNumber = $index; cellNumber = rowNumber * 7 + columnNumber;" ng-class="vm.monthlyData[cellNumber].firstDayInWork ?
+                            &#39;first-day&#39; : (vm.monthlyData[cellNumber].lastDayInWork ? &#39;last-day&#39; : &#39;&#39;)" class="ng-scope">
+                            <!-- ngIf: vm.monthlyData[cellNumber].dayNumber --><div class="calendar-day-number ng-scope" ng-class="{&#39;saturday&#39;: vm.monthlyData[cellNumber].saturday,
+                            &#39;holiday&#39;: vm.monthlyData[cellNumber].holiday}" ng-if="vm.monthlyData[cellNumber].dayNumber" style="">
+                                <span ng-bind="vm.monthlyData[cellNumber].dayNumber" class="ng-binding">29</span>
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries-summary ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-init="vm.monthlyData[cellNumber].workTimeToDay ? cellHeader = &#39;Łączny czas&#39; : cellHeader = &#39;Nie wliczone do czasu pracy&#39;" style="">
+                                <span ng-bind="cellHeader" class="ng-binding">Łączny czas</span>
+                                <!-- ngIf: vm.monthlyData[cellNumber].workTimeToDay --><span ng-if="vm.monthlyData[cellNumber].workTimeToDay" ng-bind="(vm.monthlyData[cellNumber].workTimeToDay | timeIntoHours)" class="ng-binding ng-scope">8:00h</span><!-- end ngIf: vm.monthlyData[cellNumber].workTimeToDay -->
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries -->
+                            <!-- ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList --><!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-repeat="(key, value) in vm.monthlyData[cellNumber].workTypeDailyList" style="">
+                                <span ng-bind="key + &#39; &#39; + (value | timeIntoHours)" class="ng-binding">Praca zdalna 8:00h</span>
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries --><!-- end ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList -->
+                            <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: showButtons && vm.monthlyData[cellNumber].clickable && vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) --><div class="overlay-button ng-scope" ng-init="dayToShow = cellNumber - vm.firstDayOfMonth + 1; dayOfWeek = cellNumber % 7" ng-if="vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &amp;&amp;
+                                ((vm.monthlyData[cellNumber].entries &amp;&amp; userRole === roles.user) || (vm.monthlyData[cellNumber].clickable))" ng-click="vm.openModal(vm.monthlyData[cellNumber].date)" style="">
+                                <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) -->
+                        </td><!-- end ngRepeat: day in vm.dayList track by $index --><td ng-repeat="day in vm.dayList track by $index" data-id="31" ng-mouseenter="showButtons = true" ng-mouseleave="showButtons = false" ng-init="columnNumber = $index; cellNumber = rowNumber * 7 + columnNumber;" ng-class="vm.monthlyData[cellNumber].firstDayInWork ?
+                            &#39;first-day&#39; : (vm.monthlyData[cellNumber].lastDayInWork ? &#39;last-day&#39; : &#39;&#39;)" class="ng-scope">
+                            <!-- ngIf: vm.monthlyData[cellNumber].dayNumber --><div class="calendar-day-number ng-scope holiday" ng-class="{&#39;saturday&#39;: vm.monthlyData[cellNumber].saturday,
+                            &#39;holiday&#39;: vm.monthlyData[cellNumber].holiday}" ng-if="vm.monthlyData[cellNumber].dayNumber" style="">
+                                <span ng-bind="vm.monthlyData[cellNumber].dayNumber" class="ng-binding">30</span>
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].entries -->
+                            <!-- ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList -->
+                            <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: showButtons && vm.monthlyData[cellNumber].clickable && vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) --><div class="overlay-button ng-scope" ng-init="dayToShow = cellNumber - vm.firstDayOfMonth + 1; dayOfWeek = cellNumber % 7" ng-if="vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &amp;&amp;
+                                ((vm.monthlyData[cellNumber].entries &amp;&amp; userRole === roles.user) || (vm.monthlyData[cellNumber].clickable))" ng-click="vm.openModal(vm.monthlyData[cellNumber].date)" style="">
+                                <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) -->
+                        </td><!-- end ngRepeat: day in vm.dayList track by $index --><td ng-repeat="day in vm.dayList track by $index" data-id="32" ng-mouseenter="showButtons = true" ng-mouseleave="showButtons = false" ng-init="columnNumber = $index; cellNumber = rowNumber * 7 + columnNumber;" ng-class="vm.monthlyData[cellNumber].firstDayInWork ?
+                            &#39;first-day&#39; : (vm.monthlyData[cellNumber].lastDayInWork ? &#39;last-day&#39; : &#39;&#39;)" class="ng-scope">
+                            <!-- ngIf: vm.monthlyData[cellNumber].dayNumber --><div class="calendar-day-number ng-scope" ng-class="{&#39;saturday&#39;: vm.monthlyData[cellNumber].saturday,
+                            &#39;holiday&#39;: vm.monthlyData[cellNumber].holiday}" ng-if="vm.monthlyData[cellNumber].dayNumber" style="">
+                                <span ng-bind="vm.monthlyData[cellNumber].dayNumber" class="ng-binding">31</span>
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries-summary ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-init="vm.monthlyData[cellNumber].workTimeToDay ? cellHeader = &#39;Łączny czas&#39; : cellHeader = &#39;Nie wliczone do czasu pracy&#39;" style="">
+                                <span ng-bind="cellHeader" class="ng-binding">Łączny czas</span>
+                                <!-- ngIf: vm.monthlyData[cellNumber].workTimeToDay --><span ng-if="vm.monthlyData[cellNumber].workTimeToDay" ng-bind="(vm.monthlyData[cellNumber].workTimeToDay | timeIntoHours)" class="ng-binding ng-scope">8:00h</span><!-- end ngIf: vm.monthlyData[cellNumber].workTimeToDay -->
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries -->
+                            <!-- ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList --><!-- ngIf: vm.monthlyData[cellNumber].entries --><p class="calendar-entries ng-scope" ng-if="vm.monthlyData[cellNumber].entries" ng-repeat="(key, value) in vm.monthlyData[cellNumber].workTypeDailyList" style="">
+                                <span ng-bind="key + &#39; &#39; + (value | timeIntoHours)" class="ng-binding">Urlop 8:00h</span>
+                            </p><!-- end ngIf: vm.monthlyData[cellNumber].entries --><!-- end ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList -->
+                            <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: showButtons && vm.monthlyData[cellNumber].clickable && vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) --><div class="overlay-button ng-scope" ng-init="dayToShow = cellNumber - vm.firstDayOfMonth + 1; dayOfWeek = cellNumber % 7" ng-if="vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &amp;&amp;
+                                ((vm.monthlyData[cellNumber].entries &amp;&amp; userRole === roles.user) || (vm.monthlyData[cellNumber].clickable))" ng-click="vm.openModal(vm.monthlyData[cellNumber].date)" style="">
+                                <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            </div><!-- end ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) -->
+                        </td><!-- end ngRepeat: day in vm.dayList track by $index --><td ng-repeat="day in vm.dayList track by $index" data-id="33" ng-mouseenter="showButtons = true" ng-mouseleave="showButtons = false" ng-init="columnNumber = $index; cellNumber = rowNumber * 7 + columnNumber;" ng-class="vm.monthlyData[cellNumber].firstDayInWork ?
+                            &#39;first-day&#39; : (vm.monthlyData[cellNumber].lastDayInWork ? &#39;last-day&#39; : &#39;&#39;)" class="ng-scope">
+                            <!-- ngIf: vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].entries -->
+                            <!-- ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList -->
+                            <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: showButtons && vm.monthlyData[cellNumber].clickable && vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) -->
+                        </td><!-- end ngRepeat: day in vm.dayList track by $index --><td ng-repeat="day in vm.dayList track by $index" data-id="34" ng-mouseenter="showButtons = true" ng-mouseleave="showButtons = false" ng-init="columnNumber = $index; cellNumber = rowNumber * 7 + columnNumber;" ng-class="vm.monthlyData[cellNumber].firstDayInWork ?
+                            &#39;first-day&#39; : (vm.monthlyData[cellNumber].lastDayInWork ? &#39;last-day&#39; : &#39;&#39;)" class="ng-scope">
+                            <!-- ngIf: vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].entries -->
+                            <!-- ngRepeat: (key, value) in vm.monthlyData[cellNumber].workTypeDailyList -->
+                            <!-- ngIf: vm.pickedMonth == vm.currentMonth && vm.pickedYear == vm.currentYear && vm.currentDay == vm.monthlyData[cellNumber].dayNumber -->
+                            <!-- ngIf: showButtons && vm.monthlyData[cellNumber].clickable && vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork -->
+                            <!-- ngIf: vm.monthlyData[cellNumber].betweenFirstAndLastDayInWork &&
+                                ((vm.monthlyData[cellNumber].entries && userRole === roles.user) || (vm.monthlyData[cellNumber].clickable)) -->
+                        </td><!-- end ngRepeat: day in vm.dayList track by $index -->
+                    </tr><!-- end ngRepeat: week in vm.pickedMonthWeeksArray track by $index -->
+                </tbody></table>
+            </div>
+        </div>
+    </div>
+</section></ui-view>
+
+<footer class="footer">
+    <div class="container">
+        <p><a ui-sref="about" href="http://192.168.11.100:8080/calendar/index.html?logout#/about">O stronie</a></p>
+        <!-- ngIf: userRole !== roles.user -->
+        <p>Wszelkie prawa zastrzeżone © 2017 <a href="https://www.unity-t.pl/" target="_blank">Unity-t Sp. z o.o.</a>.</p>
+    </div>
+</footer>
+
+<div class="slider-box alert hidden">
+    <p class="slider-box-details"></p>
+</div>
+
+<!-- JS Files -->
+
+<script src="./Czasownik czerwiec_files/angular.min.js.pobrane"></script>
+<script src="./Czasownik czerwiec_files/angular-resource.min.js.pobrane"></script>
+<script src="./Czasownik czerwiec_files/angular-animate.min.js.pobrane"></script>
+<script src="./Czasownik czerwiec_files/angular-sanitize.min.js.pobrane"></script>
+<script src="./Czasownik czerwiec_files/angular-locale_pl-pl.js.pobrane"></script>
+<script src="./Czasownik czerwiec_files/ui-router.min.js.pobrane"></script>
+<script src="./Czasownik czerwiec_files/ui-bootstrap-tpls-2.5.0.js.pobrane"></script>
+<script src="./Czasownik czerwiec_files/select.min.js.pobrane"></script>
+<script src="./Czasownik czerwiec_files/angular-base64-upload.min.js.pobrane"></script>
+
+<script src="./Czasownik czerwiec_files/app.js.pobrane"></script>
+<script src="./Czasownik czerwiec_files/app.controllers.js.pobrane"></script>
+<script src="./Czasownik czerwiec_files/app.service.js.pobrane"></script>
+
+<script src="./Czasownik czerwiec_files/passwordMatch.directive.js.pobrane"></script>
+<script src="./Czasownik czerwiec_files/dirPagination.js.pobrane"></script>
+
+<script src="./Czasownik czerwiec_files/userslist.js.pobrane"></script>
+<script src="./Czasownik czerwiec_files/userslist.service.js.pobrane"></script>
+<script src="./Czasownik czerwiec_files/userslist.filter.js.pobrane"></script>
+<script src="./Czasownik czerwiec_files/calendar.js.pobrane"></script>
+<script src="./Czasownik czerwiec_files/calendar.service.js.pobrane"></script>
+<script src="./Czasownik czerwiec_files/calendar.filter.js.pobrane"></script>
+<script src="./Czasownik czerwiec_files/settings.js.pobrane"></script>
+<script src="./Czasownik czerwiec_files/settings.service.js.pobrane"></script>
+<script src="./Czasownik czerwiec_files/useredit.js.pobrane"></script>
+<script src="./Czasownik czerwiec_files/useredit.service.js.pobrane"></script>
+<script src="./Czasownik czerwiec_files/logs.js.pobrane"></script>
+<script src="./Czasownik czerwiec_files/logs.service.js.pobrane"></script>
+<script src="./Czasownik czerwiec_files/reports.js.pobrane"></script>
+<script src="./Czasownik czerwiec_files/reports.service.js.pobrane"></script>
+<script src="./Czasownik czerwiec_files/tags.js.pobrane"></script>
+<script src="./Czasownik czerwiec_files/tags.service.js.pobrane"></script>
+<script src="./Czasownik czerwiec_files/companydata.js.pobrane"></script>
+<script src="./Czasownik czerwiec_files/companydata.service.js.pobrane"></script>
+<script src="./Czasownik czerwiec_files/employeedata.js.pobrane"></script>
+<script src="./Czasownik czerwiec_files/employeedata.service.js.pobrane"></script>
+<script src="./Czasownik czerwiec_files/readerconfig.js.pobrane"></script>
+<script src="./Czasownik czerwiec_files/readerconfig.service.js.pobrane"></script>
+<script src="./Czasownik czerwiec_files/fired.js.pobrane"></script>
+<script src="./Czasownik czerwiec_files/fired.service.js.pobrane"></script>
+<script src="./Czasownik czerwiec_files/about.js.pobrane"></script>
+<script src="./Czasownik czerwiec_files/modal.service.js.pobrane"></script>
+
+
+</body></html>

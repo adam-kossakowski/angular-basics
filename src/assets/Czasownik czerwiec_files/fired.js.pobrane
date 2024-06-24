@@ -1,0 +1,45 @@
+(function () {
+angular.module("fired").config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $urlRouterProvider) {
+    $urlRouterProvider.otherwise("/");
+    $stateProvider
+        .state("fired", {
+            abstract: true,
+            url: "/fired",
+            templateUrl: "./modules/fired/fired.html"
+        })
+        .state("fired.list", {
+            url: "/list",
+            templateUrl: "./modules/fired/fired.list.html",
+            controllerAs: 'vm',
+            controller: function($scope, $rootScope, $state, $interval, firedService, modalService) {
+                var ctrl = {};
+
+                ctrl = {
+                    numberOfAllFiredUsers: "",
+                    firedUsersBriefData: []
+                }
+
+                var currentDepartment = $rootScope.$watch('pickedDepartment', function (newValue, oldValue) {
+                    if(newValue){
+                        getData();
+                    }
+                }, true);
+
+                return ctrl;
+
+                function getData() {
+                     firedService.getFiredBrief({departmentIdPath: $rootScope.pickedDepartment.departmentDto.id}, function (result) {
+                        ctrl.firedUsersBriefData = result.firedEmployeeRecordsDtoList;
+                        ctrl.numberOfAllFiredUsers = result.totalNumberOfFiredUsers;
+                    }, function (error) {
+                         var infoModalData = {
+                             serverResponse: "errorResponse",
+                             message: "Nie można pobrać danych o byłych pracownikach. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                         };
+                         modalService.showInfoModal(infoModalData);
+                     });
+                }
+            }
+        })
+    }]);
+})();

@@ -1,0 +1,151 @@
+angular.module("calendarApp").controller("rootCtrl", ["$scope", "$rootScope", "$state", "$window", "coreService", "modalService", "$interval", "$transitions", "usersRoles", "instructionService", function ($scope, $rootScope, $state, $window, coreService, modalService, $interval, $transitions, usersRoles, instructionService) {
+
+    // Root variables
+    // Setting default parameters
+
+    $rootScope.readerModeWarning = false;
+    $rootScope.isElementVisible = false;
+    $rootScope.isUserReady = false;
+    $rootScope.roles = usersRoles; //constant
+    $rootScope.userRole = $rootScope.roles.user;
+    $rootScope.departmentList = [];
+    $rootScope.pickedDepartment = "";
+
+    // modal control
+    $rootScope.showModal = false;
+    $rootScope.serverResponse = "errorResponse";
+    $rootScope.message = "";
+
+    // Root functions
+    // Session timeout
+
+    $rootScope.resetSession = function() {
+        $rootScope.sessionTimeout = 1800;
+    };
+
+    $transitions.onSuccess({}, function(transition) {
+        $rootScope.resetSession();
+    });
+
+    $rootScope.countdown = function() {
+        var interval = $interval(function() {
+            $rootScope.sessionTimeout -= 1;
+            if($rootScope.sessionTimeout <= 0) {
+                $interval.cancel(interval);
+                $window.location.href = './logout';
+            }
+        }, 1000);
+    };
+
+    $rootScope.resetSession();
+    $rootScope.countdown();
+
+    // RFID reader service
+
+    $rootScope.getReaderModeStatus = function(departmentId) {
+        $rootScope.readerModeWarning = false;
+        coreService.getReaderMode({departmentId: departmentId}, function (result){
+            $rootScope.readersStatuses = result;
+            for (var i = 0; i < $rootScope.readersStatuses.length; i++) {
+                if($rootScope.readersStatuses[i].readerMode === "ADD_NEW_RFID_TAG") {
+                    $rootScope.readerModeWarning = true;
+                }
+            }
+        }, function (error) {
+            var infoModalData = {
+                serverResponse: "errorResponse",
+                message: "Nie można pobrać statusu czytnika. Spróbuj ponownie albo skontaktuj się z Administratorem."
+            };
+            modalService.showInfoModal(infoModalData);
+        });
+    };
+
+    // departments list
+
+    function departmentList (data) {
+        coreService.getDepartmentList({userId: data},function (response) {
+            $rootScope.departmentList = response;
+            $rootScope.departmentList.forEach(function (elem) {
+                if(elem.defaultDepartment) {
+                    $rootScope.pickedDepartment = elem;
+                }
+            });
+            if($rootScope.userRole !== $rootScope.roles.user){
+                $rootScope.getReaderModeStatus($rootScope.pickedDepartment.departmentDto.id);
+                $rootScope.isElementVisible = true;
+            }
+            $rootScope.isUserReady = true;
+        }, function (error) {
+            var infoModalData = {
+                serverResponse: "errorResponse",
+                message: "Nie można pobrać listy oddziałów. Spróbuj ponownie albo skontaktuj się z Administratorem."
+            };
+            modalService.showInfoModal(infoModalData);
+        });
+    }
+
+    $rootScope.updateDepartment = function (department) {
+        coreService.changeDepartment({"userId": $rootScope.loggedUser.id, "employeeId": department.id}, function (response) {
+            $rootScope.pickedDepartment = department;
+            $window.location.href = "./";
+        }, function (error) {
+            var infoModalData = {
+                serverResponse: "errorResponse",
+                message: "Nie można zmienić oddziału. Spróbuj ponownie albo skontaktuj się z Administratorem."
+            };
+            modalService.showInfoModal(infoModalData);
+        })
+    };
+
+    // logged user info
+
+    coreService.checkLoggedUser(function (result) {
+        $rootScope.loggedUser = result;
+        $rootScope.userRole = result.roleName;
+        departmentList(result.id);
+
+    }, function (error) {
+        $window.location.href = './logout';
+    });
+
+    // change reader mode
+
+    $rootScope.changeReaderMode = function(readerMAC, readerCurrentMode) {
+
+        var changeModeData = {
+            "mac": readerMAC,
+            "readerMode": readerCurrentMode === "JOB_START_END" ? "ADD_NEW_RFID_TAG" : "JOB_START_END"
+        };
+
+        coreService.changeReaderMode(changeModeData, function () {
+            $rootScope.getReaderModeStatus($rootScope.loggedUser.departmentId);
+        }, function (error) {
+            var infoModalData = {
+                serverResponse: "errorResponse",
+                message: "Nie można przełączyć trybu czytnika. Spróbuj ponownie albo skontaktuj się z Administratorem."
+            };
+            modalService.showInfoModal(infoModalData);
+        });
+    };
+
+    // get instructions
+
+    $rootScope.openInstruction = function () {
+        instructionService.getInstruction('dokumentacja');
+    };
+
+}]);
+
+angular.module('calendarApp').controller('InfoModalCtrl', function ($scope, $uibModalInstance, $timeout, ctrl) {
+    var vm = this;
+    vm.data = ctrl;
+    $timeout($uibModalInstance.close, 3000);
+});
+
+angular.module('calendarApp').controller('OkModalCtrl', function ($scope, $uibModalInstance, ctrl) {
+    var vm = this;
+    vm.data = ctrl;
+    vm.ok = function () {
+        $uibModalInstance.close();
+    };
+});

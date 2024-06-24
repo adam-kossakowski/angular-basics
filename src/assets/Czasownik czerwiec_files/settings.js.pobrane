@@ -1,0 +1,74 @@
+(function () {
+angular.module("settings").config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $urlRouterProvider) {
+    $urlRouterProvider.otherwise("/");
+    $stateProvider
+        .state("settings", {
+            url: "/settings",
+            templateUrl: "./modules/settings/settings.html",
+            controllerAs: 'vm',
+            controller: function($scope, $rootScope, $state, settingsService, modalService){
+
+                var ctrl = {};
+
+                ctrl = {
+                    user: "",
+                    oldPassword: "",
+                    newPassword: "",
+                    rePassword: "",
+                    differentPasswords: false,
+                    userNewPass: {},
+                    submitPassForm: submitPassForm
+                };
+
+                var loggedUserWatcher = $rootScope.$watch('isUserReady', function (newValue, oldValue) {
+                    if(newValue === true){
+                        ctrl.user = $rootScope.loggedUser;
+                        loggedUserWatcher();
+                    }
+                }, true);
+
+                return ctrl;
+
+                function submitPassForm () {
+                    if(ctrl.newPassword === ctrl.oldPassword) {
+                        ctrl.differentPasswords = true;
+                    } else {
+                        ctrl.userNewPass = {
+                                                "email": ctrl.user.email,
+                                                "password": ctrl.oldPassword,
+                                                "newPassword": ctrl.newPassword
+                        };
+
+                        settingsService.saveNewPassword(ctrl.userNewPass).then(function (result) {
+                            if(result.data === true) {
+                                var infoModalData = {
+                                    serverResponse: "successResponse",
+                                    message: "Dane zostały zapisane pomyślnie. Następne logowanie należy wykonać przy pomocy nowego hasła."
+                                };
+                                modalService.showInfoModal(infoModalData);
+                            } else {
+                                var infoModalData = {
+                                    serverResponse: "errorResponse",
+                                    message: "Nie można zaktualizować danych. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                                };
+                                modalService.showInfoModal(infoModalData);
+                            }
+                        }, function (error) {
+                            var infoModalData = {
+                                serverResponse: "errorResponse",
+                                message: "Nie można zaktualizować danych. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                            };
+                            modalService.showInfoModal(infoModalData);
+                        });
+                        ctrl.userNewPass = {};
+                        ctrl.oldPassword = "";
+                        ctrl.newPassword = "";
+                        ctrl.rePassword = "";
+                        ctrl.differentPasswords = false;
+                    }
+                }
+
+            }
+        })
+}]);
+})();

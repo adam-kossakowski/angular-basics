@@ -1,0 +1,387 @@
+(function () {
+angular.module("tags").config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $urlRouterProvider) {
+    $urlRouterProvider.otherwise("/");
+    $stateProvider
+        .state("tags", {
+            abstract: true,
+            url: "/tags",
+            templateUrl: "./modules/tags/tags.html"
+        })
+        .state("tags.list", {
+            url: "/list",
+            templateUrl: "./modules/tags/tags.list.html",
+            controllerAs: 'vm',
+            controller: function($scope, $rootScope, $state, tagsService, modalService, myModalService, instructionService){
+
+                var ctrl = {};
+
+                ctrl = {
+                    tagsList: [],
+
+                    removeTag: removeTag,
+                    openInstruction: openInstruction
+                };
+
+                var currentDepartment = $rootScope.$watch('pickedDepartment', function (newValue, oldValue) {
+                    if(newValue){
+                        getData();
+                    }
+                }, true);
+
+
+                return ctrl;
+
+                function getData () {
+                     tagsService.getListOfTags({departmentIdPath: $rootScope.pickedDepartment.departmentDto.id}, function (result) {
+                        ctrl.tagsList = result;
+                    }, function (error) {
+                        var infoModalData = {
+                            serverResponse: "errorResponse",
+                            message: "Nie można pobrać listy identyfikatorów. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                        };
+                        modalService.showInfoModal(infoModalData);
+                    });
+                }
+
+                function removeTag(tagData) {
+                    var modalOptions = {
+                        closeButtonText: 'Anuluj',
+                        actionButtonText: 'Usuń',
+                        headerText: 'Usuwanie karty',
+                        bodyText: 'Czy na pewno chcesz usunąć kartę o etykiecie ' + tagData.cardNumber + '?'
+                    };
+
+                    myModalService.showYesNoModal({}, modalOptions).then(function (result) {
+                         tagsService.removeTag({tagIdPath: tagData.id}, function (result) {
+                            var infoModalData = {
+                                serverResponse: "successResponse",
+                                message: "Karta została usunięta."
+                            };
+                            getData();
+                            modalService.showInfoModal(infoModalData);
+                         }, function (error) {
+                            var infoModalData = {
+                                serverResponse: "errorResponse",
+                                message: "Nie można usunąć karty. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                            };
+                            modalService.showInfoModal(infoModalData);
+                        });
+                    }, function(err) {
+                    })
+                }
+
+                function openInstruction() {
+                    instructionService.getInstruction('dodawanie_identyfikatora');
+                }
+
+
+            }
+        })
+        .state("tags.edit", {
+            url: "/edit/:id",
+            templateUrl: "./modules/tags/tags.edit.html",
+            controllerAs: 'vm',
+            controller: function ($scope, $rootScope, $state, $stateParams, tagsService, modalService, myModalService) {
+
+                var ctrl = {};
+                var labelForComparision = "";
+
+                ctrl = {
+
+                    labelsList: {},
+                    repeatedLabel: false,
+
+                    tagId: "",
+                    tagDate: "",
+                    tagType: "",
+                    tagTypeId: "",
+                    tagCode: "",
+                    tagLabel: "",
+                    tagComment: "",
+                    tagUser: "",
+                    tagUserId: "",
+
+                    editTagForm: editTagForm,
+                    unConnectTag: unConnectTag
+                };
+
+                getData();
+
+                return ctrl;
+
+                function getData() {
+                    tagsService.getTagData({tagIdPath: $stateParams.id}, function (result) {
+                        ctrl.tagId = result.id;
+                        ctrl.tagDate = result.createdDate;
+                        ctrl.tagType = result.tagTypeDto.symbol;
+                        ctrl.tagTypeId = result.tagTypeDto.id;
+                        ctrl.tagCode = result.cardCode;
+                        ctrl.tagLabel = result.cardNumber;
+                        ctrl.tagComment = result.comments;
+                        if(result.userDto) {
+                            ctrl.tagUser = result.userDto.surname + " " + result.userDto.name;
+                            ctrl.tagUserId = result.userDto.id;
+                        }
+                        labelForComparision = ctrl.tagLabel;
+                    }, function (error) {
+                        var infoModalData = {
+                            serverResponse: "errorResponse",
+                            message: "Nie można odpiąć karty. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                        };
+                        modalService.showInfoModal(infoModalData);
+                    });
+                }
+
+                function clearForm() {
+                    ctrl.tagId = "";
+                    ctrl.tagDate = "";
+                    ctrl.tagType = "";
+                    ctrl.tagTypeId = "";
+                    ctrl.tagCode = "";
+                    ctrl.tagLabel = "";
+                    ctrl.tagComment = "";
+                    ctrl.tagUser = "";
+                    ctrl.tagUserId = "";
+                }
+
+                function unConnectTag(e) {
+                    e.stopPropagation();
+                    e.preventDefault();
+
+                    var modalOptions = {
+                        closeButtonText: 'Anuluj',
+                        actionButtonText: 'Odepnij',
+                        headerText: 'Odpinanie karty',
+                        bodyText: 'Czy na pewno chcesz odpiąć kartę o etykiecie ' + ctrl.tagLabel + ' od ' + ctrl.tagUser + ' ?'
+                    };
+
+                    myModalService.showYesNoModal({}, modalOptions).then(function (result) {
+                        tagsService.disconnectTag({tagIdPath: ctrl.tagId}, function (result) {
+                            var infoModalData = {
+                                serverResponse: "successResponse",
+                                message: "Karta została odpięta."
+                            };
+                            modalService.showInfoModal(infoModalData);
+                            clearForm();
+                            getData();
+                        }, function (error) {
+                            var infoModalData = {
+                                serverResponse: "errorResponse",
+                                message: "Nie można odpiąć karty. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                            };
+                            modalService.showInfoModal(infoModalData);
+                        });
+                    }, function(err) {
+                    })
+                }
+
+                function sendForm() {
+                    var updatedData = {
+                        id: ctrl.tagId,
+                        cardNumber: ctrl.tagLabel,
+                        cardCode:  ctrl.tagCode,
+                        createdDate: ctrl.tagDate,
+                        comments: ctrl.tagComment,
+                        TagTypeDto: {id: ctrl.tagTypeId}
+                    };
+
+                    if(ctrl.tagUser) {
+                        updatedData.UserDto = {id: ctrl.tagUserId};
+                    }
+
+                    tagsService.updateTag(updatedData, function (result) {
+                        updatedData = {};
+                        clearForm();
+                        getData();
+
+                        var infoModalData = {
+                            serverResponse: "successResponse",
+                            message: "Dane zostały zapisane."
+                        };
+                        modalService.showInfoModal(infoModalData);
+
+                        $state.go("tags.list");
+                    }, function (error) {
+                        var infoModalData = {
+                            serverResponse: "errorResponse",
+                            message: "Nie można zapisać zmian. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                        };
+                        modalService.showInfoModal(infoModalData);
+                    });
+
+                }
+
+                function getTags () {
+                     tagsService.getListOfTags({departmentIdPath: $rootScope.pickedDepartment.departmentDto.id}, function (result) {
+                        var tagsList = result;
+                        tagsList.forEach(function (element) {
+                            var currentLabel = element.cardNumber;
+                            ctrl.labelsList[currentLabel] = currentLabel;
+                        });
+
+                        if(ctrl.labelsList[ctrl.tagLabel]) {
+                            ctrl.repeatedLabel = true;
+                        } else {
+                            sendForm();
+                        }
+                    }, function (error) {
+                        var infoModalData = {
+                            serverResponse: "errorResponse",
+                            message: "Nie można pobrać listy identyfikatorów. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                        };
+                        modalService.showInfoModal(infoModalData);
+                    });
+                }
+
+                function editTagForm() {
+                    ctrl.repeatedLabel = false;
+
+                    if(labelForComparision !== ctrl.tagLabel) {
+                        getTags();
+                    } else {
+                        sendForm();
+                    }
+
+                }
+            }
+        })
+        .state("tags.add", {
+            url: "/add",
+            templateUrl: "./modules/tags/tags.add.html",
+            controllerAs: 'vm',
+            controller: function($scope, $rootScope, $state, tagsService, modalService, instructionService){
+
+                var ctrl = {};
+
+                ctrl = {
+                    labelsList: {},
+                    repeatedLabel: false,
+                    newTag: "",
+                    tagId: "",
+                    tagReadDate: "",
+                    tagCode: "",
+                    tagLabel: "",
+                    tagComment: "",
+                    tagType: "",
+                    getTags: getTags,
+                    removeTag: removeTag,
+                    addTagForm: addTagForm,
+                    openInstruction: openInstruction
+                };
+
+                var currentDepartment = $rootScope.$watch('pickedDepartment', function (newValue, oldValue) {
+                    if(newValue){
+                        getData();
+                    }
+                }, true);
+
+                return ctrl;
+
+                function getData () {
+                     tagsService.getListOfTags({departmentIdPath: $rootScope.pickedDepartment.departmentDto.id}, function (result) {
+                        var tagsList = result;
+                        tagsList.forEach(function (element) {
+                            var currentLabel = element.cardNumber;
+                            ctrl.labelsList[currentLabel] = currentLabel;
+                        });
+                    }, function (error) {
+                        var infoModalData = {
+                            serverResponse: "errorResponse",
+                            message: "Nie można pobrać listy identyfikatorów. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                        };
+                        modalService.showInfoModal(infoModalData);
+                    });
+                }
+
+                function getTags() {
+                    ctrl.newTag = "";
+                    tagsService.getNewCard({departmentIdPath: $rootScope.pickedDepartment.departmentDto.id}, function(result){
+                        if(result[0]) {
+                            ctrl.newTag = result[0];
+                            ctrl.tagId = result[0].id;
+                            ctrl.tagReadDate = result[0].timeRead;
+                            ctrl.tagCode = result[0].cardCode;
+                            ctrl.tagType = result[0].tagTypeDto.symbol;
+                        } else {
+                            var infoModalData = {
+                                serverResponse: "errorResponse",
+                                message: "Brak kart do pobrania."
+                            };
+                            modalService.showInfoModal(infoModalData);
+                        }
+                    }, function (error) {
+                        var infoModalData = {
+                            serverResponse: "errorResponse",
+                            message: "Nie można pobrać danych. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                        };
+                        modalService.showInfoModal(infoModalData);
+                    });
+                }
+
+                function removeTag() {
+                    tagsService.deleteNewTag({tagIdPath: ctrl.tagId}, function (result) {
+                        ctrl.tagId = "";
+                        ctrl.tagLabel = "";
+                        ctrl.tagCode = "";
+                        ctrl.tagComment = "";
+                        ctrl.tagReadDate = "";
+                        ctrl.tagType = "";
+
+                        var infoModalData = {
+                            serverResponse: "successResponse",
+                            message: "Dane zostały usunięte z serwera."
+                        };
+                        modalService.showInfoModal(infoModalData);
+                    }, function (error) {
+                        var infoModalData = {
+                            serverResponse: "errorResponse",
+                            message: "Nie można usunąć karty. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                        };
+                        modalService.showInfoModal(infoModalData);
+                    });
+                }
+
+                function addTagForm() {
+                    ctrl.repeatedLabel = false;
+                    if(ctrl.labelsList[ctrl.tagLabel]) {
+                        ctrl.repeatedLabel = true;
+                    } else {
+                        var newTag = {
+                            tmpTagId: ctrl.tagId,
+                            cardNumber: ctrl.tagLabel,
+                            comments: ctrl.tagComment
+                        };
+                        tagsService.addNewTag(newTag, function(result){
+                            ctrl.tagId = "";
+                            ctrl.tagLabel = "";
+                            ctrl.tagCode = "";
+                            ctrl.tagComment = "";
+                            ctrl.tagReadDate = "";
+                            ctrl.tagType = "";
+                            newTag = {};
+
+                            getData();
+
+                            var infoModalData = {
+                                serverResponse: "successResponse",
+                                message: "Dane zostały zapisane na serwerze."
+                            };
+                            modalService.showInfoModal(infoModalData);
+                        }, function (error) {
+                            var infoModalData = {
+                                serverResponse: "errorResponse",
+                                message: "Nie można dodać karty. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                            };
+                            modalService.showInfoModal(infoModalData);
+                        });
+                    }
+                }
+
+                function openInstruction() {
+                    instructionService.getInstruction('dodawanie_identyfikatora');
+                }
+
+            }
+        })
+}]);
+})();

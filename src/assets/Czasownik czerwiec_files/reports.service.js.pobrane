@@ -1,0 +1,20 @@
+angular.module("reports").factory("reportsService", function ($resource, $http) {
+    var userREST = $resource("./api/:path/:action", {}, {
+        'getListOfWorkTypes': {method: 'GET', params: {path: 'worktypes'}, isArray: true},
+        'getReportEmployeeGroups': {method: 'GET', params: {path: 'report', action: 'employeeGroups'}, isArray: true}
+    });
+    return{
+        getReportForUser: function(dateRange) {
+            return $http.post('./api/report', dateRange, {});
+        },
+        getReportForGroup: function(dateRange) {
+            return $http.post('./api/report/group', dateRange, {});
+        },
+        getListOfWorkTypes: function (success, failure) {
+            userREST.getListOfWorkTypes({}, success, failure);
+        },
+        getReportEmployeeGroups: function (success, failure) {
+            userREST.getReportEmployeeGroups({}, success, failure);
+        }
+    }
+});

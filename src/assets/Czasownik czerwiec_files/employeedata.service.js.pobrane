@@ -1,0 +1,42 @@
+angular.module("employeedata").factory("employeedataService", function ($resource) {
+    var userREST = $resource("./api/:path/:subpath/:action", {}, {
+        'getJobsList': {method: 'GET', params: {path: 'jobtitle'}, isArray: true},
+        'addJobsList': {method: 'POST', params: {path: 'jobtitle'}},
+        'editJobsList': {method: 'PUT', params: {path: 'jobtitle'}},
+        'getGroupList': {method: 'GET', params: {path: 'group-jobtitle', subpath: 'by-department', action: '@departmentIdPath'}, isArray: true},
+        'addGroupList': {method: 'POST', params: {path: 'group-jobtitle'}},
+        'editGroupList': {method: 'PUT', params: {path: 'group-jobtitle'}},
+        'getWorkTypes': {method: 'GET', params: {path: 'worktypes'}, isArray: true},
+        'addWorkTypes': {method: 'POST', params: {path: 'worktypes'}},
+        'editWorkTypes': {method: 'PUT', params: {path: 'worktypes'}}
+    });
+    return{
+        getJobsList: function (success, failure) {
+            userREST.getJobsList({}, success, failure);
+        },
+        addJobsList: function (jobData, success, failure) {
+            userREST.addJobsList(jobData, success, failure);
+        },
+        editJobsList: function (jobData, success, failure) {
+            userREST.editJobsList(jobData, success, failure);
+        },
+        getGroupList: function (success, failure) {
+            userREST.getGroupList({}, success, failure);
+        },
+        addGroupList: function (jobData, success, failure) {
+            userREST.addGroupList(jobData, success, failure);
+        },
+        editGroupList: function (groupData, success, failure) {
+            userREST.editGroupList(groupData, success, failure);
+        },
+        getWorkTypes: function (success, failure) {
+            userREST.getWorkTypes({}, success, failure);
+        },
+        addWorkTypes: function (jobData, success, failure) {
+            userREST.addWorkTypes(jobData, success, failure);
+        },
+        editWorkTypes: function (jobData, success, failure) {
+            userREST.editWorkTypes(jobData, success, failure);
+        }
+    }
+});

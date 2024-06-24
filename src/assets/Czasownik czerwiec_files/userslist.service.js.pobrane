@@ -1,0 +1,14 @@
+angular.module("userslist").factory("usersListService", function ($resource) {
+    var userREST = $resource("./api/employeeRecords/:path/:action", {}, {
+        'getUsersBrief': {method: 'GET', params: {action: '@departmentIdPath'}},
+        'getAllUsersBrief': {method: 'GET', params: {path: 'getAll', action: '@departmentIdPath'}, isArray: true}
+    });
+    return{
+        getUsersBrief: function (success, failure) {
+            userREST.getUsersBrief({}, success, failure);
+        },
+        getAllUsersBrief: function (success, failure) {
+            userREST.getAllUsersBrief({}, success, failure);
+        }
+    }
+});

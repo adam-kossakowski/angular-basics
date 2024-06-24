@@ -1,0 +1,787 @@
+(function () {
+angular.module("useredit").config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $urlRouterProvider) {
+    $urlRouterProvider.otherwise("/");
+    $stateProvider
+        .state("useradd", {
+            url: "/useradd",
+            templateUrl: "./modules/useredit/useredit.html",
+            controllerAs: 'vm',
+            controller: function($scope, $rootScope, $state, usereditService, companydataService, modalService, $uibModal, myModalService, instructionService){
+
+                var ctrl = {};
+
+                ctrl = {
+                    panelHeader: "Nowy pracownik",
+                    showDeleteButton: function() { return false; },
+
+                    showTagPanel: false,
+
+                    disableNameInput: true,
+                    disableKeyInputs: false,
+                    noDataInDb: false,
+
+                    tagToAdd: "",
+                    userCompany: "",
+                    userDepartment: "",
+                    userJob: "",
+                    firstDay: {
+                        date: ""
+                    },
+                    birthday: "",
+
+                    checkingUserEmail: false,
+
+                    userContract: "FULL",
+                    userName: "",
+                    userSurname: "",
+                    userEmail: "",
+                    userRole: "",
+                    userTags: "",
+                    userId: "",
+                    userFullName: "",
+
+                    companiesName: [],
+                    departmentsName: [],
+                    jobsTitle: [],
+                    contractTypes: "",
+                    departmentForTags: "",
+                    unconnectedTags: [],
+                    rolesList: [],
+
+                    newUser: {},
+                    newUserTag: {},
+
+                    defaultBirthdayDate: "",
+                    currentDate: new Date(),
+                    illegalBirthday: false,
+
+                    submitForm: submitForm,
+                    submitTagForm: submitTagForm,
+                    checkIfUserExist: checkIfUserExist,
+                    disconnectTag: disconnectTag,
+                    getDepartment: getDepartment,
+                    getJobs: getJobs,
+                    openInstruction: openInstruction
+                };
+
+                getData();
+
+                return ctrl;
+
+                function getData() {
+
+                    // ctrl.defaultBirthdayDate = new Date(ctrl.currentDate.getFullYear() - 18, ctrl.currentDate.getMonth(), ctrl.currentDate.getDate());
+                    ctrl.defaultBirthdayDate = null;
+                    companydataService.getCompaniesList(function (result) {
+                        ctrl.companiesName = result;
+                    }, function (error) {
+                        var infoModalData = {
+                            serverResponse: "errorResponse",
+                            message: "Nie można pobrać listy firm. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                        };
+                        modalService.showInfoModal(infoModalData);
+                    });
+
+                    usereditService.getContractTypes(function (result) {
+                        ctrl.contractTypes = result;
+                        ctrl.contractTypes.forEach(function (elem) {
+                            var number = parseFloat(elem.regularPostFraction);
+                            var i,
+                                dec = number * 1000,
+                                divider;
+                            for(i = 0; i <= dec; i += 1){
+                                if(dec % i === 0 && 1000 % i === 0) {
+                                    divider = i;
+                                }
+                            }
+                            elem.properFraction = number * 1000 / divider + "/" + 1000 / divider;
+                        })
+                    }, function (error) {
+                        var infoModalData = {
+                            serverResponse: "errorResponse",
+                            message: "Nie można pobrać listy etatów. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                        };
+                        modalService.showInfoModal(infoModalData);
+                    });
+
+                    // usereditService.getUnconnectedTags(function (result) {
+                    //     ctrl.unconnectedTags = result;
+                    // }, function (error) {
+                    //     var infoModalData = {
+                    //         serverResponse: "errorResponse",
+                    //         message: "Nie można pobrać listy identyfikatorów. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                    //     };
+                    //     modalService.showInfoModal(infoModalData);
+                    // });
+
+                    usereditService.getRolesList(function (result) {
+                        ctrl.rolesList = result;
+                    }, function (error) {
+                        var infoModalData = {
+                            serverResponse: "errorResponse",
+                            message: "Nie można pobrać listy ról. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                        };
+                        modalService.showInfoModal(infoModalData);
+                    });
+
+                }
+
+                function getDepartment() {
+                    ctrl.departmentsName = [];
+                    companydataService.getCompanysDepartments({companyIdPath: ctrl.userCompany.id}, function (result) {
+                        ctrl.departmentsName = result;
+                    }, function (error) {
+                        var infoModalData = {
+                            serverResponse: "errorResponse",
+                            message: "Nie można pobrać listy oddziałów. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                        };
+                        modalService.showInfoModal(infoModalData);
+                    });
+                }
+
+                function getJobs() {
+                    ctrl.jobsTitle = [];
+                    usereditService.getJobTitles({departmentIdPath: ctrl.userDepartment.id}, function (result) {
+                        ctrl.jobsTitle = result;
+                    }, function (error) {
+                        var infoModalData = {
+                            serverResponse: "errorResponse",
+                            message: "Nie można pobrać listy stanowisk pracy. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                        };
+                        modalService.showInfoModal(infoModalData);
+                    });
+                }
+
+                function showCurrentTags() {
+                    usereditService.getUsersTags({userIdPath: ctrl.userId}, function (result) {
+                        ctrl.userTags = result;
+                        usereditService.getUnconnectedTags({departmentIdPath: ctrl.departmentForTags}, function (result) {
+                            ctrl.unconnectedTags = result;
+                        }, function (error) {
+                            var infoModalData = {
+                                serverResponse: "errorResponse",
+                                message: "Nie można pobrać listy identyfikatorów. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                            };
+                            modalService.showInfoModal(infoModalData);
+                        });
+                    }, function (error) {
+                        var infoModalData = {
+                            serverResponse: "errorResponse",
+                            message: "Nie można pobrać danych o użytkowniku. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                        };
+                        modalService.showInfoModal(infoModalData);
+                    });
+                }
+
+                function clearForm() {
+                    ctrl.userCompany = "";
+                    ctrl.userDepartment = "";
+                    ctrl.userRole = "";
+                    ctrl.userJob = "";
+                    ctrl.firstDay.date = "";
+                    if (ctrl.lastDay !== undefined) {
+                        ctrl.lastDay.date = "";
+                    }
+                    ctrl.userContract = "FULL";
+                    ctrl.userName = "";
+                    ctrl.userSurname = "";
+                    ctrl.userEmail = "";
+                    ctrl.birthday = "";
+                    ctrl.newUser = {};
+
+                    showCurrentTags();
+                }
+
+                function cannotWork() {
+                    return ctrl.birthday > new Date(ctrl.currentDate.getFullYear() - 16, ctrl.currentDate.getMonth(), ctrl.currentDate.getDate());
+                }
+
+                function submitForm () {
+                    ctrl.departmentForTags = ctrl.userDepartment.id;
+                    if (ctrl.birthday && cannotWork()) {
+                        ctrl.illegalBirthday = true;
+                    } else {
+                        ctrl.illegalBirthday = false;
+                        var birthday = ctrl.birthday ? new Date(ctrl.birthday).getTime() : null;
+                        ctrl.newUser =   {
+                            "email": ctrl.userEmail,
+                            "name": ctrl.userName,
+                            "surname": ctrl.userSurname,
+                            "birthday": birthday,
+                            "password": "123456",
+                            "departmentId": ctrl.userDepartment.id,
+                            "jobTitleId": ctrl.userJob.id,
+                            "roleId": ctrl.userRole.id,
+                            "contractTypeId": ctrl.userContract.id,
+                            "firstDayOfWork": new Date(ctrl.firstDay.date).getTime()
+                        };
+                        if (ctrl.lastDay !== undefined) {
+                            ctrl.newUser.lastDayOfWork = new Date(ctrl.lastDay.date).getTime();
+                        }
+                        if(ctrl.noDataInDb) {
+                            usereditService.addUser(ctrl.newUser, function(response) {
+                                ctrl.showTagPanel = true;
+                                ctrl.userId = response.id;
+                                ctrl.userFullName = ctrl.userName + " " + ctrl.userSurname;
+                                clearForm();
+                                var infoModalData = {
+                                    serverResponse: "successResponse",
+                                    message: "Dane zostały zapisane na serwerze."
+                                };
+                                modalService.showInfoModal(infoModalData);
+                            }, function (error) {
+                                var infoModalData = {
+                                    serverResponse: "errorResponse",
+                                    message: "Nie można dodać użytkownika. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                                };
+                                modalService.showInfoModal(infoModalData);
+                            });
+                        } else {
+                            usereditService.addUserToDepartment(ctrl.newUser, function(response) {
+                                ctrl.showTagPanel = true;
+                                ctrl.userId = response.id;
+                                clearForm();
+                                var infoModalData = {
+                                    serverResponse: "successResponse",
+                                    message: "Dane zostały zapisane na serwerze."
+                                };
+                                modalService.showInfoModal(infoModalData);
+                            }, function (error) {
+                                var infoModalData = {
+                                    serverResponse: "errorResponse",
+                                    message: "Nie można dodać użytkownika. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                                };
+                                modalService.showInfoModal(infoModalData);
+                            });
+                        }
+                        ctrl.noDataInDb = false;
+                    }
+                }
+
+                function submitTagForm() {
+
+                    ctrl.tagToAdd.userDto = {"id": ctrl.userId};
+                    var tagAndUser = {"tagId": ctrl.tagToAdd.id, "userId": ctrl.userId};
+                    usereditService.registerTag(tagAndUser, function (response) {
+                        ctrl.tagToAdd = {};
+                        showCurrentTags();
+                    }, function (error) {
+                        var infoModalData = {
+                            serverResponse: "errorResponse",
+                            message: "Nie można dodać identyfikatora. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                        };
+                        modalService.showInfoModal(infoModalData);
+                    })
+                }
+
+                function disconnectTag(tagData) {
+                    var modalOptions = {
+                        closeButtonText: 'Anuluj',
+                        actionButtonText: 'Odepnij',
+                        headerText: 'Odpinanie karty',
+                        bodyText: 'Czy na pewno chcesz odpiąć kartę od ' + ctrl.userName + ' ' + ctrl.userSurname + '?'
+                    };
+
+                    myModalService.showYesNoModal({}, modalOptions).then(function (result) {
+                        usereditService.disconnectTag({tagIdPath: tagData.id}, function (result) {
+                            showCurrentTags();
+                            var infoModalData = {
+                                serverResponse: "successResponse",
+                                message: "Karta została odpięta."
+                            };
+                            getData();
+                            modalService.showInfoModal(infoModalData);
+                        }, function (error) {
+                            var infoModalData = {
+                                serverResponse: "errorResponse",
+                                message: "Nie można odpiąć karty. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                            };
+                            modalService.showInfoModal(infoModalData);
+                        });
+                    }, function(err) {
+                    })
+                }
+
+                function checkIfUserExist(e) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    ctrl.userFullName = "";
+                    ctrl.showTagPanel =  false;
+                    ctrl.userTags = "";
+                    ctrl.checkingUserEmail = true;
+                    ctrl.noDataInDb = false;
+                    usereditService.checkUserByEmail({"email": ctrl.userEmail}, function (result) {
+                        if(result.id) {
+                            ctrl.checkingUserEmail = false;
+                            ctrl.disableNameInput = true;
+
+                            ctrl.userName = result.name;
+                            ctrl.userSurname = result.surname;
+                            ctrl.birthday = result.birthday;
+                        } else {
+                            ctrl.checkingUserEmail = false;
+                            ctrl.disableNameInput = false;
+                            ctrl.noDataInDb = true;
+
+                            ctrl.userName = "";
+                            ctrl.userSurname = "";
+                            ctrl.birthday = ctrl.defaultBirthdayDate;
+                        }
+
+                    }, function (error) {
+                        var infoModalData = {
+                            serverResponse: "errorResponse",
+                            message: "Nie można pobrać danych. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                        };
+                        modalService.showInfoModal(infoModalData);
+                    });
+                }
+
+                function openInstruction() {
+                    instructionService.getInstruction('dodawanie_uzytkownika');
+                }
+            }
+        })
+        .state("useredit", {
+            params: {
+                id: {
+                    value: null
+                }
+            },
+            url:  "/useredit/:id",
+            templateUrl:  "./modules/useredit/useredit.html",
+            controllerAs: 'vm',
+            controller: function($scope, $rootScope, $state, usereditService, companydataService, $stateParams, modalService, $uibModal, myModalService, tagsService){
+
+                var employeeId = $stateParams.id;
+
+                var userTags = {}; //to check if user's tag is changed - control variable
+
+                var ctrl = {};
+
+                ctrl = {
+                    panelHeader: "",
+                    showDeleteButton: function() {
+                        if($rootScope.loggedUser.employeeId == employeeId) {
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    },
+
+                    showTagPanel: true,
+
+                    disableNameInput: false,
+                    disableKeyInputs: true,
+                    noDataInDb: false,
+
+                    tagToAdd: "",
+                    userCompany: "",
+                    userDepartment: "",
+                    userJob: "",
+                    firstDay: {
+                        date: ""
+                    },
+                    lastDay: {
+                        date: ""
+                    },
+                    birthday: "",
+
+                    checkingUserEmail: false,
+
+                    userContract: "FULL",
+                    userName: "",
+                    userSurname: "",
+                    userEmail: "",
+                    userRole: "",
+                    userTags: "",
+                    userId: "",
+                    userDefaultDepartment: "",
+
+                    companiesName: [],
+                    departmentsName: [],
+                    jobsTitle: [],
+                    contractTypes: "",
+                    unconnectedTags: [],
+                    rolesList: [],
+
+                    newUser: {},
+                    newUserTag: {},
+
+                    currentDate: new Date(),
+                    illegalBirthday: false,
+                    wasLastDay: false,
+                    removeLastDay: false,
+
+                    submitForm: submitForm,
+                    submitTagForm: submitTagForm,
+                    confirmRemoval: confirmRemoval,
+                    disconnectTag: disconnectTag,
+                    getDepartment: getDepartment
+                };
+
+                getData();
+
+                return ctrl;
+
+                function getData() {
+
+                    companydataService.getCompaniesList(function (result) {
+                        ctrl.companiesName = result;
+                    }, function (error) {
+                        var infoModalData = {
+                            serverResponse: "errorResponse",
+                            message: "Nie można pobrać listy firm. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                        };
+                        modalService.showInfoModal(infoModalData);
+                    });
+
+                    usereditService.getContractTypes(function (result) {
+                        ctrl.contractTypes = result;
+                        ctrl.contractTypes.forEach(function (elem) {
+                            var number = parseFloat(elem.regularPostFraction);
+                            var i,
+                                dec = number * 1000,
+                                divider;
+                            for(i = 0; i <= dec; i += 1){
+                                if(dec % i === 0 && 1000 % i === 0) {
+                                    divider = i;
+                                }
+                            }
+                            elem.properFraction = number * 1000 / divider + "/" + 1000 / divider;
+                        })
+                    }, function (error) {
+                        var infoModalData = {
+                            serverResponse: "errorResponse",
+                            message: "Nie można pobrać listy etatów. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                        };
+                        modalService.showInfoModal(infoModalData);
+                    });
+
+                    usereditService.getRolesList(function (result) {
+                        ctrl.rolesList = result;
+                    }, function (error) {
+                        var infoModalData = {
+                            serverResponse: "errorResponse",
+                            message: "Nie można pobrać listy ról. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                        };
+                        modalService.showInfoModal(infoModalData);
+                    });
+
+                    usereditService.getEmployee({employeeIdPath: employeeId}, function (result) {
+                            var number = parseFloat(result.contractTypeDto.regularPostFraction);
+                            var i,
+                                dec = number * 100,
+                                divider;
+                            for(i = 0; i <= dec; i += 1){
+                                if(dec % i === 0 && 100 % i === 0) {
+                                    divider = i;
+                                }
+                            }
+
+                        result.contractTypeDto.properFraction = number * 100 / divider + "/" + 100 / divider;
+
+                        ctrl.userCompany = result.departmentDto.companyDto;
+                        ctrl.userDepartment =  result.departmentDto;
+                        ctrl.userRole = result.roleDto;
+                        ctrl.userJob = result.jobTitleDto;
+                        ctrl.firstDay.date = result.firstDayOfWork;
+                        ctrl.lastDay.date = result.lastDayOfWork;
+                        if (result.lastDayOfWork !== null) {
+                            ctrl.wasLastDay = true;
+                        }
+                        ctrl.userContract = result.contractTypeDto;
+                        ctrl.userEmail = result.userDto.email;
+                        ctrl.userName = result.userDto.name;
+                        ctrl.userSurname = result.userDto.surname;
+                        ctrl.birthday = result.userDto.birthday;
+                        ctrl.panelHeader = result.userDto.name + " " + result.userDto.surname;
+
+                        ctrl.userId = result.userDto.id;
+                        ctrl.userDefaultDepartment = result.defaultDepartment;
+                        getDepartment();
+                        getJobs();
+                        showCurrentTags();
+                    }, function (error) {
+                        var infoModalData = {
+                            serverResponse: "errorResponse",
+                            message: "Nie można pobrać danych o użytkowniku. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                        };
+                        modalService.showInfoModal(infoModalData);
+                    });
+
+                }
+
+                function getDepartment() {
+                    ctrl.departmentsName = [];
+                    companydataService.getCompanysDepartments({companyIdPath: ctrl.userCompany.id}, function (result) {
+                        ctrl.departmentsName = result;
+                    }, function (error) {
+                        var infoModalData = {
+                            serverResponse: "errorResponse",
+                            message: "Nie można pobrać listy oddziałów. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                        };
+                        modalService.showInfoModal(infoModalData);
+                    });
+                }
+
+                function getJobs() {
+                    ctrl.jobs = [];
+                    usereditService.getJobTitles({departmentIdPath: ctrl.userDepartment.id}, function (result) {
+                        ctrl.jobsTitle = result;
+                    }, function (error) {
+                        var infoModalData = {
+                            serverResponse: "errorResponse",
+                            message: "Nie można pobrać listy stanowisk pracy. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                        };
+                        modalService.showInfoModal(infoModalData);
+                    });
+                }
+
+                function showCurrentTags() {
+                    usereditService.getUsersTags({userIdPath: ctrl.userId}, function (result) {
+                        ctrl.userTags = result;
+                        usereditService.getUnconnectedTags({departmentIdPath: ctrl.userDepartment.id}, function (result) {
+                            ctrl.unconnectedTags = result;
+                        }, function (error) {
+                            var infoModalData = {
+                                serverResponse: "errorResponse",
+                                message: "Nie można pobrać listy identyfikatorów. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                            };
+                            modalService.showInfoModal(infoModalData);
+                        });
+                    }, function (error) {
+                        var infoModalData = {
+                            serverResponse: "errorResponse",
+                            message: "Nie można pobrać danych o użytkowniku. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                        };
+                        modalService.showInfoModal(infoModalData);
+                    });
+                }
+
+                function submitForm () {
+                    if(new Date(ctrl.birthday).getTime() > new Date(ctrl.currentDate.getFullYear() - 16, ctrl.currentDate.getMonth(), ctrl.currentDate.getDate())) {
+                        ctrl.illegalBirthday = true;
+                    } else if (ctrl.wasLastDay && ctrl.lastDay.date === null) {
+                        ctrl.removeLastDay = true;
+                    } else {
+                        ctrl.removeLastDay = false;
+                        ctrl.illegalBirthday = false;
+                        var birthday = ctrl.birthday ? new Date(ctrl.birthday).getTime() : null;
+                        var changedUser = {
+                            "id": ctrl.userId,
+                            "email": ctrl.userEmail,
+                            "name": ctrl.userName,
+                            "surname": ctrl.userSurname,
+                            "birthday": birthday
+                        };
+                        var changedEmployee = {
+                            "id": parseInt(employeeId),
+                            "userDto": {"id": ctrl.userId },
+                            "departmentDto": {"id": ctrl.userDepartment.id},
+                            "firstDayOfWork": new Date(ctrl.firstDay.date).getTime(),
+                            "lastDayOfWork": new Date(ctrl.lastDay.date).getTime(),
+                            "roleDto": {"id": ctrl.userRole.id},
+                            "jobTitleDto": {"id": ctrl.userJob.id},
+                            "contractTypeDto": {"id": ctrl.userContract.id},
+                            "defaultDepartment": ctrl.userDefaultDepartment
+                        };
+                        if (ctrl.lastDay.date === null) {
+                            changedEmployee.lastDayOfWork = null;
+                        }
+                        usereditService.updateUser(changedUser, function(response) {
+
+                            usereditService.updateEmployee(changedEmployee, function () {
+
+                                changedUser = {};
+                                changedEmployee = {};
+
+                                var infoModalData = {
+                                    serverResponse: "successResponse",
+                                    message: "Dane zostały zapisane na serwerze."
+                                };
+                                modalService.showInfoModal(infoModalData);
+                            }, function (error) {
+                                var infoModalData = {
+                                    serverResponse: "errorResponse",
+                                    message: "Nie można zaktualizować danych użytkownika. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                                };
+                                modalService.showInfoModal(infoModalData);
+                            });
+                        }, function (error) {
+                            var infoModalData = {
+                                serverResponse: "errorResponse",
+                                message: "Nie można zaktualizować danych użytkownika. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                            };
+                            modalService.showInfoModal(infoModalData);
+                        });
+                    }
+                }
+
+                function submitTagForm() {
+
+                    ctrl.tagToAdd.userDto = {"id": ctrl.userId};
+                    var tagAndUser = {"tagId": ctrl.tagToAdd.id, "userId": ctrl.userId};
+                    usereditService.registerTag(tagAndUser, function (response) {
+                        ctrl.tagToAdd = {};
+                        showCurrentTags();
+                    }, function (error) {
+                        var infoModalData = {
+                            serverResponse: "errorResponse",
+                            message: error.data.message
+                        };
+                        modalService.showInfoModal(infoModalData);
+                    })
+                }
+
+                function confirmRemoval() {
+                    var modalOptions = {
+                        closeButtonText: 'Anuluj',
+                        actionButtonText: 'Usuń',
+                        headerText: 'Usuwanie użytkownika',
+                        bodyText: 'Czy na pewno chcesz usunąć konto użytkownika ' + ctrl.userName + ' ' + ctrl.userSurname + '?'
+                                + 'Ta operacja spowoduje bezpowrotne usunięcie konta z bazy danych.'
+                    };
+
+                    myModalService.showYesNoModal({}, modalOptions).then(function (result) {
+                        usereditService.deleteEmployee({employeeIdPath: employeeId}, function (result) {
+                            var infoModalData = {
+                                serverResponse: "successResponse",
+                                message: 'Pomyślnie usunięto użytkownika ' + ctrl.userName + ' ' + ctrl.userSurname
+                            };
+                            modalService.showInfoModal(infoModalData);
+                            $state.go("userslist");
+                        }, function(error) {
+                            var infoModalData = {
+                                serverResponse: "errorResponse",
+                                message: "Nie można skasować użytkownika. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                            };
+                            modalService.showInfoModal(infoModalData);
+                        });
+                    }, function(error) {
+                    })
+                }
+
+                function disconnectTag(tagData) {
+                    var modalOptions = {
+                        closeButtonText: 'Anuluj',
+                        actionButtonText: 'Odepnij',
+                        headerText: 'Odpinanie karty',
+                        bodyText: 'Czy na pewno chcesz odpiąć kartę od ' + ctrl.userName + ' ' + ctrl.userSurname + '?'
+                    };
+
+                    myModalService.showYesNoModal({}, modalOptions).then(function (result) {
+                         usereditService.disconnectTag({tagIdPath: tagData.id}, function (result) {
+                             showCurrentTags();
+                            var infoModalData = {
+                                serverResponse: "successResponse",
+                                message: "Karta została odpięta."
+                            };
+                            // getData();
+                            modalService.showInfoModal(infoModalData);
+                         }, function (error) {
+                            var infoModalData = {
+                                serverResponse: "errorResponse",
+                                message: "Nie można odpiąć karty. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                            };
+                            modalService.showInfoModal(infoModalData);
+                        });
+                    }, function(err) {
+                    })
+                }
+            }
+        })
+}]);
+
+// Datepicker
+
+angular.module("useredit").controller('DatepickerPopupCtrl', function ($scope) {
+
+    $scope.today = function() {
+        $scope.dt = new Date();
+    };
+    $scope.today();
+
+    // $scope.clear = function() {
+    //     $scope.dt = null;
+    // };
+
+    $scope.inlineOptions = {
+        customClass: getDayClass,
+        minDate: new Date(2017, 0, 1),
+        showWeeks: true
+    };
+
+    $scope.dateOptions = {
+        // dateDisabled: disabled,
+        formatYear: 'yy',
+        maxDate: new Date(2026, 11, 31),
+        minDate: new Date(2017, 0, 1),
+        startingDay: 1
+    };
+
+    // Disable weekend selection
+    // function disabled(data) {
+    //     var date = data.date,
+    //         mode = data.mode;
+    //     return mode === 'day' && (date.getDay() === 0 || date.getDay() === 6);
+    // }
+
+    $scope.toggleMin = function() {
+        $scope.inlineOptions.minDate = $scope.inlineOptions.minDate ? null : new Date();
+        $scope.dateOptions.minDate = $scope.inlineOptions.minDate;
+    };
+
+    $scope.toggleMin();
+
+    $scope.open = function() {
+        $scope.popup.opened = true;
+    };
+
+    $scope.setDate = function(year, month, day) {
+        $scope.dt = new Date(year, month, day);
+    };
+
+    $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+    $scope.format = $scope.formats[2];
+    $scope.altInputFormats = ['M!/d!/yyyy'];
+
+    $scope.popup = {
+        opened: false
+    };
+
+    var tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    var afterTomorrow = new Date();
+    afterTomorrow.setDate(tomorrow.getDate() + 1);
+    $scope.events = [
+        {
+            date: tomorrow,
+            status: 'full'
+        },
+        {
+            date: afterTomorrow,
+            status: 'partially'
+        }
+    ];
+
+    function getDayClass(data) {
+        var date = data.date,
+            mode = data.mode;
+        if (mode === 'day') {
+            var dayToCheck = new Date(date).setHours(0,0,0,0);
+
+            for (var i = 0; i < $scope.events.length; i += 1) {
+                var currentDay = new Date($scope.events[i].date).setHours(0,0,0,0);
+
+                if (dayToCheck === currentDay) {
+                    return $scope.events[i].status;
+                }
+            }
+        }
+
+        return '';
+    }
+
+});
+})();

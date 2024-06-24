@@ -1,0 +1,57 @@
+(function () {
+angular.module("logs").config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $urlRouterProvider) {
+    $urlRouterProvider.otherwise("/");
+    $stateProvider
+        .state("logs", {
+            url: "/logs",
+            templateUrl: "./modules/logs/logs.html",
+            controllerAs: 'vm',
+            controller: function($scope, $rootScope, $state, logsService, modalService){
+
+                var ctrl = {};
+
+                ctrl = {
+                    logs: [],
+                    startDate: "",
+                    endDate: "",
+                    wrongDate: false,
+                    chosenProperty: "addDate",
+                    reverse: true,
+                    sortBy: sortBy,
+                    submitForm: submitForm
+                };
+
+                return ctrl;
+
+                function submitForm () {
+                    var timeRange = {
+                        "startDate": new Date(ctrl.startDate).setHours(0,0,0,1),
+                        "endDate": new Date(ctrl.endDate).setHours(23,59,59,999)
+                    };
+                    if(timeRange.startDate < timeRange.endDate) {
+                        ctrl.wrongDate = false;
+                        logsService.getLogs(timeRange, function (result) {
+                            ctrl.logs = result;
+                            ctrl.startDate = "";
+                            ctrl.endDate = "";
+                            timeRange = {};
+                        }, function (error) {
+                            var infoModalData = {
+                                serverResponse: "errorResponse",
+                                message: "Nie można pobrać danych. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                            };
+                            modalService.showInfoModal(infoModalData);
+                        });
+                    } else {
+                        ctrl.wrongDate = true;
+                    }
+                }
+                
+                function sortBy(propertyName) {
+                    ctrl.reverse = (ctrl.chosenProperty === propertyName) ? !ctrl.reverse: false;
+                    ctrl.chosenProperty = propertyName;
+                }
+            }
+        })
+}]);
+})();

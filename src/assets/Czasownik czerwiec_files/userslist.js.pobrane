@@ -1,0 +1,73 @@
+(function () {
+angular.module("userslist", ['angularUtils.directives.dirPagination'])
+    .config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $urlRouterProvider) {
+        $urlRouterProvider.otherwise("/");
+        $stateProvider
+            .state("userslist", {
+                url: "/",
+                templateUrl: "./modules/userslist/userslist.html",
+                controllerAs: 'vm',
+                controller: function($scope, $rootScope, $state, $interval, usersListService, modalService, usersRoles){
+
+                    var ctrl = {};
+
+                    ctrl = {
+                        numberOfPresentUser: "",
+                        numberOfAllUsers: "",
+                        usersBriefData: [],
+                        search: {
+                            name:"",
+                            surname:""
+                        },
+                        sortKey:"surname",
+                        reverse:false,
+                        pagination:{
+                            pageSize:{
+                                selected: 50,
+                                availableOptions: [5,10,15,30,50,60,120]
+                            },
+                            currentPage:1
+                        }
+                    };
+
+                    var loggedUserWatcher = $rootScope.$watch('isUserReady', function (newValue, oldValue) {
+                        if(newValue === true && $rootScope.userRole !== usersRoles.user){
+                            getData();
+                            $interval(getData, 600000);
+                            loggedUserWatcher();
+                        } else if (newValue === true && $rootScope.userRole === usersRoles.user){
+                            $state.go("calendar", {id: $rootScope.loggedUser.employeeId});
+                            loggedUserWatcher();
+                        }
+                    }, true);
+
+                    $scope.sort = function (sortKey) {
+                        ctrl.sortKey = sortKey;
+                        ctrl.reverse = !ctrl.reverse;
+                    };
+
+                    $scope.resetForm = function() {
+                        ctrl.search.name = '';
+                        ctrl.search.surname = '';
+                    };
+
+                    return ctrl;
+
+                    function getData() {
+                         usersListService.getUsersBrief({departmentIdPath: $rootScope.pickedDepartment.departmentDto.id}, function (result) {
+                            ctrl.usersBriefData = result.employeeRecordsList;
+                            ctrl.numberOfPresentUser = result.numberOfUsersInWork;
+                            ctrl.numberOfAllUsers = result.totalNumberOfUsersInWork;
+                        }, function (error) {
+                             var infoModalData = {
+                                 serverResponse: "errorResponse",
+                                 message: "Nie można pobrać danych o pracownikach. Spróbuj ponownie albo skontaktuj się z Administratorem."
+                             };
+                             modalService.showInfoModal(infoModalData);
+                         });
+                    }
+
+                }
+            })
+    }]);
+})();

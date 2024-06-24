@@ -1,0 +1,64 @@
+angular.module("useredit").factory("usereditService", ["$resource", function ($resource) {
+    var userREST = $resource("./api/:path/:subpath/:subsubpath/:action", {}, {
+        'getContractTypes': {method: 'GET', params: {path: 'contract-types'}, isArray: true},
+        'getUnconnectedTags': {method: 'GET', params: {path: 'tags', subpath: 'unconnected', subsubpath:'byDepartment', action: '@departmentIdPath'}, isArray: true},
+        'getJobTitles': {method: 'GET', params: {path: 'jobtitle', subpath: 'by-department', action: '@departmentIdPath'}, isArray: true},
+        'getRolesList': {method: 'GET', params: {path: 'roles'}, isArray: true},
+        'addUser': {method: 'POST', params: {path: 'users', subpath: 'register'}},
+        'addUserToDepartment': {method: 'POST', params: {path: 'employee', subpath: 'register'}},
+        'checkUserByEmail': {method: 'POST', params: {path: 'users', subpath: 'by-email'}},
+        'getEmployee': {method: 'GET', params: {path: 'employee', action: '@employeeIdPath'}},
+        'updateUser': {method: 'PUT', params: {path: 'users'}},
+        'updateEmployee': {method: 'PUT', params: {path: 'employee'}},
+        'getUsersTags': {method: 'GET', params: {path: 'tags', subpath: 'user', action: '@userIdPath'}, isArray: true},
+        'registerTag': {method: 'PUT', params: {path: 'tags', subpath: 'assign'}},
+        'deleteEmployee': {method: 'DELETE', params: {path: 'employee', action: '@employeeIdPath'}},
+        'disconnectTag': {method: 'DELETE', params: {path: 'tags', subpath: 'unconnect', action: '@tagIdPath'}}
+    }, {
+        stripTrailingSlashes: false
+    });
+    return{
+        getContractTypes: function (success, failure) {
+            userREST.getContractTypes({}, success, failure);
+        },
+        getUnconnectedTags: function (success, failure) {
+            userREST.getUnconnectedTags({}, success, failure);
+        },
+        getJobTitles: function (success, failure) {
+            userREST.getJobTitles({}, success, failure);
+        },
+        getRolesList: function (success, failure) {
+            userREST.getRolesList({}, success, failure);
+        },
+        addUser: function (userData, success, failure) {
+            userREST.addUser(userData, success, failure);
+        },
+        addUserToDepartment: function (userData, success, failure) {
+            userREST.addUserToDepartment(userData, success, failure);
+        },
+        checkUserByEmail: function (userData, success, failure) {
+            userREST.checkUserByEmail(userData, success, failure);
+        },
+        getEmployee: function (success, failure) {
+            userREST.getEmployee({}, success, failure);
+        },
+        updateUser: function (userData, success, failure) {
+            userREST.updateUser(userData, success, failure);
+        },
+        updateEmployee: function (userData, success, failure) {
+            userREST.updateEmployee(userData, success, failure);
+        },
+        getUsersTags: function (success, failure) {
+            userREST.getUsersTags({}, success, failure);
+        },
+        registerTag: function (tagAndUserData, success, failure) {
+            userREST.registerTag(tagAndUserData, success, failure);
+        },
+        deleteEmployee: function (success, failure) {
+            userREST.deleteEmployee({}, success, failure);
+        },
+        disconnectTag: function (success, failure) {
+            userREST.disconnectTag({}, success, failure);
+        }
+    }
+}]);

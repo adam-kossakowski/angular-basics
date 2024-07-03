@@ -1,5 +1,7 @@
-import { Component, output, signal } from '@angular/core';
+import { Component, output, signal, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { NewTaskData } from '../task/task.model';
+import { TasksService } from '../tasks.service';
 
 @Component({
   selector: 'app-new-task',
@@ -9,19 +11,30 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './new-task.component.css',
 })
 export class NewTaskComponent {
+  @Input({required: true}) userId!: string;
+
   enteredTitle = '';
   enteredSummary = '';
 
-  //with usage of signal
-  enteredDueDate = signal('');
+  constructor(private tasksService: TasksService){}
 
-  cancel = output();
+  // with usage of signal
+  enteredDueDate = signal('');
+  // enteredDueDate = '';
+
+  close = output();
+  // added = output<NewTaskData>();
 
   onCancelClick() {
-    this.cancel.emit();
+    this.close.emit();
   }
 
   onSubmit() {
-    
+    this.tasksService.addTask({
+      title: this.enteredTitle,
+      date: this.enteredDueDate(),
+      summary: this.enteredSummary
+    }, this.userId);
+    this.close.emit();
   }
 }
